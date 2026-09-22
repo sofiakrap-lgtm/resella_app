@@ -113,7 +113,7 @@ function HakuContent() {
           <input
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder="Kokeile: 7-vuotiaalle haalari Helsingistä"
+            placeholder="Hae tai kysy, esim. villapaita koko M"
             aria-label="Hae"
             enterKeyHint="search"
             className="t-body min-w-0 flex-1 bg-transparent py-2 outline-none placeholder:text-brown-70"
@@ -218,9 +218,8 @@ function HakuContent() {
 
       {!hasSearch ? (
         <>
-          <section className="mt-5">
-            <h2 className="t-headline px-4">Kokeile näitä</h2>
-            <div className="mt-2 flex flex-col gap-2 px-4">
+          <section className="section">
+            <div className="flex flex-wrap gap-2 screen-x">
               {exampleSearches.map((example) => (
                 <Chip
                   key={example.label}
@@ -229,21 +228,16 @@ function HakuContent() {
                     run(example.filters, example.note);
                   }}
                   icon={example.isAi ? <SparkleIcon size={16} className="text-terracotta-ink" /> : undefined}
-                  className="!h-auto min-h-11 w-full !justify-start py-2 text-left"
                 >
-                  <span className="line-clamp-2 text-left">{example.label}</span>
+                  {example.label}
                 </Chip>
               ))}
             </div>
-            <p className="t-caption mt-2 px-4 text-brown-70">
-              Kipinällä merkitty haku on kirjoitettu omin sanoin. Demossa vastaus on käsin
-              kirjoitettu esimerkki.
-            </p>
           </section>
 
           {recentSearches.length ? (
-            <section className="mt-6">
-              <h2 className="t-headline px-4">Viimeksi haetut</h2>
+            <section className="section">
+              <h2 className="t-headline screen-x">Viimeksi haetut</h2>
               <ul className="mt-1">
                 {recentSearches.map((recent) => (
                   <li key={recent}>
@@ -272,8 +266,8 @@ function HakuContent() {
         </div>
       ) : results.length === 0 ? (
         <EmptyState
-          title="Ei osumia"
-          body="Kokeile väljentää suodattimia tai tallenna haku, niin ilmoitamme kun sopiva tulee myyntiin."
+          title={filters.query ? `Ei osumia haulle "${filters.query}"` : 'Ei osumia'}
+          body="Tallenna haku, niin ilmoitamme kun tällainen tulee myyntiin."
           action={
             <div className="flex flex-col items-center gap-3">
               <Button
@@ -283,7 +277,7 @@ function HakuContent() {
                 }}
                 icon={<BookmarkIcon size={18} />}
               >
-                Tallenna haku
+                Tallenna hakuvahti
               </Button>
               <Button variant="secondary" size="sm" onClick={() => run({ ...emptyFilters, query: filters.query })}>
                 Tyhjennä suodattimet

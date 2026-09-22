@@ -35,10 +35,11 @@ export function SellerWhere({ seller, className = '' }: { seller: Seller; classN
       <span className={`t-footnote text-brown-70 ${className}`}>Ei aktiivista pöytää juuri nyt.</span>
     );
   }
+  // Table first: it is the fact that gets someone to the right shelf.
   return (
     <span className={`t-footnote text-brown-70 ${className}`}>
-      Myy nyt: {market.name}, {seller.tableNumber}
-      {seller.tableValidUntil ? `, voimassa ${seller.tableValidUntil} asti` : ''}
+      {seller.tableNumber}, {market.name}
+      {seller.tableValidUntil ? `, myynnissä ${seller.tableValidUntil} asti` : ''}
     </span>
   );
 }

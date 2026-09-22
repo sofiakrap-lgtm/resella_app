@@ -7,7 +7,7 @@ import { useApp } from '@/lib/state';
 import { categories } from '@/data/categories';
 import { markets, cities } from '@/data/markets';
 import { sellers } from '@/data/sellers';
-import { products, newTodayCount } from '@/data/products';
+import { products } from '@/data/products';
 import { CITY_CENTERS, haversineKm } from '@/lib/format';
 import { isOpenNow } from '@/lib/time';
 import { useNow } from '@/lib/state';
@@ -17,9 +17,11 @@ import { Chip } from '@/components/ui/Chip';
 import { MarketCard } from '@/components/MarketHeader';
 import { SellerCard } from '@/components/SellerHeader';
 import { MarketMap } from '@/components/MarketMap';
+import { Button } from '@/components/ui/Button';
+import { Sheet } from '@/components/ui/Sheet';
 import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import { RowSkeleton } from '@/components/ui/Skeleton';
-import { SearchIcon, MapIcon, GridIcon, ChevronRight } from '@/components/ui/Icons';
+import { SearchIcon, MapIcon, GridIcon, FilterIcon, categoryIcons } from '@/components/ui/Icons';
 
 type Segment = 'kategoriat' | 'kirpputorit' | 'myyjat';
 
@@ -42,6 +44,7 @@ function SelaaContent() {
   const [cityFilter, setCityFilter] = useState<string | null>(city);
   const [openNow, setOpenNow] = useState(false);
   const [selectedMarket, setSelectedMarket] = useState<string | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(params.get('demo') === 'error');
 
@@ -57,6 +60,9 @@ function SelaaContent() {
     const origin = CITY_CENTERS[cityFilter ?? city] ?? CITY_CENTERS.Helsinki;
     return [...list].sort((a, b) => haversineKm(origin, a) - haversineKm(origin, b));
   }, [cityFilter, openNow, now, city]);
+
+  /** Shown on the filter button so the viewer knows the list is narrowed. */
+  const marketFilterCount = (cityFilter ? 1 : 0) + (openNow ? 1 : 0);
 
   const activeSellers = useMemo(
     () =>
@@ -91,7 +97,7 @@ function SelaaContent() {
           className="flex min-h-11 items-center gap-2 rounded-full bg-cream px-4 py-2.5 shadow-card"
         >
           <SearchIcon size={19} className="text-brown-70" />
-          <span className="t-body truncate text-brown-70">Kokeile: 7-vuotiaalle haalari Helsingistä</span>
+          <span className="t-body truncate text-brown-70">Hae tai kysy, esim. villapaita koko M</span>
         </Link>
         <div className="mt-2">
           <Segmented
@@ -114,49 +120,41 @@ function SelaaContent() {
           ))}
         </div>
       ) : segment === 'kategoriat' ? (
-        <section className="mt-3 grid grid-cols-2 gap-3 px-4">
+        <section className="mt-4 grid grid-cols-2 gap-3 screen-x">
           {categories.map((category) => {
             const count = products.filter(
               (product) => product.category === category.slug && product.status !== 'Myyty',
             ).length;
+            const Icon = categoryIcons[category.slug];
             return (
               <Link
                 key={category.slug}
                 href={`/selaa/kategoria/${category.slug}`}
-                className="flex min-h-[112px] flex-col justify-between rounded-[18px] bg-cream p-4 shadow-card"
+                className="flex min-h-[112px] flex-col justify-between rounded-[16px] bg-cream p-4 shadow-card"
               >
-                <span>
+                {Icon ? <Icon size={28} className="text-brown" /> : null}
+                <span className="mt-3 block">
                   <span className="t-headline block">{category.name}</span>
-                  <span className="t-caption mt-1 block text-brown-70">{category.blurb}</span>
-                </span>
-                <span className="t-caption mt-3 inline-flex items-center gap-1 text-terracotta-ink">
-                  {count} tuotetta
-                  <ChevronRight size={14} />
+                  <span className="t-subhead mt-0.5 block text-brown-70">{count} tuotetta</span>
                 </span>
               </Link>
             );
           })}
         </section>
       ) : segment === 'kirpputorit' ? (
-        <section className="mt-3">
-          <div className="flex items-center justify-between gap-2 px-4">
-            <div className="hide-scrollbar flex gap-2 overflow-x-auto">
-              <Chip selected={!cityFilter} onClick={() => setCityFilter(null)}>
-                Kaikki
-              </Chip>
-              {cities.map((option) => (
-                <Chip
-                  key={option}
-                  selected={cityFilter === option}
-                  onClick={() => setCityFilter(option)}
-                >
-                  {option}
-                </Chip>
-              ))}
-              <Chip selected={openNow} onClick={() => setOpenNow((current) => !current)}>
-                Avoinna nyt
-              </Chip>
-            </div>
+        <section className="mt-4">
+          <div className="flex items-center gap-2 screen-x">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setFiltersOpen(true)}
+              icon={<FilterIcon size={18} />}
+            >
+              Suodata{marketFilterCount ? ` (${marketFilterCount})` : ''}
+            </Button>
+            <span className="t-subhead flex-1 truncate text-brown-70">
+              {visibleMarkets.length} kirpputoria
+            </span>
             <button
               type="button"
               onClick={() => setMarketView(marketView === 'lista' ? 'kartta' : 'lista')}
@@ -170,7 +168,17 @@ function SelaaContent() {
           {visibleMarkets.length === 0 ? (
             <EmptyState
               title="Ei kirpputoreja"
-              body="Kokeile toista kaupunkia tai poista aukiolorajaus."
+              body="Kokeile toista kaupunkia."
+              action={
+                <Button
+                  onClick={() => {
+                    setCityFilter(null);
+                    setOpenNow(false);
+                  }}
+                >
+                  Näytä kaikki kaupungit
+                </Button>
+              }
             />
           ) : marketView === 'kartta' ? (
             <div className="mt-3">
@@ -195,11 +203,8 @@ function SelaaContent() {
           )}
         </section>
       ) : (
-        <section className="mt-3">
-          <p className="t-footnote px-4 pb-2 text-brown-70">
-            Myyjä vuokraa pöydän kirpputorilta. Seuraamalla näet, kun hän lisää uutta.
-          </p>
-          <div className="grid grid-cols-2 gap-3 px-4">
+        <section className="mt-4">
+          <div className="grid grid-cols-2 gap-3 screen-x">
             {activeSellers.slice(0, 6).map((seller, index) => (
               <SellerCard key={seller.id} seller={seller} index={index} layout="grid" />
             ))}
@@ -211,6 +216,57 @@ function SelaaContent() {
           </div>
         </section>
       )}
+
+      <Sheet
+        open={filtersOpen}
+        onClose={() => setFiltersOpen(false)}
+        title="Suodata kirpputorit"
+        detents={[0.55]}
+        ariaLabel="Kirpputorien suodattimet"
+      >
+        <div className="px-4 pb-8">
+          <h3 className="t-headline">Kaupunki</h3>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Chip selected={!cityFilter} onClick={() => setCityFilter(null)}>
+              Kaikki
+            </Chip>
+            {cities.map((option) => (
+              <Chip
+                key={option}
+                selected={cityFilter === option}
+                onClick={() => setCityFilter(option)}
+              >
+                {option}
+              </Chip>
+            ))}
+          </div>
+
+          <h3 className="t-headline mt-6">Aukiolo</h3>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Chip selected={openNow} onClick={() => setOpenNow((current) => !current)}>
+              Avoinna nyt
+            </Chip>
+          </div>
+
+          <div className="mt-8">
+            <Button full size="lg" onClick={() => setFiltersOpen(false)}>
+              {`Näytä ${visibleMarkets.length} kirpputoria`}
+            </Button>
+            {marketFilterCount ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setCityFilter(null);
+                  setOpenNow(false);
+                }}
+                className="t-subhead mt-2 min-h-11 w-full text-brown-70"
+              >
+                Tyhjennä suodattimet
+              </button>
+            ) : null}
+          </div>
+        </div>
+      </Sheet>
     </div>
   );
 }

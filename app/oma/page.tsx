@@ -174,7 +174,7 @@ export default function OmaPage() {
                           {countdown}
                         </span>
                       </span>
-                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream-sink text-terracotta">
+                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream-sink text-terracotta-ink">
                         <QrIcon size={22} />
                       </span>
                     </Link>

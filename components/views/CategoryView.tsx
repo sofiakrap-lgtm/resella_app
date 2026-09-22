@@ -49,13 +49,13 @@ export function CategoryView() {
     <div>
       <ScreenHeader title={category.name} back />
 
-      <div className="px-4 pt-3">
+      <div className="pt-3 screen-x">
         <h1 className="t-large-title">{category.name}</h1>
         <p className="t-subhead mt-1 text-brown-70">{category.blurb}</p>
       </div>
 
       <section className="mt-4">
-        <h2 className="t-headline px-4">Alakategoriat</h2>
+        <h2 className="t-headline screen-x">Alakategoriat</h2>
         <ul className="mt-1">
           {category.subcategories.map((sub) => {
             const count = items.filter((product) => product.subcategory === sub.slug).length;
@@ -63,7 +63,7 @@ export function CategoryView() {
               <li key={sub.slug}>
                 <Link
                   href={link({ query: sub.name.split(' ')[0].toLowerCase() })}
-                  className="flex min-h-11 items-center justify-between gap-3 border-b border-separator px-4 py-3"
+                  className="flex min-h-11 items-center justify-between gap-3 border-b border-separator py-3 screen-x"
                 >
                   <span className="t-body">{sub.name}</span>
                   <span className="inline-flex items-center gap-2">
@@ -78,9 +78,9 @@ export function CategoryView() {
       </section>
 
       {category.sizes.length ? (
-        <section className="mt-5">
-          <h2 className="t-headline px-4">Koot</h2>
-          <div className="hide-scrollbar mt-2 flex gap-2 overflow-x-auto px-4">
+        <section className="section">
+          <h2 className="t-headline screen-x">Koot</h2>
+          <div className="hide-scrollbar mt-2 flex gap-2 overflow-x-auto screen-x">
             {category.sizes.map((size) => (
               <Link
                 key={size}
@@ -94,9 +94,9 @@ export function CategoryView() {
         </section>
       ) : null}
 
-      <section className="mt-5">
-        <h2 className="t-headline px-4">Merkit</h2>
-        <div className="hide-scrollbar mt-2 flex gap-2 overflow-x-auto px-4">
+      <section className="section">
+        <h2 className="t-headline screen-x">Merkit</h2>
+        <div className="hide-scrollbar mt-2 flex gap-2 overflow-x-auto screen-x">
           {category.brands.map((brand) => (
             <Link
               key={brand}
@@ -109,29 +109,29 @@ export function CategoryView() {
         </div>
       </section>
 
-      <section className="mt-6">
-        <div className="flex items-baseline justify-between px-4">
-          <h2 className="t-title3">Kaikki tuotteet</h2>
-          <Link href={link({})} className="t-subhead inline-flex min-h-11 items-center text-terracotta-ink">
-            Suodata
-          </Link>
-        </div>
+      <section className="section">
+        <h2 className="t-title3 screen-x">Kaikki tuotteet</h2>
         {items.length === 0 ? (
-          <EmptyState title="Ei vielä tuotteita tässä kategoriassa." pose="empty" />
+          <EmptyState
+            title="Ei vielä tuotteita"
+            body="Tallenna haku, niin ilmoitamme kun tähän kategoriaan tulee uutta."
+            pose="empty"
+            action={<Button href="/haku">Tee hakuvahti</Button>}
+          />
         ) : (
-          <div className="mt-2 grid grid-cols-2 gap-3 px-4">
-            {items.slice(0, 12).map((product, index) => (
-              <ProductCard key={product.id} product={product} index={index} fullWidth />
-            ))}
-          </div>
+          <>
+            <div className="mt-3 grid grid-cols-2 gap-3 screen-x">
+              {items.slice(0, 12).map((product, index) => (
+                <ProductCard key={product.id} product={product} index={index} fullWidth />
+              ))}
+            </div>
+            <div className="pt-6 screen-x">
+              <Button full size="lg" href={link({})}>
+                {`Näytä ${items.length} tuotetta`}
+              </Button>
+            </div>
+          </>
         )}
-        {items.length > 12 ? (
-          <div className="px-4 pt-4">
-            <Button full variant="secondary" href={link({})}>
-              Näytä kaikki {items.length} tuotetta
-            </Button>
-          </div>
-        ) : null}
       </section>
     </div>
   );

@@ -36,7 +36,7 @@ interface ListRowProps {
 export function ListRow({ label, value, href, onClick, icon, right, destructive }: ListRowProps) {
   const content = (
     <>
-      {icon ? <span className="shrink-0 text-terracotta">{icon}</span> : null}
+      {icon ? <span className="shrink-0 text-brown">{icon}</span> : null}
       <span className="t-body min-w-0 flex-1 truncate" style={destructive ? { color: 'var(--color-danger)' } : undefined}>
         {label}
       </span>
@@ -92,7 +92,7 @@ export function Toggle({
           className="peer absolute inset-0 h-11 w-[52px] cursor-pointer appearance-none rounded-full"
         />
         <span
-          className="pointer-events-none h-8 w-[52px] rounded-full bg-cream-sink transition-colors peer-checked:bg-terracotta"
+          className="pointer-events-none h-8 w-[52px] rounded-full bg-cream-sink transition-colors peer-checked:bg-terracotta-ink"
           aria-hidden="true"
         />
         <span

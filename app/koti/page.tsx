@@ -8,15 +8,13 @@ import { useApp } from '@/lib/state';
 import { useTransition } from '@/lib/motion';
 import { products, newToday, productsBySeller } from '@/data/products';
 import { markets, marketById } from '@/data/markets';
-import { sellers } from '@/data/sellers';
 import { seedNotifications } from '@/data/notifications';
 import { CITY_CENTERS, haversineKm, inCity } from '@/lib/format';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { ProductCard, ProductRow } from '@/components/ProductCard';
 import { MarketCard } from '@/components/MarketHeader';
-import { Mascot } from '@/components/ui/Mascot';
 import { Button, IconButton } from '@/components/ui/Button';
-import { EmptyState, ErrorState } from '@/components/ui/StateViews';
+import { ErrorState } from '@/components/ui/StateViews';
 import { ProductCardSkeleton } from '@/components/ui/Skeleton';
 import { BellIcon, SearchIcon } from '@/components/ui/Icons';
 
@@ -33,6 +31,8 @@ function KotiContent() {
   const { city, interests, sizes, followedMarkets, followedSellers, readNotifications } = useApp();
   const transition = useTransition();
   const [loading, setLoading] = useState(true);
+  /** The rest of the feed stays folded until the viewer asks for it. */
+  const [more, setMore] = useState(false);
   // Demo switch: append ?demo=error to show the error state.
   const [failed, setFailed] = useState(false);
 
@@ -80,6 +80,13 @@ function KotiContent() {
     (product) => product.subcategory === 'vinyylit' && product.priceEur < 14,
   );
 
+  /** Today in this city first, then today anywhere, so the hero is never empty. */
+  const hero = todayHere.length ? todayHere : newToday();
+  const heroIds = new Set(hero.map((product) => product.id));
+
+  /** Only what the hero above does not already show. */
+  const beyondHero = fromFollows.filter((product) => !heroIds.has(product.id));
+
   const origin = CITY_CENTERS[city] ?? CITY_CENTERS.Helsinki;
   const nearby = [...markets]
     .sort((a, b) => haversineKm(origin, a) - haversineKm(origin, b))
@@ -117,17 +124,12 @@ function KotiContent() {
         }
       />
 
-      <div className="flex items-start justify-between gap-3 pr-4 pt-1">
-        <div className="min-w-0">
-          <div className="px-4 pb-1 pt-1">
-            <h2 className="t-large-title">ReSello</h2>
-            <p className="t-subhead mt-1 text-brown-70">Löydöt {city} ja lähiseutu</p>
-          </div>
-        </div>
-        <Mascot pose="wave" size={56} className="mt-2 shrink-0" />
+      <div className="px-4 pb-1 pt-1">
+        <h2 className="t-large-title">ReSello</h2>
+        <p className="t-subhead mt-1 text-brown-70">Löydöt {inCity(city)}</p>
       </div>
 
-      <div className="mt-3 px-4">
+      <div className="mt-4 px-4">
         <Link
           href="/haku"
           className="flex min-h-11 items-center gap-2 rounded-full bg-cream px-4 py-2.5 shadow-card"
@@ -138,11 +140,11 @@ function KotiContent() {
       </div>
 
       {loading ? (
-        <section className="mt-6">
-          <div className="px-4">
+        <section className="section">
+          <div className="screen-x">
             <div className="shimmer h-6 w-40 rounded-md" />
           </div>
-          <div className="hide-scrollbar mt-2 flex gap-3 overflow-x-auto px-4">
+          <div className="hide-scrollbar mt-3 flex gap-3 overflow-x-auto screen-x">
             {[0, 1, 2].map((key) => (
               <ProductCardSkeleton key={key} />
             ))}
@@ -150,83 +152,99 @@ function KotiContent() {
         </section>
       ) : (
         <>
-          {fromFollows.length ? (
-            <ProductRow
-              title="Uutta seuraamiltasi"
-              products={fromFollows}
-              href="/toivelista"
-            />
-          ) : (
-            <section className="mt-4">
-              <EmptyState
-                title="Ala seuraamaan"
-                body="Seuraa kirpputoreja ja myyjiä, niin näet uutuudet heti tässä."
-                pose="search"
-                action={
-                  <Button href="/selaa" icon={<SearchIcon size={18} />}>
-                    Selaa kirpputoreja
-                  </Button>
-                }
-              />
-            </section>
-          )}
-
+          {/* Hero. One thing to look at first, the reason to open the app today. */}
           <motion.section
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={transition}
-            className="mt-6"
+            className="section"
           >
-            <h3 className="t-title3 px-4">Tänään {inCity(city)}</h3>
-            <div className="hide-scrollbar mt-2 flex gap-3 overflow-x-auto px-4 pb-1">
-              {(todayHere.length ? todayHere : newToday()).map((product, index) => (
-                <ProductCard key={product.id} product={product} index={index} />
-              ))}
+            <div className="flex items-baseline justify-between gap-3 screen-x">
+              <h3 className="t-title2">Uutta tänään</h3>
+              <Link
+                href="/haku?uutta=1"
+                className="t-subhead inline-flex min-h-11 shrink-0 items-center text-terracotta-ink"
+              >
+                Katso kaikki
+              </Link>
             </div>
-          </motion.section>
-
-          <ProductRow title="Vinyylit alle 14 euroa" products={vinyls} />
-
-          {forYou.length ? <ProductRow title="Sinulle" products={forYou} /> : null}
-
-          {followedSellerItems.length ? (
-            <ProductRow title="Seuraamiltasi myyjiltä" products={followedSellerItems} />
-          ) : null}
-
-          {followed.length ? (
-            <section className="mt-6">
-              <div className="flex items-baseline justify-between px-4">
-                <h3 className="t-title3">Seuraamasi kirpputorit</h3>
-                <Link href="/selaa" className="t-subhead inline-flex min-h-11 items-center text-terracotta-ink">
-                  Näytä kaikki
-                </Link>
-              </div>
-              <div className="hide-scrollbar mt-2 flex gap-3 overflow-x-auto px-4 pb-1">
-                {followed.map((market, index) => (
-                  <MarketCard key={market.id} market={market} index={index} layout="card" />
+            {hero.length ? (
+              <div className="hide-scrollbar mt-3 flex gap-3 overflow-x-auto pb-1 screen-x">
+                {hero.map((product, index) => (
+                  <ProductCard key={product.id} product={product} index={index} hideNewBadge />
                 ))}
               </div>
-            </section>
-          ) : null}
+            ) : (
+              <p className="t-subhead mt-2 text-brown-70 screen-x">
+                Ei uutuuksia tänään. Katso eiliset.
+              </p>
+            )}
+          </motion.section>
 
-          <section className="mt-6">
-            <h3 className="t-title3 px-4">Lähellä sinua</h3>
-            <div className="hide-scrollbar mt-2 flex gap-3 overflow-x-auto px-4 pb-1">
+          {/* Second section: what this viewer follows, or what suits them. */}
+          {beyondHero.length ? (
+            <ProductRow title="Seuraamasi" products={beyondHero} href="/toivelista" />
+          ) : forYou.length ? (
+            <ProductRow title="Sinulle" products={forYou} href="/selaa" />
+          ) : (
+            <section className="section screen-x">
+              <div className="rounded-[18px] bg-cream-panel p-5 text-center shadow-card">
+                <p className="t-body">Seuraa kirpputoria, niin uutuudet tulevat tänne.</p>
+                <div className="mt-4 flex justify-center">
+                  <Button href="/selaa?nakyma=kirpputorit" icon={<SearchIcon size={18} />}>
+                    Selaa kirpputoreja
+                  </Button>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Third section: where to go next, in the real world. */}
+          <section className="section">
+            <div className="flex items-baseline justify-between gap-3 screen-x">
+              <h3 className="t-title3">Lähellä</h3>
+              <Link
+                href="/selaa?nakyma=kirpputorit"
+                className="t-subhead inline-flex min-h-11 shrink-0 items-center text-terracotta-ink"
+              >
+                Katso kaikki
+              </Link>
+            </div>
+            <div className="hide-scrollbar mt-3 flex gap-3 overflow-x-auto pb-1 screen-x">
               {nearby.map((market, index) => (
                 <MarketCard key={market.id} market={market} index={index} layout="card" />
               ))}
             </div>
           </section>
 
-          <section className="mt-8 px-4">
-            <div className="flex items-center gap-3 rounded-[18px] bg-cream-panel px-4 py-3">
-              <Mascot pose="default" size={40} animate={false} />
-              <p className="t-footnote text-brown-70">
-                Kaikki tuotteet ovat oikeasti myynnissä kirpputorin pöydällä. Varaa noudettavaksi,
-                niin se odottaa sinua.
-              </p>
+          {/* Everything else stays folded until it is asked for. */}
+          {more ? (
+            <>
+              {forYou.length && fromFollows.length ? (
+                <ProductRow title="Sinulle" products={forYou} href="/selaa" />
+              ) : null}
+              <ProductRow title="Vinyylit alle 14 euroa" products={vinyls} />
+              {followedSellerItems.length ? (
+                <ProductRow title="Seuraamiltasi myyjiltä" products={followedSellerItems} />
+              ) : null}
+              {followed.length ? (
+                <section className="section">
+                  <h3 className="t-title3 screen-x">Seuraamasi kirpputorit</h3>
+                  <div className="hide-scrollbar mt-3 flex gap-3 overflow-x-auto pb-1 screen-x">
+                    {followed.map((market, index) => (
+                      <MarketCard key={market.id} market={market} index={index} layout="card" />
+                    ))}
+                  </div>
+                </section>
+              ) : null}
+            </>
+          ) : (
+            <div className="section flex justify-center screen-x">
+              <Button variant="secondary" onClick={() => setMore(true)}>
+                Näytä lisää
+              </Button>
             </div>
-          </section>
+          )}
         </>
       )}
     </div>

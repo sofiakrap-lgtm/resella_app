@@ -7,7 +7,7 @@ import { CITY_CENTERS, haversineKm } from '@/lib/format';
 import { isOpenNow } from '@/lib/time';
 import { useApp, useNow } from '@/lib/state';
 import { MarketMap } from '@/components/MarketMap';
-import { MarketCard } from '@/components/MarketHeader';
+import { MarketCard, OpenStatus } from '@/components/MarketHeader';
 import { Sheet } from '@/components/ui/Sheet';
 import { Chip } from '@/components/ui/Chip';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -45,6 +45,8 @@ function KarttaContent() {
     const origin = CITY_CENTERS[cityFilter ?? city] ?? CITY_CENTERS.Helsinki;
     return [...list].sort((a, b) => haversineKm(origin, a) - haversineKm(origin, b));
   }, [cityFilter, openNow, now, city]);
+
+  const selectedMarket = visible.find((market) => market.id === selected) ?? null;
 
   const select = (marketId: string) => {
     setSelected(marketId);
@@ -118,10 +120,32 @@ function KarttaContent() {
         title={`${visible.length} kirpputoria`}
       >
         <div ref={listRef} className="pb-[120px]">
+          {selectedMarket ? (
+            <div className="border-b border-separator px-4 pb-4">
+              <div className="rounded-[16px] bg-cream-panel p-4 shadow-card">
+                <p className="t-headline truncate">{selectedMarket.name}</p>
+                <p className="t-subhead mt-0.5 truncate text-brown-70">
+                  {selectedMarket.address}, {selectedMarket.city}
+                </p>
+                <OpenStatus market={selectedMarket} className="mt-1" />
+                <div className="mt-4 flex items-center gap-3">
+                  <Button href={`/kirpputori/${selectedMarket.id}`}>Katso kirpputori</Button>
+                  <button
+                    type="button"
+                    onClick={() => setSelected(null)}
+                    className="t-subhead min-h-11 px-2 text-brown-70"
+                  >
+                    Sulje
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
           {visible.length === 0 ? (
             <EmptyState
               title="Ei kirpputoreja"
-              body="Kokeile toista kaupunkia tai poista aukiolorajaus."
+              body="Kokeile toista kaupunkia."
               action={
                 <Button
                   onClick={() => {

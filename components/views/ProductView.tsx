@@ -150,25 +150,31 @@ export function ProductView() {
         <div className="px-4 pt-4">
           <h1 className="t-title2">{product.title}</h1>
           <p className="t-title1 mt-1">{price(product.priceEur)}</p>
-          <div className="mt-2">
-            <Tag tone={unavailable ? 'warning' : 'positive'}>
-              {status === 'Saatavilla' ? 'Saatavilla nyt' : status}
-            </Tag>
-          </div>
+          {unavailable ? null : (
+            <div className="mt-2">
+              <Tag tone="positive">Saatavilla nyt</Tag>
+            </div>
+          )}
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {product.brand ? <Tag>{product.brand}</Tag> : null}
             {product.size ? <Tag tone="accent">{`Koko ${product.size}`}</Tag> : null}
             <Tag>{product.condition}</Tag>
-            <Tag>{product.color}</Tag>
-            {category ? <Tag>{category.name}</Tag> : null}
-            <Tag>{`Lisätty: ${addedLabel(product.addedDaysAgo)}`}</Tag>
           </div>
           <p className="t-body mt-4 text-brown-70">{product.description}</p>
         </div>
 
+        {/* The rest of the facts, labelled, where there is room to read them. */}
+        <section className="section screen-x">
+          <div className="overflow-hidden rounded-[16px] bg-cream shadow-card">
+            {product.brand ? <DetailRow label="Merkki" value={product.brand} /> : null}
+            <DetailRow label="Väri" value={product.color} />
+            {category ? <DetailRow label="Kategoria" value={category.name} /> : null}
+            <DetailRow label="Lisätty" value={addedLabel(product.addedDaysAgo)} />
+          </div>
+        </section>
+
         {/* Location: the part that only works because the till knows the table */}
         <section className="mt-5 px-4">
-          <h2 className="t-headline mb-2">Sijainti</h2>
+          <h2 className="t-headline mb-2">Missä tämä on</h2>
           <div className="overflow-hidden rounded-[18px] bg-cream shadow-card">
             <Link href={`/kirpputori/${market.id}`} className="flex items-center gap-3 px-4 py-3">
               <span className="min-w-0 flex-1">
@@ -209,11 +215,7 @@ export function ProductView() {
                   {rating(seller.rating)} · {seller.reviewsCount} arvostelua
                 </span>
               </span>
-              <Button
-                size="sm"
-                variant={following ? 'secondary' : 'primary'}
-                onClick={() => toggleFollowSeller(seller.id)}
-              >
+              <Button size="sm" variant="secondary" onClick={() => toggleFollowSeller(seller.id)}>
                 {following ? 'Seurataan' : 'Seuraa'}
               </Button>
             </div>
@@ -248,6 +250,17 @@ export function ProductView() {
           </div>
         ) : null}
 
+        {!unavailable ? (
+          <div className="section flex justify-center screen-x">
+            <Link
+              href={`/varaus/${product.id}?osta=1`}
+              className="t-subhead inline-flex min-h-11 items-center font-semibold text-terracotta-ink"
+            >
+              {`Tai osta heti ${price(product.priceEur)}`}
+            </Link>
+          </div>
+        ) : null}
+
         <ProductRow title="Samankaltaisia" products={similarProducts(product)} />
       </motion.div>
 
@@ -264,18 +277,19 @@ export function ProductView() {
             <Button full size="sm" href={`/varaus/${product.id}`} className="whitespace-nowrap">
               Varaa noudettavaksi
             </Button>
-            <Button
-              full
-              size="sm"
-              variant="secondary"
-              href={`/varaus/${product.id}?osta=1`}
-              className="whitespace-nowrap"
-            >
-              Osta nyt
-            </Button>
           </div>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+/** One labelled fact in the product detail list. */
+function DetailRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex min-h-11 items-center justify-between gap-4 border-b border-separator px-4 py-2.5 last:border-b-0">
+      <span className="t-subhead shrink-0 text-brown-70">{label}</span>
+      <span className="t-subhead min-w-0 text-right">{value}</span>
     </div>
   );
 }

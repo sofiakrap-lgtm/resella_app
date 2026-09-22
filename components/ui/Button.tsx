@@ -112,7 +112,7 @@ export function IconButton({
   const transition = useTransition('press');
   const classes = [
     'inline-flex h-11 w-11 items-center justify-center rounded-full',
-    active ? 'text-terracotta' : 'text-brown',
+    active ? 'text-terracotta-ink' : 'text-brown',
     className,
   ].join(' ');
 

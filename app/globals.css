@@ -25,9 +25,23 @@
   --color-warning: #8a5310;
   --color-danger: #9c3421;
 
-  --radius: 18px;
+  /* 8pt grid. Every margin, gap and padding comes from this ladder. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Screen gutter and the gap between sections, used by .screen-x and .section. */
+  --screen-x: var(--space-4);
+  --section-gap: var(--space-8);
+
+  --radius: 16px;
   --radius-sm: 12px;
-  --radius-lg: 26px;
+  --radius-lg: 24px;
 
   --shadow-card: 0 1px 2px rgba(60, 36, 21, 0.05), 0 10px 26px -18px rgba(60, 36, 21, 0.55);
   --shadow-raised: 0 2px 8px rgba(60, 36, 21, 0.08), 0 22px 50px -26px rgba(60, 36, 21, 0.55);
@@ -90,17 +104,20 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
-   Type scale, generous line height for easy reading
+   Type scale on the iOS point ladder (34, 28, 22, 20, 17, 15, 13, 12).
+   Display sizes take the tight iOS leading. Reading sizes keep 1.45 to 1.5,
+   which is what dyslexia guidance asks for and what WCAG 1.4.12 overrides to
+   anyway, so the layout is built for that spacing rather than broken by it.
 --------------------------------------------------------------------------- */
-.t-large-title { font-size: 2.125rem; line-height: 1.16; font-weight: 700; letter-spacing: -0.02em; }
-.t-title1 { font-size: 1.6rem; line-height: 1.2; font-weight: 700; letter-spacing: -0.015em; }
-.t-title2 { font-size: 1.3rem; line-height: 1.25; font-weight: 700; letter-spacing: -0.01em; }
-.t-title3 { font-size: 1.12rem; line-height: 1.3; font-weight: 600; }
-.t-headline { font-size: 1rem; line-height: 1.4; font-weight: 600; }
-.t-body { font-size: 1rem; line-height: 1.5; }
+.t-large-title { font-size: 2.125rem; line-height: 1.21; font-weight: 700; letter-spacing: -0.02em; }
+.t-title1 { font-size: 1.75rem; line-height: 1.22; font-weight: 700; letter-spacing: -0.015em; }
+.t-title2 { font-size: 1.375rem; line-height: 1.28; font-weight: 700; letter-spacing: -0.01em; }
+.t-title3 { font-size: 1.25rem; line-height: 1.25; font-weight: 600; }
+.t-headline { font-size: 1.0625rem; line-height: 1.35; font-weight: 600; }
+.t-body { font-size: 1.0625rem; line-height: 1.5; }
 .t-subhead { font-size: 0.9375rem; line-height: 1.5; }
 .t-footnote { font-size: 0.8125rem; line-height: 1.45; }
-.t-caption { font-size: 0.75rem; line-height: 1.35; }
+.t-caption { font-size: 0.75rem; line-height: 1.4; }
 .t-label {
   font-size: 0.6875rem;
   line-height: 1.2;
@@ -126,6 +143,12 @@ body {
     --glass-blur: 0px;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Layout, 8pt grid
+--------------------------------------------------------------------------- */
+.screen-x { padding-left: var(--screen-x); padding-right: var(--screen-x); }
+.section { margin-top: var(--section-gap); }
 
 /* ---------------------------------------------------------------------------
    Helpers

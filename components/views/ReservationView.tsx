@@ -73,6 +73,8 @@ export function ReservationView() {
       <ScreenHeader title={buying ? 'Osta nyt' : 'Varaa noudettavaksi'} back />
 
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={transition}>
+        <Steps current={0} />
+
         <section className="px-4 pt-4">
           <h2 className="t-headline mb-2">Yhteenveto</h2>
           <div className="flex gap-3 rounded-[18px] bg-cream p-3 shadow-card">
@@ -213,5 +215,39 @@ function Row({ label, value, strong = false }: { label: string; value: string; s
       <span className={strong ? 't-headline' : 't-subhead text-brown-70'}>{label}</span>
       <span className={strong ? 't-headline' : 't-subhead'}>{value}</span>
     </div>
+  );
+}
+
+/** Two steps, so the reservation reads as a path and not a purchase. */
+function Steps({ current }: { current: 0 | 1 }) {
+  const steps = ['Varaa', 'Nouda kassalta'];
+  return (
+    <ol className="flex items-center gap-2 px-4 pt-3">
+      {steps.map((label, index) => (
+        <li key={label} className="flex min-w-0 flex-1 items-center gap-2">
+          <span
+            aria-hidden="true"
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full t-caption font-semibold"
+            style={{
+              background:
+                index <= current ? 'var(--color-terracotta-ink)' : 'var(--color-cream-sink)',
+              color: index <= current ? 'var(--color-on-terracotta)' : 'var(--color-brown-70)',
+            }}
+          >
+            {index + 1}
+          </span>
+          <span
+            className="t-footnote min-w-0 truncate"
+            style={{
+              color: index <= current ? 'var(--color-brown)' : 'var(--color-brown-70)',
+              fontWeight: index === current ? 600 : 400,
+            }}
+            aria-current={index === current ? 'step' : undefined}
+          >
+            {label}
+          </span>
+        </li>
+      ))}
+    </ol>
   );
 }

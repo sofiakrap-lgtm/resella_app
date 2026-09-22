@@ -22,7 +22,7 @@ import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import { ProductCard } from '@/components/ProductCard';
 import { SellerCard } from '@/components/SellerHeader';
 import { MarketMap } from '@/components/MarketMap';
-import { HeartIcon, ShareIcon, RouteIcon, ChevronDown } from '@/components/ui/Icons';
+import { HeartIcon, ShareIcon, RouteIcon, ChevronDown, ClockIcon } from '@/components/ui/Icons';
 
 type Segment = 'valikoima' | 'uutta' | 'myyjat';
 
@@ -150,48 +150,52 @@ export function MarketView() {
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
             <Tag tone="accent">{`${items.length} tuotetta`}</Tag>
-            <Tag>{`${fresh.length} uutta tänään`}</Tag>
-            <Tag>{`${market.followerCount} seuraajaa`}</Tag>
             <Tag>{distance(km)}</Tag>
           </div>
           <p className="t-subhead mt-3">{market.description}</p>
-          <div className="mt-3 flex gap-2">
+          <div className="mt-4 flex items-center gap-3">
             <Button
-              size="sm"
               variant={following ? 'secondary' : 'primary'}
               onClick={() => toggleFollowMarket(market.id)}
-              icon={<HeartIcon size={16} filled={following} />}
+              icon={<HeartIcon size={18} filled={following} />}
             >
               {following ? 'Seurataan' : 'Seuraa'}
             </Button>
-            <Button
-              size="sm"
-              variant="secondary"
-              icon={<RouteIcon size={16} />}
+            <button
+              type="button"
               onClick={() => pushToast({ title: 'Reittiohjeet', body: market.address })}
+              className="t-subhead inline-flex min-h-11 items-center gap-1.5 font-semibold text-terracotta-ink"
             >
+              <RouteIcon size={16} />
               Reittiohjeet
-            </Button>
+            </button>
           </div>
         </div>
 
-        <section className="mt-5">
-          <button
-            type="button"
-            onClick={() => setHoursOpen((current) => !current)}
-            aria-expanded={hoursOpen}
-            className="flex min-h-11 w-full items-center justify-between px-4"
-          >
-            <h2 className="t-headline">Aukioloajat</h2>
-            <ChevronDown
-              size={18}
-              className="text-brown-70 transition-transform"
-              style={{ transform: hoursOpen ? 'rotate(180deg)' : undefined }}
-            />
-          </button>
-          <div className="mx-4 mt-1 overflow-hidden rounded-[18px] bg-cream shadow-card">
+        <section className="section">
+          <div className="mx-4 overflow-hidden rounded-[16px] bg-cream shadow-card">
+            <button
+              type="button"
+              onClick={() => setHoursOpen((current) => !current)}
+              aria-expanded={hoursOpen}
+              aria-label="Näytä aukioloajat"
+              className="flex min-h-11 w-full items-center justify-between gap-3 px-4 py-2.5"
+            >
+              <span
+                className="t-subhead inline-flex items-center gap-1.5 font-semibold"
+                style={{ color: status?.open ? 'var(--color-positive)' : 'var(--color-brown-70)' }}
+              >
+                <ClockIcon size={16} />
+                {status?.label ?? 'Aukioloajat'}
+              </span>
+              <ChevronDown
+                size={18}
+                className="shrink-0 text-brown-70 transition-transform"
+                style={{ transform: hoursOpen ? 'rotate(180deg)' : undefined }}
+              />
+            </button>
             {hoursOpen ? (
-              <ul className="divide-y divide-separator">
+              <ul className="divide-y divide-separator border-t border-separator">
                 {WEEKDAYS.map((day) => {
                   const hours = market.hours[day];
                   const isToday = day === todayKey;
@@ -209,9 +213,7 @@ export function MarketView() {
                   );
                 })}
               </ul>
-            ) : (
-              <p className="t-subhead px-4 py-3">{status?.label ?? 'Aukioloajat'}</p>
-            )}
+            ) : null}
           </div>
         </section>
 

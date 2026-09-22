@@ -15,11 +15,12 @@ import { useTransition } from '@/lib/motion';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { QRCode } from '@/components/ui/QRCode';
+import { BrandWordmark } from '@/components/ui/BrandMark';
 import { Button } from '@/components/ui/Button';
 import { Sheet } from '@/components/ui/Sheet';
 import { EmptyState } from '@/components/ui/StateViews';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { ClockIcon, LocationIcon, TagIcon, CheckIcon } from '@/components/ui/Icons';
+import { LocationIcon, TagIcon, CheckIcon } from '@/components/ui/Icons';
 
 export default function QrPage() {
   return (
@@ -84,32 +85,27 @@ function QrContent() {
         transition={transition}
         className="px-4 pt-3"
       >
-        <div className="flex flex-col items-center rounded-[26px] bg-cream p-5 text-center shadow-card">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-cream-sink px-3 py-1 text-positive">
-            <CheckIcon size={16} />
-            <span className="t-subhead font-semibold">{bought ? 'Ostettu' : 'Varattu sinulle'}</span>
-          </span>
-
-          <h2 className="t-title3 mt-3">Näytä tämä kassalla</h2>
-          <p className="t-footnote mt-1 text-brown-70">
-            {market.name}, {product.tableNumber}
-          </p>
-
-          <div className="mt-4 rounded-[20px] bg-white p-4 shadow-card">
-            <QRCode value={reservation.code} size={196} />
+        <div className="overflow-hidden rounded-[24px] bg-cream shadow-raised">
+          <div className="flex items-center justify-between gap-3 border-b border-separator px-5 py-4">
+            <BrandWordmark height={20} />
+            <span className="inline-flex items-center gap-1.5 text-positive">
+              <CheckIcon size={16} />
+              <span className="t-subhead font-semibold">{bought ? 'Ostettu' : 'Varattu'}</span>
+            </span>
           </div>
 
-          <p className="t-title2 mt-3 tracking-[0.18em]">{reservation.code}</p>
-          <p className="t-caption text-brown-70">Varaustunnus</p>
+          <div className="flex flex-col items-center px-5 pb-5 pt-6">
+            <h2 className="t-title3">Näytä kassalla</h2>
+            <div className="mt-4 rounded-[20px] bg-white p-4 shadow-card">
+              <QRCode value={reservation.code} size={208} />
+            </div>
+            <p className="t-title2 mt-4 tracking-[0.18em]">{reservation.code}</p>
+          </div>
 
-          {countdown ? (
-            <p className="t-subhead mt-3 inline-flex items-center gap-1.5 text-terracotta-ink">
-              <ClockIcon size={16} />
-              {reservation.pickupWindow}, {countdown}
-            </p>
-          ) : (
-            <p className="t-subhead mt-3 text-brown-70">{reservation.pickupWindow}</p>
-          )}
+          <dl className="grid grid-cols-2 gap-px border-t border-separator bg-separator">
+            <PassField label="Nouda" value={countdown ?? reservation.pickupWindow} />
+            <PassField label="Mistä" value={`${market.name}, ${product.tableNumber}`} />
+          </dl>
         </div>
       </motion.div>
 
@@ -137,7 +133,7 @@ function QrContent() {
       <section className="px-4 pt-4">
         <div className="rounded-[18px] bg-cream p-4 shadow-card">
           <Link href={`/kirpputori/${market.id}`} className="flex min-h-11 items-center gap-2">
-            <LocationIcon size={18} className="shrink-0 text-terracotta" />
+            <LocationIcon size={18} className="shrink-0 text-brown" />
             <span className="min-w-0 flex-1">
               <span className="t-body block truncate">{market.name}</span>
               <span className="t-caption block truncate text-brown-70">{market.address}</span>
@@ -147,7 +143,7 @@ function QrContent() {
             href={`/myyja/${seller.id}`}
             className="flex min-h-11 items-center gap-2 border-t border-separator pt-2"
           >
-            <TagIcon size={18} className="shrink-0 text-terracotta" />
+            <TagIcon size={18} className="shrink-0 text-brown" />
             <span className="min-w-0 flex-1">
               <span className="t-body block truncate">
                 {product.tableNumber}, {seller.name}
@@ -203,6 +199,16 @@ function QrContent() {
           </div>
         </div>
       </Sheet>
+    </div>
+  );
+}
+
+/** One labelled field along the bottom of the pass, like a boarding pass. */
+function PassField({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="bg-cream px-5 py-3">
+      <dt className="t-label text-brown-70">{label}</dt>
+      <dd className="t-subhead mt-0.5 font-semibold">{value}</dd>
     </div>
   );
 }

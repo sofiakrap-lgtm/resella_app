@@ -163,7 +163,7 @@ function NotificationRow({
         className="flex items-start gap-3 border-b border-separator px-4 py-3"
         style={fresh ? { background: 'var(--color-cream-panel)' } : undefined}
       >
-        <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cream-sink text-terracotta">
+        <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cream-sink text-brown">
           <Icon size={18} />
         </span>
         <span className="min-w-0 flex-1">

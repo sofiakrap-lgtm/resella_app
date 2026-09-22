@@ -53,17 +53,24 @@ export function nextOpenDay(market: Market, date: Date): { day: Weekday; hours: 
 }
 
 /** "Avoinna klo 19.00 asti" or "Suljettu, avautuu huomenna 10.00". */
+/**
+ * Short status for a header, for example "Auki nyt, sulkeutuu 18.00". The
+ * viewer wants to know whether to go now, not to read a week of hours.
+ */
 export function openStatusLabel(market: Market, date: Date): { open: boolean; label: string } {
   if (isOpenNow(market, date)) {
-    return { open: true, label: `Avoinna klo ${hoursToday(market, date)!.close} asti` };
+    return { open: true, label: `Auki nyt, sulkeutuu ${hoursToday(market, date)!.close}` };
   }
   const later = opensLaterToday(market, date);
-  if (later) return { open: false, label: `Suljettu, avautuu tänään ${later.open}` };
+  if (later) return { open: false, label: `Kiinni, avautuu tänään ${later.open}` };
   const next = nextOpenDay(market, date);
   if (next) {
-    return { open: false, label: `Suljettu, avautuu ${WEEKDAY_LABELS[next.day].toLowerCase()} ${next.hours.open}` };
+    return {
+      open: false,
+      label: `Kiinni, avautuu ${WEEKDAY_LABELS[next.day].toLowerCase()} ${next.hours.open}`,
+    };
   }
-  return { open: false, label: 'Suljettu' };
+  return { open: false, label: 'Kiinni' };
 }
 
 /** Pickup windows offered in the reservation flow, within opening hours. */

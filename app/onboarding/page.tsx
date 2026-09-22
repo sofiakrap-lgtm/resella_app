@@ -13,11 +13,9 @@ import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { BrandWordmark } from '@/components/ui/BrandMark';
 
-const SIZE_OPTIONS = ['XS', 'S', 'M', 'L', 'XL', '98', '104', '110', '116', '122', '128'];
-
 /** Three light steps. No account, nothing blocking. */
 export default function OnboardingPage() {
-  const { set, city, interests, sizes } = useApp();
+  const { set, city, interests } = useApp();
   const router = useRouter();
   const transition = useTransition();
   const [step, setStep] = useState(0);
@@ -63,53 +61,14 @@ export default function OnboardingPage() {
             {step === 0 ? (
               <div className="text-center">
                 <Mascot pose="wave" size={148} className="mx-auto" />
-                <h1 className="t-large-title mt-6">Tervetuloa</h1>
+                <h1 className="t-large-title mt-6">Löydä aarteesi läheltä</h1>
                 <p className="t-body mt-3 text-brown-70">
-                  Löydä juuri etsimäsi second hand. Näet myös, millä kirpputorilla ja missä pöydässä
-                  tuote odottaa sinua.
+                  Näet mitä kirpputoreilla on juuri nyt, ja missä pöydässä.
                 </p>
               </div>
             ) : null}
 
             {step === 1 ? (
-              <div>
-                <h1 className="t-title1 text-center">Mikä kiinnostaa?</h1>
-                <p className="t-subhead mt-2 text-center text-brown-70">
-                  Valitse yksi tai useampi. Voit muuttaa valintoja myöhemmin.
-                </p>
-                <div className="mt-5 flex flex-wrap justify-center gap-2">
-                  {categories.map((category) => (
-                    <Chip
-                      key={category.slug}
-                      selected={interests.includes(category.slug)}
-                      onClick={() =>
-                        set('interests', toggle(interests, category.slug) as CategorySlug[])
-                      }
-                    >
-                      {category.name}
-                    </Chip>
-                  ))}
-                </div>
-
-                <p className="t-headline mt-7 text-center">Tavallisimmat kokosi</p>
-                <p className="t-footnote mt-1 text-center text-brown-70">
-                  Vapaaehtoinen, auttaa nostamaan sopivat löydöt esiin.
-                </p>
-                <div className="mt-3 flex flex-wrap justify-center gap-2">
-                  {SIZE_OPTIONS.map((size) => (
-                    <Chip
-                      key={size}
-                      selected={sizes.includes(size)}
-                      onClick={() => set('sizes', toggle(sizes, size))}
-                    >
-                      {size}
-                    </Chip>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-
-            {step === 2 ? (
               <div>
                 <Mascot pose="search" size={110} className="mx-auto" />
                 <h1 className="t-title1 mt-5 text-center">Missä liikut?</h1>
@@ -120,6 +79,28 @@ export default function OnboardingPage() {
                   {cities.map((option) => (
                     <Chip key={option} selected={city === option} onClick={() => set('city', option)}>
                       {option}
+                    </Chip>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {step === 2 ? (
+              <div>
+                <h1 className="t-title1 text-center">Mikä kiinnostaa?</h1>
+                <p className="t-subhead mt-2 text-center text-brown-70">
+                  Valitse yksi tai useampi.
+                </p>
+                <div className="mt-6 flex flex-wrap justify-center gap-2">
+                  {categories.map((category) => (
+                    <Chip
+                      key={category.slug}
+                      selected={interests.includes(category.slug)}
+                      onClick={() =>
+                        set('interests', toggle(interests, category.slug) as CategorySlug[])
+                      }
+                    >
+                      {category.name}
                     </Chip>
                   ))}
                 </div>
@@ -141,7 +122,7 @@ export default function OnboardingPage() {
             <motion.span
               animate={{ width: index === step ? 22 : 7, opacity: index === step ? 1 : 0.35 }}
               transition={transition}
-              className="block h-[7px] rounded-full bg-terracotta"
+              className="block h-[7px] rounded-full bg-terracotta-ink"
             />
           </button>
         ))}
@@ -149,7 +130,7 @@ export default function OnboardingPage() {
 
       <div className="mt-3">
         <Button full size="lg" onClick={() => go(step + 1)}>
-          {step === 2 ? 'Valmista' : 'Jatka'}
+          {step === 2 ? 'Aloita selailu' : 'Jatka'}
         </Button>
         <p className="t-caption mt-3 text-center text-brown-70">
           Ei tarvitse luoda tiliä. Voit selata heti.

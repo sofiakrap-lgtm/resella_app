@@ -114,27 +114,12 @@ export function SellerView() {
 
         <p className="t-subhead mt-3 px-4 text-brown-70">{seller.bio}</p>
 
-        <div className="mt-4 px-4">
-          <Button
-            full
-            variant={following ? 'secondary' : 'primary'}
-            onClick={() => toggleFollowSeller(seller.id)}
-            icon={<HeartIcon size={18} filled={following} />}
-          >
-            {following ? 'Seurataan' : 'Seuraa myyjää'}
-          </Button>
-          <p className="t-caption mt-2 text-center text-brown-70">
-            Saat ilmoituksen kun {seller.name} lisää uusia tuotteita.
-          </p>
-        </div>
-
         {/* Where this seller sells right now, the link back to the market */}
-        <section className="mt-5 px-4">
-          <h2 className="t-headline mb-2">Myy nyt</h2>
+        <section className="section screen-x">
           {seller.isActive && market ? (
             <Link
               href={`/kirpputori/${market.id}`}
-              className="flex items-center gap-3 rounded-[18px] bg-cream px-4 py-3 shadow-card"
+              className="flex items-center gap-3 rounded-[16px] bg-cream px-4 py-3 shadow-card"
             >
               <span className="min-w-0 flex-1">
                 <span className="t-headline block truncate">{market.name}</span>
@@ -151,7 +136,7 @@ export function SellerView() {
               <ChevronRight size={18} className="shrink-0 text-brown-50" />
             </Link>
           ) : (
-            <div className="rounded-[18px] bg-cream-panel px-4 py-3">
+            <div className="rounded-[16px] bg-cream-panel px-4 py-3">
               <p className="t-subhead">Ei aktiivista pöytää juuri nyt.</p>
               <p className="t-footnote mt-1 text-brown-70">
                 Seuraa, niin saat viestin kun {seller.name} vuokraa pöydän uudelleen.
@@ -160,10 +145,30 @@ export function SellerView() {
           )}
         </section>
 
-        <section className="mt-6">
-          <h2 className="t-title3 px-4">Kaapissa nyt ({available.length})</h2>
+        <div className="section screen-x">
+          <Button
+            full
+            variant={following ? 'secondary' : 'primary'}
+            onClick={() => toggleFollowSeller(seller.id)}
+            icon={<HeartIcon size={18} filled={following} />}
+          >
+            {following ? 'Seurataan' : 'Seuraa myyjää'}
+          </Button>
+        </div>
+
+        <section className="section">
+          <h2 className="t-title3 screen-x">Kaapissa nyt ({available.length})</h2>
           {available.length === 0 ? (
-            <EmptyState title="Ei tuotteita juuri nyt" pose="empty" />
+            <EmptyState
+              title="Ei tuotteita juuri nyt"
+              body={`Seuraa, niin näet heti kun ${seller.name} lisää uutta.`}
+              pose="empty"
+              action={
+                <Button onClick={() => toggleFollowSeller(seller.id)}>
+                  {following ? 'Seurataan' : 'Seuraa myyjää'}
+                </Button>
+              }
+            />
           ) : (
             <div className="mt-2 grid grid-cols-2 gap-3 px-4">
               {available.map((product, index) => (
@@ -174,8 +179,8 @@ export function SellerView() {
         </section>
 
         {sold.length ? (
-          <section className="mt-6">
-            <h2 className="t-title3 px-4">Myydyt</h2>
+          <section className="section">
+            <h2 className="t-title3 screen-x">Myydyt</h2>
             <div className="mt-2 grid grid-cols-2 gap-3 px-4 opacity-55">
               {sold.map((product, index) => (
                 <ProductCard key={product.id} product={product} index={index} fullWidth hideMarket />

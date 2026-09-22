@@ -203,3 +203,77 @@ export const GridIcon = (p: IconProps) => (
     <path d="M4.5 4.5h6v6h-6zM13.5 4.5h6v6h-6zM4.5 13.5h6v6h-6zM13.5 13.5h6v6h-6z" />
   </Base>
 );
+
+/* ---------------------------------------------------------------------------
+   Category icons. One per top level category, so Selaa reads as pictures
+   before it reads as words.
+--------------------------------------------------------------------------- */
+
+const DressIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M9 3h6l-1 4 3 5-2 11H7L5 12l3-5-1-4Z" />
+    <path d="M10 3c0 1.2.9 2 2 2s2-.8 2-2" />
+  </Base>
+);
+
+const ShirtIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M8 4 3.5 7.5 6 10.5l1-.9V20h10v-10.4l1 .9 2.5-3L16 4l-2 1.8h-4L8 4Z" />
+  </Base>
+);
+
+const ChildIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M9 3 6 5.5l2 3V13l-1 8h4v-6h2v6h4l-1-8V8.5l2-3L15 3H9Z" />
+    <path d="M12 3v5" />
+  </Base>
+);
+
+const LampIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M9 3h6l4 8H5l4-8Z" />
+    <path d="M12 11v7" />
+    <path d="M8.5 21h7" />
+  </Base>
+);
+
+const CupIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M5 5h11v8a5 5 0 0 1-5 5H10a5 5 0 0 1-5-5V5Z" />
+    <path d="M16 7h2a2.5 2.5 0 0 1 0 5h-2" />
+    <path d="M4 21h14" />
+  </Base>
+);
+
+const ShoeIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M3 16V9h4l2.5 2.5L13 12l5 1.6a3 3 0 0 1 2 2.8V17H3Z" />
+    <path d="M3 17h17" />
+  </Base>
+);
+
+const BagIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M6 8h12l1 12H5L6 8Z" />
+    <path d="M9 8a3 3 0 0 1 6 0" />
+  </Base>
+);
+
+const DiscIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <circle cx="12" cy="12" r="2" />
+  </Base>
+);
+
+/** Keyed by category slug, see data/categories.ts. */
+export const categoryIcons: Record<string, (p: IconProps) => React.ReactElement> = {
+  naiset: DressIcon,
+  miehet: ShirtIcon,
+  lapset: ChildIcon,
+  koti: LampIcon,
+  astiat: CupIcon,
+  kengat: ShoeIcon,
+  asusteet: BagIcon,
+  viihde: DiscIcon,
+};
