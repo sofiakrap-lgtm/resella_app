@@ -1,0 +1,990 @@
+<title>ReSello</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Epilogue:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+  /* ------------------------------------------------------------------
+     ReSello, tokens
+     Beige on paperi, ruskea kantaa tekstin, terrakotta on ainoa kova vari.
+  ------------------------------------------------------------------ */
+  :root {
+    --paper: #FAECDE;
+    --paper-deep: #F3E1CF;
+    --ink: #3C2415;
+    --ink-soft: rgba(60, 36, 21, 0.68);
+    --ink-faint: rgba(60, 36, 21, 0.42);
+    --cream: #FFFBF4;
+    --terracotta: #C0693A;
+    --terracotta-deep: #A8552B;
+    --teal: #6C888D;
+    --sage: #BAB58D;
+    --hover: #4E3220;
+    --night: #272125;
+
+    --lift: 0 16px 38px -20px rgba(60, 36, 21, 0.5);
+    --lift-lg: 0 28px 60px -28px rgba(60, 36, 21, 0.55);
+    --r-card: 30px;
+    --r-card-sm: 22px;
+
+    --display: "Outfit", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --body: "Epilogue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+
+  /* Yksi visuaalinen maailma, ei tummaa varianttia. Kaikki varit maalataan
+     eksplisiittisesti, jotta sivu pitaa pintansa kummalla tahansa taustalla. */
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    background-image: var(--grain);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    box-sizing: border-box;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1.02;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  h1 { font-size: clamp(2.7rem, 7.5vw, 5.1rem); }
+  h2 { font-size: clamp(2rem, 4.6vw, 3.2rem); }
+  h3 { font-size: clamp(1.25rem, 2.1vw, 1.6rem); }
+  p { margin: 0; }
+  a { color: inherit; }
+
+  .eyebrow {
+    font-family: var(--display);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .lede { font-size: 1.12rem; color: var(--ink-soft); max-width: 60ch; }
+  .small { font-size: 0.93rem; color: var(--ink-soft); }
+  .tiny { font-size: 0.8rem; color: var(--ink-faint); }
+
+  /* ---------------------------- napit ---------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 24px;
+    border-radius: 999px;
+    border: 1.5px solid transparent;
+    font-family: var(--display);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.18s ease, transform 0.18s ease, color 0.18s ease,
+      border-color 0.18s ease;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:focus-visible { outline: 3px solid var(--terracotta); outline-offset: 3px; }
+
+  .btn--primary { background: var(--terracotta); color: var(--cream); }
+  .btn--primary:hover { background: var(--hover); }
+  .btn--ghost { background: transparent; color: var(--ink); border-color: rgba(60, 36, 21, 0.28); }
+  .btn--ghost:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .btn--cream { background: var(--cream); color: var(--ink); }
+  .btn--cream:hover { background: var(--terracotta); color: var(--cream); }
+
+  .btn .arrow {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    border: 1.5px solid currentColor;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+  }
+  .btn .arrow svg { display: block; }
+
+  /* ---------------------------- navi ---------------------------- */
+  .nav {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 40;
+    padding-block: 14px;
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: rgba(255, 251, 244, 0.86);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(60, 36, 21, 0.1);
+    border-radius: 999px;
+    padding: 10px 10px 10px 18px;
+    box-shadow: var(--lift);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--display);
+    font-weight: 800;
+    font-style: italic;
+    font-size: 1.22rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 26px;
+    margin-left: auto;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  .nav-links a { text-decoration: none; color: var(--ink-soft); }
+  .nav-links a:hover { color: var(--ink); }
+  .nav .btn { padding: 10px 12px 10px 20px; font-size: 0.95rem; }
+  .nav .btn .arrow { width: 26px; height: 26px; }
+
+  /* ---------------------------- hero ---------------------------- */
+  .hero { padding-block: clamp(36px, 6vw, 72px) 20px; position: relative; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 40px;
+    align-items: center;
+  }
+  .hero h1 em { font-style: italic; color: var(--terracotta); }
+  .hero-copy > * + * { margin-top: 22px; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(60, 36, 21, 0.2);
+    background: rgba(255, 251, 244, 0.6);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .pill .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--terracotta); }
+  .pill .dot--teal { background: var(--teal); }
+  .pill .dot--sage { background: var(--sage); }
+
+  /* hero-kollaasi */
+  .collage {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .tile {
+    border-radius: var(--r-card);
+    box-shadow: var(--lift);
+    overflow: hidden;
+    position: relative;
+    background: var(--cream);
+  }
+  .tile svg { display: block; width: 100%; height: auto; }
+  .tile--tall { grid-row: span 2; }
+  .tile-tag {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    background: var(--cream);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 6px 13px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: 0 6px 16px -10px rgba(60, 36, 21, 0.7);
+  }
+  .tile-price {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    background: var(--ink);
+    color: var(--cream);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.8rem;
+  }
+
+  /* tarrat */
+  .sticker {
+    position: absolute;
+    font-family: var(--display);
+    font-weight: 800;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .sticker--goods {
+    top: -18px;
+    right: -6px;
+    transform: rotate(9deg);
+  }
+  .sticker--second {
+    left: -14px;
+    bottom: 54px;
+    transform: rotate(-7deg);
+  }
+  .badge-round {
+    width: 108px;
+    height: 108px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--terracotta);
+    color: var(--cream);
+    text-align: center;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    line-height: 1.15;
+    text-transform: uppercase;
+    box-shadow: var(--lift);
+    border: 2px solid var(--cream);
+  }
+  .badge-flag {
+    background: var(--sage);
+    color: var(--ink);
+    border: 2px solid var(--cream);
+    border-radius: 14px;
+    padding: 9px 15px;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow: var(--lift);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .float { animation: float 7s ease-in-out infinite; }
+    .float--slow { animation-duration: 9s; animation-delay: -2s; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(9deg); }
+    50% { transform: translateY(-9px) rotate(6deg); }
+  }
+
+  /* --------------------------- luottorivi --------------------------- */
+  .marquee {
+    margin-top: 44px;
+    border-top: 1.5px dashed rgba(60, 36, 21, 0.22);
+    border-bottom: 1.5px dashed rgba(60, 36, 21, 0.22);
+    padding-block: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 30px;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ---------------------------- bento ---------------------------- */
+  section { scroll-margin-top: 128px; }
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .section-head .lede { margin-top: 12px; }
+
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .card {
+    border-radius: var(--r-card);
+    padding: 30px;
+    box-shadow: var(--lift);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: var(--cream);
+    box-sizing: border-box;
+  }
+  .card p { color: var(--ink-soft); }
+  .card--wide { grid-column: span 2; }
+  .card > :last-child { margin-top: auto; }
+  .card--accent { background: var(--terracotta); color: var(--cream); }
+  .card--accent p { color: rgba(255, 251, 244, 0.85); }
+  .card--teal { background: var(--teal); color: var(--cream); }
+  .card--teal p { color: rgba(255, 251, 244, 0.88); }
+  .card--sage { background: var(--sage); color: var(--ink); }
+  .card--sage p { color: rgba(60, 36, 21, 0.75); }
+  .card--ink { background: var(--ink); color: var(--cream); }
+  .card--ink p { color: rgba(255, 251, 244, 0.78); }
+
+  .card .eyebrow { opacity: 0.72; }
+  .icon-chip {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: rgba(60, 36, 21, 0.08);
+  }
+  .card--accent .icon-chip,
+  .card--teal .icon-chip,
+  .card--ink .icon-chip { background: rgba(255, 251, 244, 0.18); }
+
+  .spot-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .spot-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgba(255, 251, 244, 0.16);
+    border-radius: 14px;
+    padding: 10px 14px;
+    font-size: 0.92rem;
+  }
+  .spot-list .where {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  /* --------------------------- appiosio --------------------------- */
+  .night {
+    background: var(--night);
+    color: var(--cream);
+    border-radius: 36px;
+    padding: clamp(28px, 4vw, 56px);
+    margin-block: 28px;
+    box-shadow: var(--lift-lg);
+  }
+  .night h2 { color: var(--cream); }
+  .night .lede { color: rgba(255, 251, 244, 0.72); }
+  .night-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    gap: 40px;
+    align-items: center;
+  }
+  .night .pill { border-color: rgba(255, 251, 244, 0.28); background: rgba(255, 251, 244, 0.08); color: var(--cream); }
+
+  .phone {
+    width: 100%;
+    max-width: 300px;
+    margin-inline: auto;
+    background: var(--paper);
+    border: 10px solid #12100f;
+    border-radius: 42px;
+    padding: 12px 12px 16px;
+    box-shadow: var(--lift-lg);
+    box-sizing: border-box;
+  }
+  .phone-notch {
+    width: 92px;
+    height: 22px;
+    background: #12100f;
+    border-radius: 999px;
+    margin: -4px auto 12px;
+  }
+  .phone-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 6px 14px -12px rgba(60, 36, 21, 0.9);
+  }
+  .phone-thumb { width: 46px; height: 46px; border-radius: 12px; flex: 0 0 auto; }
+  .phone-row strong {
+    display: block;
+    font-family: var(--display);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 0.86rem;
+    color: var(--ink);
+  }
+  .phone-row span { font-size: 0.74rem; color: var(--ink-soft); }
+  .phone-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--cream);
+    border-radius: 999px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+
+  /* --------------------------- askeleet --------------------------- */
+  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .step { display: flex; flex-direction: column; gap: 12px; }
+  .step-no {
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 800;
+    font-size: 2.4rem;
+    color: var(--terracotta);
+    line-height: 1;
+  }
+  .step h3 { font-size: 1.22rem; }
+  .step p { color: var(--ink-soft); font-size: 0.96rem; }
+  .step-rule { height: 1.5px; background: rgba(60, 36, 21, 0.2); }
+
+  /* ---------------------------- hinta ---------------------------- */
+  .price-grid { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 18px; }
+  .price-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .price-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 0.98rem; }
+  .tick {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--terracotta);
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    margin-top: 2px;
+  }
+
+  /* ---------------------------- lainaus ---------------------------- */
+  .quote {
+    background: var(--paper-deep);
+    border-radius: var(--r-card);
+    padding: clamp(26px, 4vw, 46px);
+    display: grid;
+    gap: 18px;
+    box-shadow: inset 0 0 0 1.5px rgba(60, 36, 21, 0.12);
+  }
+  .quote blockquote {
+    margin: 0;
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 3vw, 2.1rem);
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+    max-width: 22ch;
+  }
+  .quote-by { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    background: var(--teal);
+    display: grid;
+    place-items: center;
+    color: var(--cream);
+    font-family: var(--display);
+    font-weight: 800;
+    font-style: italic;
+  }
+
+  /* ----------------------------- cta ----------------------------- */
+  .cta {
+    background: var(--terracotta);
+    color: var(--cream);
+    border-radius: 36px;
+    padding: clamp(32px, 5vw, 64px);
+    display: grid;
+    gap: 22px;
+    justify-items: center;
+    text-align: center;
+    box-shadow: var(--lift-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .cta h2 { color: var(--cream); max-width: 18ch; }
+  .cta p { color: rgba(255, 251, 244, 0.86); max-width: 48ch; }
+
+  footer { padding-block: 44px 56px; }
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 30px;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1.5px dashed rgba(60, 36, 21, 0.22);
+    padding-top: 26px;
+  }
+  .foot-links { display: flex; flex-wrap: wrap; gap: 20px; font-size: 0.93rem; }
+  .foot-links a { color: var(--ink-soft); text-decoration: none; }
+  .foot-links a:hover { color: var(--ink); text-decoration: underline; }
+
+  .stack-lg > * + * { margin-top: clamp(56px, 8vw, 104px); }
+
+  /* --------------------------- responsive --------------------------- */
+  @media (max-width: 960px) {
+    .hero-grid, .night-grid, .price-grid { grid-template-columns: minmax(0, 1fr); }
+    .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card--wide { grid-column: span 2; }
+  .card > :last-child { margin-top: auto; }
+    .steps { grid-template-columns: minmax(0, 1fr); }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 620px) {
+    body { font-size: 16px; }
+    .bento { grid-template-columns: minmax(0, 1fr); }
+    .card--wide { grid-column: span 1; }
+    .card { padding: 24px; }
+    .sticker--goods { top: -8px; right: 6px; }
+    .sticker--second { left: 4px; bottom: 30px; }
+    .badge-round { width: 84px; height: 84px; font-size: 0.66rem; }
+    .collage { gap: 12px; }
+  }
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <a class="brand" href="#top">
+        <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="#3C2415"></rect>
+          <path d="M11 22V10.5h5.4a3.6 3.6 0 0 1 0 7.2H13l5.4 4.3" stroke="#FFFBF4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <circle cx="22.5" cy="11.5" r="2.2" fill="#C0693A"></circle>
+        </svg>
+        ReSello
+      </a>
+      <nav class="nav-links" aria-label="Sivun osiot">
+        <a href="#jarjestelma">Järjestelmä</a>
+        <a href="#appi">Kuluttaja-appi</a>
+        <a href="#nain-se-toimii">Näin se toimii</a>
+        <a href="#hinta">Hinta</a>
+      </nav>
+      <a class="btn btn--primary" href="#varaa">
+        Varaa esittely
+        <span class="arrow" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap stack-lg">
+
+    <!-- ------------------------------ hero ------------------------------ -->
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Kirpputorin käyttöjärjestelmä</span>
+          <h1>Kirppis, joka <em>tietää</em> mitä hyllyssä on.</h1>
+          <p class="lede">
+            ReSello hoitaa pöytävuokrat, myynnin ja tilitykset yhdessä paikassa. Samalla se
+            avaa kirppiksesi valikoiman hakuun, jotta asiakas löytää tuotteen ennen kuin
+            astuu ovesta sisään.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn--primary" href="#varaa">
+              Varaa esittely
+              <span class="arrow" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </span>
+            </a>
+            <a class="btn btn--ghost" href="#appi">
+              Katso kuluttaja-appi
+              <span class="arrow" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5 11.5 7 8 10.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </span>
+            </a>
+          </div>
+          <div class="pills">
+            <span class="pill"><span class="dot"></span>Pöytävuokrat</span>
+            <span class="pill"><span class="dot dot--teal"></span>Tilitykset automaattisesti</span>
+            <span class="pill"><span class="dot dot--sage"></span>Myyjäsaldot reaaliajassa</span>
+          </div>
+        </div>
+
+        <!-- Kuvakollaasi. Korvaa jokainen .tile valokuvalla kun kuvapankki on valmis. -->
+        <div class="collage">
+          <div class="sticker sticker--goods float" aria-hidden="true">
+            <div class="badge-round">
+              <span>Good<br>stuff<br>only</span>
+            </div>
+          </div>
+          <div class="sticker sticker--second float float--slow" aria-hidden="true">
+            <div class="badge-flag">Second hand</div>
+          </div>
+
+          <div class="tile tile--tall">
+            <svg viewBox="0 0 220 300" role="img" aria-label="Farkkutakki kirppiksen pöydällä">
+              <rect width="220" height="300" fill="#6C888D"></rect>
+              <circle cx="46" cy="52" r="30" fill="#FFFBF4" opacity="0.22"></circle>
+              <path d="M74 88h72l16 26-22 12v90H80v-90l-22-12z" fill="#41616B"></path>
+              <path d="M110 88v128" stroke="#FFFBF4" stroke-width="3" stroke-dasharray="7 7" opacity="0.7"></path>
+              <path d="M74 88 92 74l18 14 18-14 18 14" fill="none" stroke="#FFFBF4" stroke-width="3" stroke-linejoin="round"></path>
+              <rect x="86" y="140" width="20" height="14" rx="3" fill="#FFFBF4" opacity="0.65"></rect>
+              <rect x="116" y="140" width="20" height="14" rx="3" fill="#FFFBF4" opacity="0.65"></rect>
+              <rect x="28" y="236" width="164" height="10" rx="5" fill="#3C2415" opacity="0.18"></rect>
+            </svg>
+            <span class="tile-price">24,00 €</span>
+            <span class="tile-tag">Pöytä 12</span>
+          </div>
+
+          <div class="tile">
+            <svg viewBox="0 0 220 142" role="img" aria-label="Kahvikuppeja hyllyssä">
+              <rect width="220" height="142" fill="#BAB58D"></rect>
+              <path d="M58 52h56v38a19 19 0 0 1-19 19H77a19 19 0 0 1-19-19z" fill="#FFFBF4"></path>
+              <path d="M114 62h12a13 13 0 0 1 0 26h-12" fill="none" stroke="#FFFBF4" stroke-width="7"></path>
+              <path d="M58 68h56" stroke="#C0693A" stroke-width="5"></path>
+              <path d="M140 52h44v57h-44z" fill="#FFFBF4" opacity="0.55"></path>
+              <path d="M140 74h44" stroke="#3C2415" stroke-width="3" opacity="0.35"></path>
+              <rect x="28" y="118" width="164" height="8" rx="4" fill="#3C2415" opacity="0.16"></rect>
+            </svg>
+            <span class="tile-tag">Hylly A3</span>
+          </div>
+
+          <div class="tile">
+            <svg viewBox="0 0 220 142" role="img" aria-label="Pöytälamppu ja maljakko">
+              <rect width="220" height="142" fill="#C0693A"></rect>
+              <path d="M62 34h58l16 34H46z" fill="#FFFBF4"></path>
+              <path d="M91 68v38" stroke="#FFFBF4" stroke-width="6"></path>
+              <path d="M70 106h42" stroke="#FFFBF4" stroke-width="8" stroke-linecap="round"></path>
+              <path d="M150 62c14 0 22 10 22 22s-8 22-22 22-22-10-22-22 8-22 22-22z" fill="#3C2415" opacity="0.55"></path>
+              <path d="M146 44h8v20h-8z" fill="#3C2415" opacity="0.55"></path>
+              <rect x="28" y="118" width="164" height="8" rx="4" fill="#3C2415" opacity="0.22"></rect>
+            </svg>
+            <span class="tile-tag">Vitriini 2</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="marquee" aria-label="Mitä ReSello kattaa">
+        <span>Pöytävaraukset</span>
+        <span>Kassa</span>
+        <span>Provisiot</span>
+        <span>Tilitykset</span>
+        <span>Myyjäviestit</span>
+        <span>Kuluttajahaku</span>
+      </div>
+    </section>
+
+    <!-- --------------------------- järjestelmä --------------------------- -->
+    <section id="jarjestelma">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Yksi järjestelmä</span>
+          <h2>Kaikki mitä kirppis pyörittää, ilman kolmea eri ohjelmaa.</h2>
+          <p class="lede">
+            Pöytien vuokraus, myynti, provisiot ja myyjäkohtaiset saldot ovat perusta, eivät
+            myyntivaltti. Ero tulee siitä, mitä niiden päälle rakennetaan.
+          </p>
+        </div>
+      </div>
+
+      <div class="bento">
+        <article class="card card--accent card--wide">
+          <span class="eyebrow">Ero muihin</span>
+          <h3>Tuotteesi löytyvät haulla, pöytätasolle asti.</h3>
+          <p>
+            Kun kassa tietää mikä tuote on missäkin pöydässä, se tieto voidaan näyttää myös
+            ostajalle. Asiakas hakee haalaria koossa 122 ja näkee, että sellainen odottaa
+            sinun kirppiksesi pöydässä 12.
+          </p>
+          <ul class="spot-list">
+            <li><span>Reima talvihaalari, koko 122</span><span class="where">Pöytä 12</span></li>
+            <li><span>Iittala Teema lautaset, 4 kpl</span><span class="where">Hylly D2</span></li>
+            <li><span>Arabia Paratiisi vati</span><span class="where">Vitriini 1</span></li>
+          </ul>
+        </article>
+
+        <article class="card card--teal">
+          <span class="icon-chip" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M7 12h10M10 17h4"></path></svg>
+          </span>
+          <h3>Pöytävaraus verkossa</h3>
+          <p>
+            Myyjä varaa pöydän ja maksaa vuokran itse. Sinulta jää pois puhelinvaihde ja
+            käsin täytetty varauskirja.
+          </p>
+          <p class="small" style="color: rgba(255,251,244,0.75)">
+            Vapaat pöydät näkyvät kalenterissa, myös silloin kun kirppis on kiinni.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="icon-chip" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5h16v11H4zM4 8.5 7 4h10l3 4.5M12 4v4.5"></path></svg>
+          </span>
+          <h3>Kassa, joka pysyy pystyssä</h3>
+          <p>
+            Viivakoodi, käteinen, kortti ja lahjakortti. Myynti kirjautuu oikealle myyjälle
+            samassa sekunnissa.
+          </p>
+        </article>
+
+        <article class="card card--sage">
+          <span class="icon-chip" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M17 7.5c-1.2-1.6-3-2.3-5-2.3-2.6 0-4.4 1.3-4.4 3.3 0 4.6 9.8 2.6 9.8 7.2 0 2.1-2 3.4-4.8 3.4-2.3 0-4.2-.8-5.4-2.5"></path></svg>
+          </span>
+          <h3>Tilitykset ilman käsityötä</h3>
+          <p>
+            Provisiot lasketaan automaattisesti ja tilitykset lähtevät ajallaan. Myyjä näkee
+            saldonsa itse, eikä sinulta kysytä sitä lauantaina.
+          </p>
+        </article>
+
+        <article class="card card--ink card--wide">
+          <span class="eyebrow">Näkymä, joka ei kuormita</span>
+          <h3>Rauhallinen käyttöliittymä, jonka oppii ensimmäisellä vuorolla.</h3>
+          <p>
+            Kirppiksellä on kiire lauantaisin ja kassalla seisoo joskus vapaaehtoinen.
+            Siksi näkymässä on vain se mitä juuri nyt tarvitaan, isolla ja selkeästi.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="icon-chip" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 1.8"></path></svg>
+          </span>
+          <h3>Aukiolot ja kierto</h3>
+          <p>
+            Pöytäkausien vaihtuminen, muistutukset ja hakuvahdit hoituvat taustalla, jotta
+            tavara liikkuu eikä jää seisomaan.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ----------------------------- appi ----------------------------- -->
+    <section id="appi">
+      <div class="night">
+        <div class="night-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">Kuluttaja-appi</span>
+            <h2>Uusi asiakas löytää sinut hakusanalla, ei sattumalta.</h2>
+            <p class="lede">
+              Sama data, joka pyörittää kassaasi, näkyy kuluttajalle hakuna. Hän kirjoittaa
+              omin sanoin mitä etsii, saa vastaukseksi tuotteen, kirppiksen ja pöydän, ja
+              voi varata sen noudettavaksi.
+            </p>
+            <div class="pills">
+              <span class="pill"><span class="dot"></span>Haku omin sanoin</span>
+              <span class="pill"><span class="dot dot--sage"></span>Varaus noudettavaksi</span>
+              <span class="pill"><span class="dot dot--teal"></span>Hakuvahdit</span>
+            </div>
+            <p class="small" style="color: rgba(255,251,244,0.7)">
+              Kuluttaja-appi on kehitysvaiheessa. Kirppikset, jotka ovat mukana alusta asti,
+              näkyvät siinä ensimmäisinä.
+            </p>
+          </div>
+
+          <div class="phone" aria-label="Kuluttaja-appin hakunäkymä">
+            <div class="phone-notch" aria-hidden="true"></div>
+            <div class="phone-search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 4.5 4.5" stroke-linecap="round"></path></svg>
+              haalari koko 122, Helsinki
+            </div>
+            <div class="phone-row">
+              <span class="phone-thumb" style="background:#6C888D"></span>
+              <span>
+                <strong>Reima Tec talvihaalari</strong>
+                <span>Ogelin kirppis, pöytä 12, 35,00 €</span>
+              </span>
+            </div>
+            <div class="phone-row">
+              <span class="phone-thumb" style="background:#BAB58D"></span>
+              <span>
+                <strong>Lindex kevythaalari</strong>
+                <span>Ogelin kirppis, hylly A3, 18,00 €</span>
+              </span>
+            </div>
+            <div class="phone-row">
+              <span class="phone-thumb" style="background:#C0693A"></span>
+              <span>
+                <strong>Reima kurahaalari</strong>
+                <span>Vekarakirppis, pöytä 18, 20,00 €</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -------------------------- näin se toimii -------------------------- -->
+    <section id="nain-se-toimii">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Käyttöönotto</span>
+          <h2>Kolme askelta, ei projektia.</h2>
+        </div>
+        <p class="small">Tyypillisesti viikko ensimmäisestä puhelusta ensimmäiseen myyntipäivään.</p>
+      </div>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-rule"></div>
+          <span class="step-no">1</span>
+          <h3>Käydään kirppiksesi läpi</h3>
+          <p>
+            Montako pöytää, millainen provisio, miten tilitykset hoituvat nyt. Puoli tuntia
+            riittää.
+          </p>
+        </article>
+        <article class="step">
+          <div class="step-rule"></div>
+          <span class="step-no">2</span>
+          <h3>Pöydät ja hinnasto sisään</h3>
+          <p>
+            Siirrämme pöytäkartan ja nykyiset sopimukset järjestelmään. Sinun ei tarvitse
+            naputella niitä uudestaan.
+          </p>
+        </article>
+        <article class="step">
+          <div class="step-rule"></div>
+          <span class="step-no">3</span>
+          <h3>Ensimmäinen vuoro yhdessä</h3>
+          <p>
+            Olemme mukana ensimmäisenä myyntipäivänä. Sen jälkeen puhelin vastaa, kun
+            kysyttävää tulee.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ----------------------------- hinta ----------------------------- -->
+    <section id="hinta">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Hinnoittelu</span>
+          <h2>Maksat myyntipisteiden verran. Ei piilokuluja.</h2>
+        </div>
+      </div>
+
+      <div class="price-grid">
+        <article class="card">
+          <h3>Mitä hintaan kuuluu</h3>
+          <ul class="price-list">
+            <li>
+              <span class="tick" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFBF4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"></path></svg></span>
+              <span>Kassa, pöytävaraukset ja myyjäsaldot samalla hinnalla</span>
+            </li>
+            <li>
+              <span class="tick" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFBF4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"></path></svg></span>
+              <span>Tilitykset sisältyvät, ei erillistä tapahtumamaksua</span>
+            </li>
+            <li>
+              <span class="tick" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFBF4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"></path></svg></span>
+              <span>Käyttöönotto ja koulutus ensimmäisenä myyntipäivänä</span>
+            </li>
+            <li>
+              <span class="tick" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFBF4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"></path></svg></span>
+              <span>Näkyvyys kuluttaja-apissa, kun se avautuu</span>
+            </li>
+          </ul>
+          <p class="tiny">Hinta skaalautuu kirppiksen kokoon. Pieni kirppis maksaa pienen kirppiksen verran.</p>
+        </article>
+
+        <article class="card card--accent">
+          <span class="eyebrow">Pilottipaikat</span>
+          <h3>Haemme kirppiksiä, jotka haluavat vaikuttaa siihen mitä rakennamme.</h3>
+          <p>
+            Pilottikirppikset saavat järjestelmän käyttöön alennettuun hintaan ja pääsevät
+            sanomaan, mitä seuraavaksi kehitetään.
+          </p>
+          <div>
+            <a class="btn btn--cream" href="#varaa">
+              Kysy pilottipaikkaa
+              <span class="arrow" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5 11.5 7 8 10.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ---------------------------- lainaus ---------------------------- -->
+    <section>
+      <div class="quote">
+        <span class="eyebrow">Miksi tämä tehdään</span>
+        <blockquote>
+          Iso ketju saa näkyvyyden ilmaiseksi. Pieni kirppis ansaitsee saman.
+        </blockquote>
+        <div class="quote-by">
+          <span class="avatar" aria-hidden="true">S</span>
+          <span class="small">Sofia, perustaja, ReSello</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------ cta ------------------------------ -->
+    <section id="varaa">
+      <div class="cta">
+        <span class="eyebrow">Aloitetaan</span>
+        <h2>Katsotaan yhdessä, mitä kirppiksesi tarvitsee.</h2>
+        <p>
+          Puoli tuntia puhelimessa tai paikan päällä. Kerromme suoraan, jos ReSello ei ole
+          teille oikea ratkaisu.
+        </p>
+        <a class="btn btn--cream" href="mailto:sofia@resello.fi?subject=Esittely">
+          Varaa esittely
+          <span class="arrow" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </span>
+        </a>
+        <p class="tiny" style="color: rgba(255,251,244,0.72)">Vastaamme yleensä saman päivän aikana.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <a class="brand" href="#top">
+        <svg width="26" height="26" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="#3C2415"></rect>
+          <path d="M11 22V10.5h5.4a3.6 3.6 0 0 1 0 7.2H13l5.4 4.3" stroke="#FFFBF4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <circle cx="22.5" cy="11.5" r="2.2" fill="#C0693A"></circle>
+        </svg>
+        ReSello
+      </a>
+      <nav class="foot-links" aria-label="Alatunniste">
+        <a href="#jarjestelma">Järjestelmä</a>
+        <a href="#appi">Kuluttaja-appi</a>
+        <a href="#hinta">Hinta</a>
+        <a href="mailto:sofia@resello.fi">sofia@resello.fi</a>
+      </nav>
+      <span class="tiny">Tehty kirpputoriyrittäjille, Suomessa.</span>
+    </div>
+  </div>
+</footer>
