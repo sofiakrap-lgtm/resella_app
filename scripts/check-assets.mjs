@@ -26,8 +26,40 @@ async function listFiles(folder) {
   return (await readdir(dir)).filter((name) => !name.startsWith('.'));
 }
 
+const WEB_FORMATS = /\.(jpg|jpeg|png|webp|avif|gif|svg)$/i;
+
 function baseName(file) {
-  return file.replace(/\.(jpg|jpeg|png|webp|svg)$/i, '');
+  return file.replace(/\.[^.]+$/, '');
+}
+
+/** Levenshtein distance, used to spot a typo close to a real name. */
+function distance(a, b) {
+  const rows = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 0; j <= b.length; j += 1) rows[0][j] = j;
+  for (let i = 1; i <= a.length; i += 1) {
+    for (let j = 1; j <= b.length; j += 1) {
+      rows[i][j] = Math.min(
+        rows[i - 1][j] + 1,
+        rows[i][j - 1] + 1,
+        rows[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
+      );
+    }
+  }
+  return rows[a.length][b.length];
+}
+
+/** The expected name closest to a file that matched nothing, if it is close. */
+function closest(name, candidates) {
+  let best = null;
+  let bestScore = Infinity;
+  for (const candidate of candidates) {
+    const score = distance(name, candidate);
+    if (score < bestScore) {
+      bestScore = score;
+      best = candidate;
+    }
+  }
+  return bestScore <= Math.max(3, Math.round(name.length * 0.3)) ? best : null;
 }
 
 async function main() {
@@ -38,17 +70,28 @@ async function main() {
   let demoFound = 0;
   const unknown = [];
   const missingDemo = [];
+  const wrongFormat = [];
 
   console.log('\nReSello, kuvien tarkistus\n');
 
   for (const [folder, names] of Object.entries(expected)) {
     const files = await listFiles(folder);
-    const present = new Set(files.map(baseName));
+    // Only web formats count as present: a .heic cannot be shown, so treating
+    // it as present would hide it from the missing list.
+    const present = new Set(files.filter((file) => WEB_FORMATS.test(file)).map(baseName));
     const hits = names.filter((name) => present.has(name));
     found += hits.length;
 
     for (const file of files) {
-      if (!names.includes(baseName(file))) unknown.push(`${folder}/${file}`);
+      if (!WEB_FORMATS.test(file)) {
+        wrongFormat.push(`${folder}/${file}`);
+        continue;
+      }
+      if (names.includes(baseName(file))) continue;
+      const suggestion = closest(baseName(file), names);
+      unknown.push(
+        suggestion ? `${folder}/${file}  ->  tarkoititko ${suggestion}?` : `${folder}/${file}`,
+      );
     }
     for (const name of names) {
       if (!demoPath.has(name)) continue;
@@ -74,13 +117,22 @@ async function main() {
     if (missingDemo.length > 40) console.log(`    ja ${missingDemo.length - 40} muuta`);
   }
 
+  if (wrongFormat.length) {
+    console.log(`\n  ${red('Selain ei osaa näyttää näitä, muunna .jpg-muotoon:')}`);
+    for (const name of wrongFormat) console.log(`    assets/${name}`);
+    console.log(
+      dim('\n    Mac: valitse kuvat Finderissa, oikea klikkaus, Pika-apu, Muunna kuva, JPEG.'),
+    );
+    console.log(dim('    Windows: avaa Kuvat, Tallenna nimellä, JPG.'));
+  }
+
   if (unknown.length) {
     console.log(`\n  ${red('Näitä nimiä ei tunnisteta, tarkista kirjoitusasu:')}`);
     for (const name of unknown) console.log(`    assets/${name}`);
     console.log(dim('\n    Oikeat nimet: assets/KUVALISTA.md'));
   }
 
-  if (!missingDemo.length && !unknown.length) {
+  if (!missingDemo.length && !unknown.length && !wrongFormat.length) {
     console.log(`\n  ${green('Kaikki pääpolun kuvat paikallaan, ei tuntemattomia nimiä.')}`);
   }
 
