@@ -1,0 +1,235 @@
+@import 'tailwindcss';
+/* Konsta's React entry point registers its own sources, so Tailwind sees the
+   utility classes used by the pre-built components inside node_modules. */
+@import 'konsta/react/theme.css';
+
+/* ---------------------------------------------------------------------------
+   ReSello design tokens
+   Colour values are brand placeholders and can be swapped in one place.
+--------------------------------------------------------------------------- */
+:root {
+  --text-scale: 1;
+
+  --color-bg: #faf7f2;
+  --color-bg-elevated: #f2ece2;
+  --color-surface: #ffffff;
+  --color-surface-2: #f6f2ec;
+  --color-text: #1c1c1e;
+  --color-text-secondary: rgba(60, 60, 67, 0.6);
+  --color-text-tertiary: rgba(60, 60, 67, 0.32);
+  --color-accent: #3f5c48;
+  --color-accent-strong: #2f4636;
+  --color-on-accent: #ffffff;
+  --color-accent-2: #b8563a;
+  --color-accent-soft: #ede6db;
+  --color-separator: rgba(60, 60, 67, 0.16);
+  --color-success: #2f6b46;
+  --color-warning: #8a5a12;
+  --color-danger: #a62a1f;
+
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.55);
+  --glass-shadow: 0 8px 28px rgba(28, 28, 30, 0.14);
+  --glass-blur: 24px;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+
+  --shadow-card: 0 1px 2px rgba(28, 28, 30, 0.05), 0 6px 18px rgba(28, 28, 30, 0.07);
+  --shadow-raised: 0 2px 6px rgba(28, 28, 30, 0.08), 0 16px 40px rgba(28, 28, 30, 0.12);
+
+  --k-color-primary: var(--color-accent);
+  color-scheme: light;
+}
+
+.dark {
+  --color-bg: #14120f;
+  --color-bg-elevated: #1b1815;
+  --color-surface: #1f1c19;
+  --color-surface-2: #262220;
+  --color-text: #f6f2ec;
+  --color-text-secondary: rgba(235, 235, 245, 0.62);
+  --color-text-tertiary: rgba(235, 235, 245, 0.34);
+  --color-accent: #8fb39a;
+  --color-accent-strong: #a9c9b3;
+  --color-on-accent: #11100e;
+  --color-accent-2: #ef9f87;
+  --color-accent-soft: #2c2925;
+  --color-separator: rgba(235, 235, 245, 0.18);
+  --color-success: #7fc79b;
+  --color-warning: #e0b063;
+  --color-danger: #f08a80;
+
+  --glass-bg: rgba(38, 35, 32, 0.66);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 22px rgba(0, 0, 0, 0.35);
+  --shadow-raised: 0 2px 8px rgba(0, 0, 0, 0.45), 0 18px 44px rgba(0, 0, 0, 0.5);
+
+  color-scheme: dark;
+}
+
+/* Accessibility: "Lisää kontrastia" setting and the OS level equivalent. */
+:root[data-contrast='high'] {
+  --color-text-secondary: rgba(38, 38, 42, 0.92);
+  --color-text-tertiary: rgba(38, 38, 42, 0.7);
+  --color-separator: rgba(28, 28, 30, 0.5);
+  --glass-bg: rgba(255, 255, 255, 0.97);
+  --glass-border: rgba(28, 28, 30, 0.45);
+  --glass-blur: 0px;
+}
+
+:root[data-contrast='high'].dark {
+  --color-text-secondary: rgba(246, 242, 236, 0.94);
+  --color-text-tertiary: rgba(246, 242, 236, 0.75);
+  --color-separator: rgba(246, 242, 236, 0.55);
+  --glass-bg: rgba(20, 18, 15, 0.97);
+  --glass-border: rgba(246, 242, 236, 0.45);
+}
+
+@theme inline {
+  /* Konsta derives its palette from a literal hex, the runtime accent stays in
+     sync through --k-color-primary above. */
+  --color-brand-primary: #3f5c48;
+  --color-bg: var(--color-bg);
+  --color-bg-elevated: var(--color-bg-elevated);
+  --color-surface: var(--color-surface);
+  --color-surface-2: var(--color-surface-2);
+  --color-ink: var(--color-text);
+  --color-ink-secondary: var(--color-text-secondary);
+  --color-ink-tertiary: var(--color-text-tertiary);
+  --color-accent: var(--color-accent);
+  --color-accent-strong: var(--color-accent-strong);
+  --color-on-accent: var(--color-on-accent);
+  --color-accent-2: var(--color-accent-2);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-separator: var(--color-separator);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-raised: var(--shadow-raised);
+
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Inter',
+    'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
+}
+
+html {
+  font-size: calc(16px * var(--text-scale));
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------------------------------------------------------------------------
+   Typography, Apple HIG scale (pt values mapped 1:1 to px at scale 1)
+--------------------------------------------------------------------------- */
+.t-large-title { font-size: 2.125rem; line-height: 2.5625rem; font-weight: 700; letter-spacing: -0.02em; }
+.t-title1 { font-size: 1.75rem; line-height: 2.125rem; font-weight: 700; letter-spacing: -0.02em; }
+.t-title2 { font-size: 1.375rem; line-height: 1.75rem; font-weight: 600; letter-spacing: -0.01em; }
+.t-title3 { font-size: 1.25rem; line-height: 1.5625rem; font-weight: 600; letter-spacing: -0.01em; }
+.t-headline { font-size: 1.0625rem; line-height: 1.375rem; font-weight: 600; }
+.t-body { font-size: 1.0625rem; line-height: 1.375rem; font-weight: 400; }
+.t-callout { font-size: 1rem; line-height: 1.3125rem; font-weight: 400; }
+.t-subhead { font-size: 0.9375rem; line-height: 1.25rem; font-weight: 400; }
+.t-footnote { font-size: 0.8125rem; line-height: 1.125rem; font-weight: 400; }
+.t-caption1 { font-size: 0.75rem; line-height: 1rem; font-weight: 400; }
+.t-caption2 { font-size: 0.6875rem; line-height: 0.8125rem; font-weight: 400; }
+
+/* ---------------------------------------------------------------------------
+   Liquid Glass, navigation layer only (never behind body copy)
+--------------------------------------------------------------------------- */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 0.5px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-flat {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+}
+
+/* Reduce transparency: swap the material for a solid surface. */
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --glass-bg: rgba(255, 255, 255, 0.98);
+    --glass-blur: 0px;
+  }
+  .dark {
+    --glass-bg: rgba(28, 26, 23, 0.98);
+  }
+}
+
+:root[data-transparency='reduce'] {
+  --glass-bg: rgba(255, 255, 255, 0.98);
+  --glass-blur: 0px;
+}
+
+:root[data-transparency='reduce'].dark {
+  --glass-bg: rgba(28, 26, 23, 0.98);
+}
+
+/* ---------------------------------------------------------------------------
+   Helpers
+--------------------------------------------------------------------------- */
+.hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
+.squircle { border-radius: var(--radius-md); overflow: hidden; }
+
+.tap-target { min-width: 44px; min-height: 44px; }
+
+.safe-top { padding-top: env(safe-area-inset-top, 0px); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+.shimmer {
+  background: linear-gradient(
+    100deg,
+    var(--color-surface-2) 30%,
+    color-mix(in oklab, var(--color-surface-2) 60%, var(--color-surface)) 50%,
+    var(--color-surface-2) 70%
+  );
+  background-size: 220% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer {
+  from { background-position: 180% 0; }
+  to { background-position: -40% 0; }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+:root[data-motion='reduce'] .shimmer { animation: none; }

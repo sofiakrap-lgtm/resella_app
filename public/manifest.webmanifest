@@ -1,0 +1,13 @@
+{
+  "name": "ReSello",
+  "short_name": "ReSello",
+  "description": "Löydä aarteesi läheltä. Hae tuotteita kaikilta kirpputoreilta ja näe, missä pöydässä ne ovat.",
+  "start_url": "/home",
+  "display": "standalone",
+  "background_color": "#faf7f2",
+  "theme_color": "#faf7f2",
+  "lang": "fi",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
