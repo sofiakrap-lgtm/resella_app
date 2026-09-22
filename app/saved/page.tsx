@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { productById, type Product } from '@/lib/mockData';
 import { filterProducts, filtersToQuery } from '@/lib/search';
@@ -9,13 +10,23 @@ import { ScreenHeader, LargeTitle } from '@/components/ui/ScreenHeader';
 import { Segmented } from '@/components/ui/Segmented';
 import { Button, IconButton } from '@/components/ui/Button';
 import { Tag } from '@/components/ui/Chip';
-import { EmptyState } from '@/components/ui/StateViews';
+import { EmptyState, ErrorState } from '@/components/ui/StateViews';
+import { ProductCardSkeleton } from '@/components/ui/Skeleton';
 import { ProductCard } from '@/components/product/ProductCard';
 import { QuickView } from '@/components/product/QuickView';
 import { BellIcon, ShareIcon, CloseIcon, SearchIcon, ChevronRight } from '@/components/ui/Icons';
 import Link from 'next/link';
 
 export default function SavedPage() {
+  return (
+    <Suspense fallback={null}>
+      <SavedContent />
+    </Suspense>
+  );
+}
+
+function SavedContent() {
+  const search = useSearchParams();
   const {
     t,
     wishlist,
@@ -27,6 +38,18 @@ export default function SavedPage() {
   } = useApp();
   const [segment, setSegment] = useState<'wishlist' | 'alerts'>('wishlist');
   const [quickView, setQuickView] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  // Demo switch: append ?demo=error to show the error state.
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(search.get('demo') === 'error');
+  }, [search]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setLoading(false), 360);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const saved = wishlist.map((id) => productById(id)).filter((p): p is Product => Boolean(p));
 
@@ -58,7 +81,20 @@ export default function SavedPage() {
         />
       </div>
 
-      {segment === 'wishlist' ? (
+      {failed ? (
+        <ErrorState
+          onRetry={() => {
+            setFailed(false);
+            setLoading(true);
+          }}
+        />
+      ) : loading ? (
+        <div className="mt-4 grid grid-cols-2 gap-3 px-4">
+          {[0, 1, 2, 3].map((key) => (
+            <ProductCardSkeleton key={key} wide />
+          ))}
+        </div>
+      ) : segment === 'wishlist' ? (
         saved.length === 0 ? (
           <EmptyState
             title={t('saved.emptyWishlistTitle')}

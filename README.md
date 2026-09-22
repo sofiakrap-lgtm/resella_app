@@ -152,9 +152,9 @@ Jokaisella datanäkymällä on lataus-, tyhjä- ja virhetila.
 - **Tyhjä tila** nähdään esimerkiksi haulla, jolle ei ole osumia:
   `/results?q=kajakki`. Sieltä pääsee tallentamaan hakuvahdin.
 - **Virhetila** on kytketty demoa varten osoitteeseen: lisää `?demo=error`
-  osoitteen perään, esimerkiksi `/results?demo=error`, `/product/p-001?demo=error`,
-  `/market/m-ogeli?demo=error` tai `/pinterest?demo=error`. Nappi `Yritä uudelleen`
-  palaa normaaliin näkymään.
+  osoitteen perään. Toimii kaikissa datanäkymissä: `/home`, `/results`,
+  `/product/p-001`, `/market/m-ogeli`, `/map`, `/saved` ja `/pinterest`. Nappi
+  `Yritä uudelleen` palaa normaaliin näkymään.
 
 ## Demon kulku esittelyssä
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/lib/state';
@@ -24,6 +24,18 @@ export default function SearchPage() {
     sizes: preferredSize ? [preferredSize] : [],
   });
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [typing, setTyping] = useState(false);
+
+  // Short spinner in the field while the suggestions catch up with the typing.
+  useEffect(() => {
+    if (!query) {
+      setTyping(false);
+      return;
+    }
+    setTyping(true);
+    const timer = window.setTimeout(() => setTyping(false), 260);
+    return () => window.clearTimeout(timer);
+  }, [query]);
 
   const suggestions = useMemo(() => suggestionsFor(query), [query]);
   const previewCount = useMemo(
@@ -46,6 +58,8 @@ export default function SearchPage() {
         value={query}
         onChange={setQuery}
         onSubmit={() => submit()}
+        onCancel={() => router.back()}
+        loading={typing}
         autoFocus
         placeholder={t('home.searchPlaceholder')}
       />

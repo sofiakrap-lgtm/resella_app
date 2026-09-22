@@ -12,7 +12,7 @@ import { Sheet } from '@/components/ui/Sheet';
 import { Chip } from '@/components/ui/Chip';
 import { Button, IconButton } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { EmptyState } from '@/components/ui/StateViews';
+import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import { LocationIcon, RouteIcon, SearchIcon, CloseIcon } from '@/components/ui/Icons';
 
 export default function MapPage() {
@@ -25,7 +25,7 @@ export default function MapPage() {
 
 function MapContent() {
   const params = useSearchParams();
-  const { t, city, locationEnabled, set, pushToast } = useApp();
+  const { t, city, locationEnabled, locationPromptSeen, set, pushToast } = useApp();
   const now = useNow();
   const listRef = useRef<HTMLDivElement | null>(null);
 
@@ -36,6 +36,8 @@ function MapContent() {
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [route, setRoute] = useState<string[]>(params.get('route')?.split(',').filter(Boolean) ?? []);
   const [askLocation, setAskLocation] = useState(false);
+  // Demo switch: append ?demo=error to show the error state.
+  const [failed, setFailed] = useState(params.get('demo') === 'error');
 
   const origin = params.get('origin') === 'scandic'
     ? { ...SCANDIC_OULU, label: SCANDIC_OULU.name }
@@ -48,10 +50,10 @@ function MapContent() {
 
   // Location permission is asked in context, after the map has shown its value.
   useEffect(() => {
-    if (loading || locationEnabled) return;
+    if (loading || locationEnabled || locationPromptSeen) return;
     const timer = window.setTimeout(() => setAskLocation(true), 1600);
     return () => window.clearTimeout(timer);
-  }, [loading, locationEnabled]);
+  }, [loading, locationEnabled, locationPromptSeen]);
 
   useEffect(() => {
     const routeParam = params.get('route');
@@ -88,7 +90,16 @@ function MapContent() {
 
   return (
     <div className="relative flex flex-1 flex-col">
-      {loading ? (
+      {failed ? (
+        <div className="flex flex-1 items-center">
+          <ErrorState
+            onRetry={() => {
+              setFailed(false);
+              setLoading(true);
+            }}
+          />
+        </div>
+      ) : loading ? (
         <Skeleton className="h-full min-h-[560px] w-full flex-1 rounded-none" />
       ) : (
         <MapView
@@ -98,6 +109,7 @@ function MapContent() {
           origin={origin}
           route={route}
           cluster={!cityFilter}
+          sheetInset={0.34}
           className="min-h-[560px] w-full flex-1"
         />
       )}
@@ -213,7 +225,14 @@ function MapContent() {
           ) : (
             visibleMarkets.map((market, index) => (
               <div key={market.id} data-market={market.id}>
-                <MarketCard market={market} index={index} layout="row" origin={origin} />
+                <MarketCard
+                  market={market}
+                  index={index}
+                  layout="row"
+                  origin={origin}
+                  selected={selected === market.id}
+                  onSelect={() => setSelected(market.id)}
+                />
               </div>
             ))
           )}
@@ -235,12 +254,20 @@ function MapContent() {
               icon={<LocationIcon size={18} />}
               onClick={() => {
                 set('locationEnabled', true);
+                set('locationPromptSeen', true);
                 setAskLocation(false);
               }}
             >
               {t('map.locationAllow')}
             </Button>
-            <Button full variant="plain" onClick={() => setAskLocation(false)}>
+            <Button
+              full
+              variant="plain"
+              onClick={() => {
+                set('locationPromptSeen', true);
+                setAskLocation(false);
+              }}
+            >
               {t('map.locationLater')}
             </Button>
           </div>

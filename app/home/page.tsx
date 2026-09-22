@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useApp } from '@/lib/state';
 import { useTransition } from '@/lib/motion';
@@ -14,15 +15,30 @@ import { QuickView } from '@/components/product/QuickView';
 import { MarketCard } from '@/components/market/MarketCard';
 import { Mascot } from '@/components/ui/Mascot';
 import { Button, IconButton } from '@/components/ui/Button';
-import { EmptyState } from '@/components/ui/StateViews';
+import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import { ProductCardSkeleton } from '@/components/ui/Skeleton';
 import { SearchIcon, SparkleIcon, SettingsIcon, ChevronRight } from '@/components/ui/Icons';
 
 export default function HomePage() {
+  return (
+    <Suspense fallback={null}>
+      <HomeContent />
+    </Suspense>
+  );
+}
+
+function HomeContent() {
+  const search = useSearchParams();
   const { t, name, city, tasteCategories, favoriteMarkets, recentSearches, wishlist } = useApp();
   const transition = useTransition();
   const [loading, setLoading] = useState(true);
+  // Demo switch: append ?demo=error to show the error state.
+  const [failed, setFailed] = useState(false);
   const [quickView, setQuickView] = useState<Product | null>(null);
+
+  useEffect(() => {
+    setFailed(search.get('demo') === 'error');
+  }, [search]);
 
   // The demo fakes a short fetch so the skeletons are visible at least once.
   useEffect(() => {
@@ -120,7 +136,14 @@ export default function HomePage() {
         </Link>
       </motion.div>
 
-      {loading ? (
+      {failed ? (
+        <ErrorState
+          onRetry={() => {
+            setFailed(false);
+            setLoading(true);
+          }}
+        />
+      ) : loading ? (
         <section className="mt-6">
           <div className="px-4">
             <div className="shimmer h-6 w-40 rounded-md" />

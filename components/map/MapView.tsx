@@ -18,6 +18,11 @@ interface MapViewProps {
   className?: string;
   /** Groups nearby pins into a count bubble, used on the zoomed out map. */
   cluster?: boolean;
+  /**
+   * Fraction of the map covered by a bottom sheet. Pins are projected above it
+   * so every marker stays visible.
+   */
+  sheetInset?: number;
 }
 
 /**
@@ -32,18 +37,30 @@ export function MapView({
   route,
   className = '',
   cluster = false,
+  sheetInset = 0,
 }: MapViewProps) {
   const transition = useTransition();
 
   const points = useMemo(() => {
-    const all: LatLng[] = origin ? [...markets, origin] : markets;
+    // With a route the map frames the stops, otherwise every visible market.
+    const routeStops = (route ?? [])
+      .map((id) => markets.find((market) => market.id === id))
+      .filter((market): market is Market => Boolean(market));
+    const framed: LatLng[] = routeStops.length ? routeStops : markets;
+    const all: LatLng[] = origin ? [...framed, origin] : framed;
     const bounds = boundsFor(all.length ? all : [{ lat: 60.17, lng: 24.94 }]);
+    // Squeeze the vertical range so nothing hides behind the bottom sheet.
+    const bottom = 1 - Math.min(0.55, sheetInset);
+    const fit = (point: { x: number; y: number }) => ({
+      x: point.x,
+      y: 0.08 + point.y * (bottom - 0.14),
+    });
     return {
       bounds,
-      markets: markets.map((market) => ({ market, position: project(market, bounds) })),
-      origin: origin ? project(origin, bounds) : null,
+      markets: markets.map((market) => ({ market, position: fit(project(market, bounds)) })),
+      origin: origin ? fit(project(origin, bounds)) : null,
     };
-  }, [markets, origin]);
+  }, [markets, origin, sheetInset, route]);
 
   const clustered = useMemo(() => {
     if (!cluster) return points.markets.map((entry) => ({ ...entry, count: 1, members: [entry.market] }));
@@ -60,27 +77,49 @@ export function MapView({
     return Array.from(cells.values()).map((entry) => ({ ...entry, count: entry.members.length }));
   }, [points.markets, cluster]);
 
+  // Tapping a pin or a list row pans the map so that market moves to the middle.
+  const selectedPoint = points.markets.find((entry) => entry.market.id === selectedId);
+  const clamp = (value: number) => Math.max(-26, Math.min(26, value));
+  const pan = selectedPoint
+    ? {
+        x: clamp((0.5 - selectedPoint.position.x) * 100),
+        y: clamp(((1 - Math.min(0.55, sheetInset)) / 2 - selectedPoint.position.y) * 100),
+      }
+    : { x: 0, y: 0 };
+
   const routePoints = (route ?? [])
     .map((id) => points.markets.find((entry) => entry.market.id === id))
     .filter(Boolean) as Array<{ market: Market; position: { x: number; y: number } }>;
 
   return (
     <div className={`relative overflow-hidden bg-surface-2 ${className}`}>
-      <MapCanvas />
+      <motion.div
+        className="absolute inset-0"
+        animate={{ x: `${pan.x}%`, y: `${pan.y}%` }}
+        transition={transition}
+      >
+        <MapCanvas />
 
       {/* route line */}
       {routePoints.length > 1 ? (
-        <svg className="absolute inset-0 h-full w-full" aria-hidden="true">
+        <svg
+          className="absolute inset-0 h-full w-full"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          {/* Coordinates are 0..100 in the viewBox, percentages are not valid SVG. */}
           <polyline
             points={[
-              ...(points.origin ? [`${points.origin.x * 100}%,${points.origin.y * 100}%`] : []),
-              ...routePoints.map((entry) => `${entry.position.x * 100}%,${entry.position.y * 100}%`),
+              ...(points.origin ? [`${points.origin.x * 100},${points.origin.y * 100}`] : []),
+              ...routePoints.map((entry) => `${entry.position.x * 100},${entry.position.y * 100}`),
             ].join(' ')}
             fill="none"
             stroke="var(--color-accent-2)"
             strokeWidth="3"
             strokeLinecap="round"
             strokeDasharray="1 7"
+            vectorEffect="non-scaling-stroke"
           />
         </svg>
       ) : null}
@@ -120,6 +159,7 @@ export function MapView({
           />
         </motion.div>
       ))}
+      </motion.div>
     </div>
   );
 }
@@ -127,7 +167,7 @@ export function MapView({
 /** Stylised, deterministic map drawing. */
 function MapCanvas() {
   return (
-    <svg className="absolute inset-0 h-full w-full" viewBox="0 0 400 700" preserveAspectRatio="none" aria-hidden="true">
+    <svg className="absolute inset-[-40%] h-[180%] w-[180%]" viewBox="0 0 400 700" preserveAspectRatio="none" aria-hidden="true">
       <rect width="400" height="700" fill="var(--color-surface-2)" />
       <path d="M-20 520 C 90 470, 150 560, 260 500 S 420 470, 440 520 L440 760 L-20 760 Z" fill="var(--color-accent-soft)" opacity="0.55" />
       <circle cx="90" cy="180" r="58" fill="var(--color-accent-soft)" opacity="0.7" />

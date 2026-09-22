@@ -18,9 +18,23 @@ interface MarketCardProps {
   layout?: 'card' | 'row';
   origin?: LatLng;
   note?: string;
+  /**
+   * Map list behaviour: the row body selects the market and centres its pin,
+   * and the chevron opens the market profile.
+   */
+  onSelect?: () => void;
+  selected?: boolean;
 }
 
-export function MarketCard({ market, index = 0, layout = 'card', origin, note }: MarketCardProps) {
+export function MarketCard({
+  market,
+  index = 0,
+  layout = 'card',
+  origin,
+  note,
+  onSelect,
+  selected = false,
+}: MarketCardProps) {
   const { t, city } = useApp();
   const transition = useStagger(index);
   const tap = useTapScale(0.985);
@@ -36,20 +50,50 @@ export function MarketCard({ market, index = 0, layout = 'card', origin, note }:
   );
 
   if (layout === 'row') {
+    const body = (
+      <>
+        <span className="block h-[68px] w-[68px] shrink-0 overflow-hidden rounded-[14px] bg-surface-2">{photo}</span>
+        <span className="min-w-0 flex-1 text-left">
+          <span className="t-headline block truncate">{market.name}</span>
+          <span className="t-footnote block truncate text-ink-secondary">
+            {market.district}, {market.city}, {formatDistance(distance)}
+          </span>
+          <OpenStatus market={market} className="mt-0.5" />
+          {note ? <span className="t-caption1 mt-0.5 block text-accent">{note}</span> : null}
+        </span>
+      </>
+    );
+
     return (
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={transition} whileTap={tap}>
-        <Link href={`/market/${market.id}`} className="flex items-center gap-3 border-b border-separator px-4 py-3">
-          <span className="block h-[68px] w-[68px] shrink-0 overflow-hidden rounded-[14px] bg-surface-2">{photo}</span>
-          <span className="min-w-0 flex-1">
-            <span className="t-headline block truncate">{market.name}</span>
-            <span className="t-footnote block truncate text-ink-secondary">
-              {market.district}, {market.city}, {formatDistance(distance)}
-            </span>
-            <OpenStatus market={market} className="mt-0.5" />
-            {note ? <span className="t-caption1 mt-0.5 block text-accent">{note}</span> : null}
-          </span>
-          <ChevronRight size={18} className="shrink-0 text-ink-tertiary" />
-        </Link>
+        <div
+          className={`flex items-center gap-3 border-b border-separator px-4 py-3 transition-colors ${
+            selected ? 'bg-accent-soft' : ''
+          }`}
+        >
+          {onSelect ? (
+            <button
+              type="button"
+              onClick={onSelect}
+              aria-pressed={selected}
+              aria-label={market.name}
+              className="flex min-w-0 flex-1 items-center gap-3"
+            >
+              {body}
+            </button>
+          ) : (
+            <Link href={`/market/${market.id}`} className="flex min-w-0 flex-1 items-center gap-3">
+              {body}
+            </Link>
+          )}
+          <Link
+            href={`/market/${market.id}`}
+            aria-label={`${market.name}, ${t('market.browseAll')}`}
+            className="flex h-11 w-11 shrink-0 items-center justify-center"
+          >
+            <ChevronRight size={18} className="text-ink-tertiary" />
+          </Link>
+        </div>
       </motion.div>
     );
   }

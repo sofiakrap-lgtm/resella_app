@@ -64,6 +64,8 @@ export interface AppState {
   pinterestConnected: boolean;
   notificationsEnabled: boolean;
   locationEnabled: boolean;
+  /** The contextual location prompt is shown once, not on every map visit. */
+  locationPromptSeen: boolean;
   largeText: boolean;
   reduceMotion: boolean;
   increaseContrast: boolean;
@@ -87,6 +89,7 @@ const defaultState: AppState = {
   pinterestConnected: false,
   notificationsEnabled: true,
   locationEnabled: false,
+  locationPromptSeen: false,
   largeText: false,
   reduceMotion: false,
   increaseContrast: false,
