@@ -1,6 +1,7 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { formatPrice, marketById, productById } from '@/lib/mockData';
 import { useApp } from '@/lib/state';
@@ -14,11 +15,19 @@ import { EmptyState } from '@/components/ui/StateViews';
 import { RouteIcon, BookmarkIcon } from '@/components/ui/Icons';
 
 export default function ReceiptPage() {
-  const params = useParams<{ id: string }>();
+  return (
+    <Suspense fallback={null}>
+      <ReceiptContent />
+    </Suspense>
+  );
+}
+
+function ReceiptContent() {
+  const params = useSearchParams();
   const { t, reservations, pushToast } = useApp();
   const transition = useTransition('lively');
 
-  const reservation = reservations.find((entry) => entry.id === params.id);
+  const reservation = reservations.find((entry) => entry.id === params.get('id'));
   const product = reservation ? productById(reservation.productId) : undefined;
   const market = product ? marketById(product.marketId) : undefined;
 

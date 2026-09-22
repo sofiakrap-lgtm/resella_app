@@ -32,6 +32,36 @@ Työpöydällä (leveys >= 768 px) sovellus näkyy iPhone 16 Pro -kehyksessä.
 Puhelimessa se on kokoruututilassa ja kunnioittaa turva-alueita. Sovellus on
 PWA-valmis, eli sen voi lisätä puhelimen kotinäyttöön.
 
+## Julkaisu
+
+Demo toimii kolmella tavalla. Kaikki antavat julkisen osoitteen.
+
+**1. Netlify Drop, nopein, ei tilin luontia**
+
+```bash
+npm run build:export   # kirjoittaa ./out
+```
+
+Raahaa `out`-kansio osoitteeseen https://app.netlify.com/drop. Osoite on
+valmis noin 30 sekunnissa.
+
+**2. Vercel, suositus jos haluat automaattiset päivitykset**
+
+Mene osoitteeseen https://vercel.com/new, tuo tämä GitHub-repo ja paina Deploy.
+Ei asetuksia, Next.js tunnistetaan automaattisesti. Jokainen push päivittää
+sivuston.
+
+**3. GitHub Pages, valmis työnkulku repossa**
+
+Repossa on `.github/workflows/pages.yml`. Ota käyttöön kerran:
+Settings -> Pages -> Build and deployment -> Source: **GitHub Actions**.
+Sen jälkeen jokainen push julkaisee osoitteeseen
+`https://<käyttäjä>.github.io/<repo>/`.
+
+Staattinen vienti toimii myös omalla webhotellilla: kopioi `out`-kansion sisältö
+juurihakemistoon. Sivusto tarvitsee palvelimen, `index.html` ei avaudu suoraan
+tiedostojärjestelmästä.
+
 ## Kuvat
 
 Oikeat kuvat pudotetaan kansioon `/assets` (katso [assets/README.md](assets/README.md)).

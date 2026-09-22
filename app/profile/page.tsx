@@ -67,7 +67,7 @@ export default function ProfilePage() {
                 after={<Tag tone="accent">{market?.name ?? reservation.code}</Tag>}
                 link
                 linkComponent={LinkComponent}
-                linkProps={{ href: `/receipt/${reservation.id}` }}
+                linkProps={{ href: `/receipt?id=${reservation.id}` }}
               />
             );
           })
@@ -88,7 +88,7 @@ export default function ProfilePage() {
                 after={formatPrice(reservation.total)}
                 link
                 linkComponent={LinkComponent}
-                linkProps={{ href: `/receipt/${reservation.id}` }}
+                linkProps={{ href: `/receipt?id=${reservation.id}` }}
               />
             );
           })

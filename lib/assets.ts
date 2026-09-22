@@ -7,7 +7,10 @@
  * so a missing file shows a branded placeholder instead of a broken image.
  */
 
-export const ASSET_BASE = '/assets';
+/** Set when the demo is served from a subfolder, for example GitHub Pages. */
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
+export const ASSET_BASE = `${BASE_PATH}/assets`;
 
 export const logos = {
   /** Full logo, logo mark plus wordmark. */
