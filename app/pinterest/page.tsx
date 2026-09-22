@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { products, type Product, type StyleTag } from '@/lib/mockData';
 import { demoImageUrl } from '@/lib/assets';
@@ -13,7 +14,7 @@ import { Mascot } from '@/components/ui/Mascot';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { ProductCard } from '@/components/product/ProductCard';
 import { QuickView } from '@/components/product/QuickView';
-import { ProductCardSkeleton } from '@/components/ui/Skeleton';
+import { ProductCardSkeleton, Skeleton } from '@/components/ui/Skeleton';
 import { ErrorState } from '@/components/ui/StateViews';
 import { SparkleIcon, CameraIcon } from '@/components/ui/Icons';
 
@@ -40,6 +41,15 @@ const PRESET_IMAGES = [
 ];
 
 export default function PinterestPage() {
+  return (
+    <Suspense fallback={<Skeleton className="m-4 h-72 rounded-[18px]" />}>
+      <PinterestContent />
+    </Suspense>
+  );
+}
+
+function PinterestContent() {
+  const search = useSearchParams();
   const { t, pinterestConnected, set } = useApp();
   const transition = useTransition();
   const [phase, setPhase] = useState<Phase>(pinterestConnected ? 'connected' : 'idle');
@@ -50,6 +60,11 @@ export default function PinterestPage() {
   const styleFeed = products.filter(
     (product) => product.status !== 'sold' && product.style.some((tag) => DETECTED_STYLE.includes(tag)),
   );
+
+  useEffect(() => {
+    // Demo switch: append ?demo=error to show the error state.
+    if (search.get('demo') === 'error') setPhase('error');
+  }, [search]);
 
   const connect = () => {
     setPhase('connecting');

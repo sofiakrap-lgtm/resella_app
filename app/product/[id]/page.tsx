@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { addedLabel, formatPrice, marketById, productById } from '@/lib/mockData';
@@ -14,7 +14,7 @@ import { ImageCarousel } from '@/components/ui/ImageCarousel';
 import { Button, IconButton } from '@/components/ui/Button';
 import { Tag } from '@/components/ui/Chip';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { EmptyState } from '@/components/ui/StateViews';
+import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import { ProductRow } from '@/components/product/ProductRow';
 import { MapView } from '@/components/map/MapView';
 import { OpenStatus } from '@/components/market/OpeningHours';
@@ -30,10 +30,17 @@ import {
 
 export default function ProductPage() {
   const params = useParams<{ id: string }>();
+  const search = useSearchParams();
   const router = useRouter();
   const { t, city, wishlist, toggleWishlist, pushToast } = useApp();
   const transition = useTransition();
   const [loading, setLoading] = useState(true);
+  // Demo switch: append ?demo=error to show the error state.
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(search.get('demo') === 'error');
+  }, [search]);
 
   const product = productById(params.id);
   const market = product ? marketById(product.marketId) : undefined;
@@ -59,6 +66,20 @@ export default function ProductPage() {
   const saved = wishlist.includes(product.id);
   const distance = distanceKm(originFor(city), market);
   const unavailable = product.status !== 'available';
+
+  if (failed) {
+    return (
+      <div>
+        <ScreenHeader title={product.title} back />
+        <ErrorState
+          onRetry={() => {
+            setFailed(false);
+            setLoading(true);
+          }}
+        />
+      </div>
+    );
+  }
 
   if (loading) return <ProductSkeleton title={product.title} />;
 

@@ -56,7 +56,8 @@ function ResultsContent() {
   const [view, setView] = useState<'list' | 'map'>('list');
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [loading, setLoading] = useState(true);
-  const [failed] = useState(false);
+  // Demo switch: append ?demo=error to any data screen to show the error state.
+  const [failed, setFailed] = useState(params.get('demo') === 'error');
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [quickView, setQuickView] = useState<Product | null>(null);
@@ -170,7 +171,12 @@ function ResultsContent() {
       ) : null}
 
       {failed ? (
-        <ErrorState onRetry={() => setLoading(true)} />
+        <ErrorState
+          onRetry={() => {
+            setFailed(false);
+            setLoading(true);
+          }}
+        />
       ) : view === 'map' ? (
         <div className="mt-3">
           <MapView

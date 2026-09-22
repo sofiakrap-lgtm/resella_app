@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { marketById, newToday, productsByMarket } from '@/lib/mockData';
@@ -15,7 +15,7 @@ import { SafeImage } from '@/components/ui/SafeImage';
 import { Button, IconButton } from '@/components/ui/Button';
 import { Tag } from '@/components/ui/Chip';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { EmptyState } from '@/components/ui/StateViews';
+import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import { ProductRow } from '@/components/product/ProductRow';
 import { OpeningHoursList } from '@/components/market/OpeningHours';
 import { MapView } from '@/components/map/MapView';
@@ -23,12 +23,19 @@ import { HeartIcon, ShareIcon, RouteIcon, LocationIcon, ChevronDown } from '@/co
 
 export default function MarketPage() {
   const params = useParams<{ id: string }>();
+  const search = useSearchParams();
   const router = useRouter();
   const { t, city, language, favoriteMarkets, toggleFavoriteMarket, pushToast } = useApp();
   const transition = useTransition();
   const now = useNow();
   const [loading, setLoading] = useState(true);
+  // Demo switch: append ?demo=error to show the error state.
+  const [failed, setFailed] = useState(false);
   const [hoursOpen, setHoursOpen] = useState(false);
+
+  useEffect(() => {
+    setFailed(search.get('demo') === 'error');
+  }, [search]);
 
   const market = marketById(params.id);
 
@@ -55,6 +62,20 @@ export default function MarketPage() {
   const laterToday = now ? opensLaterToday(market, now) : null;
   const next = now ? nextOpenDay(market, now) : null;
   const items = productsByMarket(market.id).filter((product) => product.status !== 'sold');
+
+  if (failed) {
+    return (
+      <div>
+        <ScreenHeader title={market.name} back />
+        <ErrorState
+          onRetry={() => {
+            setFailed(false);
+            setLoading(true);
+          }}
+        />
+      </div>
+    );
+  }
 
   if (loading) {
     return (

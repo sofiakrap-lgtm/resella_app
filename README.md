@@ -128,6 +128,18 @@ kiinteäksi, jos käyttöjärjestelmä tai asetus pyytää vähemmän läpinäky
 - **QR-koodi** on deterministinen piirros varauskoodista.
 - **Ilmoitukset** ovat sovelluksen sisäisiä toasteja.
 
+## Tilat esittelyssä
+
+Jokaisella datanäkymällä on lataus-, tyhjä- ja virhetila.
+
+- **Lataus** näkyy aina, kun näkymä avataan (luurangot ja kimallus).
+- **Tyhjä tila** nähdään esimerkiksi haulla, jolle ei ole osumia:
+  `/results?q=kajakki`. Sieltä pääsee tallentamaan hakuvahdin.
+- **Virhetila** on kytketty demoa varten osoitteeseen: lisää `?demo=error`
+  osoitteen perään, esimerkiksi `/results?demo=error`, `/product/p-001?demo=error`,
+  `/market/m-ogeli?demo=error` tai `/pinterest?demo=error`. Nappi `Yritä uudelleen`
+  palaa normaaliin näkymään.
+
 ## Demon kulku esittelyssä
 
 1. `/onboarding`: valitse kaupunki ja pari kiinnostusta.
