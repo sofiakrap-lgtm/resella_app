@@ -64,7 +64,9 @@ tiedostojärjestelmästä.
 
 ## Kuvat
 
-Oikeat kuvat pudotetaan kansioon `/assets` (katso [assets/README.md](assets/README.md)).
+Oikeat kuvat pudotetaan kansioon `/assets`. Tarkka lista jokaisesta
+tiedostonimestä on tiedostossa [assets/KUVALISTA.md](assets/KUVALISTA.md), ja
+ohjeet lataamiseen [assets/README.md](assets/README.md).
 Ne kopioidaan automaattisesti kansioon `/public/assets` ennen `dev` ja `build`
 komentoja. Jokainen kuva renderöidään `<SafeImage>` komponentin kautta, joten
 puuttuva tiedosto näkyy brändin mukaisena paikkamerkkinä, ei rikkinäisenä kuvana.

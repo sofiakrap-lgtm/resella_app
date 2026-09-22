@@ -1,6 +1,28 @@
 # ReSello, kuvatiedostot / image assets
 
+> Tarkka lista jokaisesta tiedostonimestä: [KUVALISTA.md](KUVALISTA.md)
+
 ## Suomeksi
+
+### Miten kuvat lisätään
+
+**Selaimessa, ei vaadi git-osaamista**
+
+1. Avaa repo GitHubissa ja mene haluttuun kansioon, esimerkiksi
+   `assets/product-photos`.
+2. Paina **Add file -> Upload files**.
+3. Raahaa tiedostot ja paina **Commit changes**.
+
+Tiedostojen pitää olla oikein nimettyjä jo ennen lataamista, katso KUVALISTA.md.
+
+**Koneelta gitillä**
+
+```bash
+git pull
+cp ~/kuvat/*.jpg assets/product-photos/
+git add assets && git commit -m "Lisää tuotekuvat" && git push
+```
+
 
 Pudota oikeat kuvat tähän kansioon. Demo toimii ilman niitäkin: jos tiedosto
 puuttuu, sovellus näyttää brändinmukaisen paikkamerkin (ReSello-merkki ja
