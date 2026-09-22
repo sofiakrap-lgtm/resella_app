@@ -5,7 +5,7 @@ export function Skeleton({ className = '' }: { className?: string }) {
 /** Card shaped placeholder used by the product rows and grids. */
 export function ProductCardSkeleton({ wide = false }: { wide?: boolean }) {
   return (
-    <div className={wide ? 'w-full' : 'w-[164px] shrink-0'}>
+    <div className={wide ? 'w-full' : 'w-[168px] shrink-0'}>
       <Skeleton className="aspect-[4/5] w-full rounded-[16px]" />
       <Skeleton className="mt-2 h-4 w-3/4" />
       <Skeleton className="mt-1.5 h-3 w-1/2" />

@@ -5,138 +5,121 @@ import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useApp } from '@/lib/state';
 import { useTransition } from '@/lib/motion';
-import { kidsSizes, adultSizes } from '@/lib/mockData';
+import { categories } from '@/data/categories';
+import { cities } from '@/data/markets';
+import type { CategorySlug } from '@/lib/types';
 import { Mascot } from '@/components/ui/Mascot';
 import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { BrandWordmark } from '@/components/ui/BrandMark';
 
-const TASTE_OPTIONS = ['Vaatteet', 'Lastentarvikkeet', 'Astiat', 'Sisustus', 'Vintage'];
-const ONBOARDING_CITIES = [
-  'Helsinki',
-  'Espoo',
-  'Vantaa',
-  'Tampere',
-  'Turku',
-  'Oulu',
-  'Lahti',
-  'Jyväskylä',
-];
+const SIZE_OPTIONS = ['XS', 'S', 'M', 'L', 'XL', '98', '104', '110', '116', '122', '128'];
 
+/** Three light steps. No account, nothing blocking. */
 export default function OnboardingPage() {
-  const { t, set, city, tasteCategories, preferredSize } = useApp();
+  const { set, city, interests, sizes } = useApp();
   const router = useRouter();
   const transition = useTransition();
-  const [page, setPage] = useState(0);
+  const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
-
-  const pages = 4;
 
   const finish = () => {
     set('onboarded', true);
-    router.replace('/home');
+    router.replace('/koti');
   };
 
   const go = (next: number) => {
     if (next < 0) return;
-    if (next >= pages) {
+    if (next > 2) {
       finish();
       return;
     }
-    setDirection(next > page ? 1 : -1);
-    setPage(next);
+    setDirection(next > step ? 1 : -1);
+    setStep(next);
   };
+
+  const toggle = (list: string[], value: string) =>
+    list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
 
   return (
     <div className="flex flex-1 flex-col px-6 pb-8 pt-4">
       <div className="flex items-center justify-between">
         <BrandWordmark />
-        <button type="button" onClick={finish} className="min-h-11 px-2 t-subhead text-accent">
-          {t('common.skip')}
+        <button type="button" onClick={finish} className="min-h-11 px-2 t-subhead text-terracotta-ink">
+          Ohita
         </button>
       </div>
 
       <div className="relative flex-1 overflow-hidden">
-        <AnimatePresence initial={false} custom={direction} mode="wait">
+        <AnimatePresence initial={false} mode="wait">
           <motion.div
-            key={page}
-            custom={direction}
+            key={step}
             initial={{ opacity: 0, x: direction * 40 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: direction * -40 }}
             transition={transition}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.12}
-            onDragEnd={(_, info) => {
-              if (info.offset.x < -60) go(page + 1);
-              if (info.offset.x > 60) go(page - 1);
-            }}
             className="flex h-full flex-col justify-center py-6"
           >
-            {page === 0 ? (
-              <Slide
-                pose="wave"
-                title={t('onboarding.welcomeTitle')}
-                body={t('onboarding.welcomeBody')}
-              />
+            {step === 0 ? (
+              <div className="text-center">
+                <Mascot pose="wave" size={148} className="mx-auto" />
+                <h1 className="t-large-title mt-6">Tervetuloa</h1>
+                <p className="t-body mt-3 text-brown-70">
+                  Löydä juuri etsimäsi second hand. Näet myös, millä kirpputorilla ja missä pöydässä
+                  tuote odottaa sinua.
+                </p>
+              </div>
             ) : null}
 
-            {page === 1 ? (
-              <Slide pose="search" title={t('onboarding.findTitle')} body={t('onboarding.findBody')} />
-            ) : null}
-
-            {page === 2 ? (
+            {step === 1 ? (
               <div>
-                <Mascot pose="default" size={92} className="mx-auto" />
-                <h2 className="t-title1 mt-5 text-center">{t('onboarding.cityTitle')}</h2>
-                <p className="t-subhead mt-2 text-center text-ink-secondary">{t('onboarding.cityBody')}</p>
-                <div className="mt-6 flex flex-wrap justify-center gap-2">
-                  {ONBOARDING_CITIES.map((name) => (
-                    <Chip key={name} selected={city === name} onClick={() => set('city', name)}>
-                      {name}
+                <h1 className="t-title1 text-center">Mikä kiinnostaa?</h1>
+                <p className="t-subhead mt-2 text-center text-brown-70">
+                  Valitse yksi tai useampi. Voit muuttaa valintoja myöhemmin.
+                </p>
+                <div className="mt-5 flex flex-wrap justify-center gap-2">
+                  {categories.map((category) => (
+                    <Chip
+                      key={category.slug}
+                      selected={interests.includes(category.slug)}
+                      onClick={() =>
+                        set('interests', toggle(interests, category.slug) as CategorySlug[])
+                      }
+                    >
+                      {category.name}
+                    </Chip>
+                  ))}
+                </div>
+
+                <p className="t-headline mt-7 text-center">Tavallisimmat kokosi</p>
+                <p className="t-footnote mt-1 text-center text-brown-70">
+                  Vapaaehtoinen, auttaa nostamaan sopivat löydöt esiin.
+                </p>
+                <div className="mt-3 flex flex-wrap justify-center gap-2">
+                  {SIZE_OPTIONS.map((size) => (
+                    <Chip
+                      key={size}
+                      selected={sizes.includes(size)}
+                      onClick={() => set('sizes', toggle(sizes, size))}
+                    >
+                      {size}
                     </Chip>
                   ))}
                 </div>
               </div>
             ) : null}
 
-            {page === 3 ? (
+            {step === 2 ? (
               <div>
-                <h2 className="t-title1 text-center">{t('onboarding.tasteTitle')}</h2>
-                <p className="t-subhead mt-2 text-center text-ink-secondary">{t('onboarding.tasteBody')}</p>
-                <div className="mt-5 flex flex-wrap justify-center gap-2">
-                  {TASTE_OPTIONS.map((option) => {
-                    const selected = tasteCategories.includes(option);
-                    return (
-                      <Chip
-                        key={option}
-                        selected={selected}
-                        onClick={() =>
-                          set(
-                            'tasteCategories',
-                            selected
-                              ? tasteCategories.filter((item) => item !== option)
-                              : [...tasteCategories, option],
-                          )
-                        }
-                      >
-                        {option}
-                      </Chip>
-                    );
-                  })}
-                </div>
-
-                <p className="t-headline mt-7 text-center">{t('onboarding.sizeLabel')}</p>
-                <p className="t-footnote mt-1 text-center text-ink-secondary">{t('onboarding.sizeHint')}</p>
-                <div className="mt-3 flex flex-wrap justify-center gap-2">
-                  {[...adultSizes, ...kidsSizes.slice(4, 9)].map((size) => (
-                    <Chip
-                      key={size}
-                      selected={preferredSize === size}
-                      onClick={() => set('preferredSize', preferredSize === size ? null : size)}
-                    >
-                      {size}
+                <Mascot pose="search" size={110} className="mx-auto" />
+                <h1 className="t-title1 mt-5 text-center">Missä liikut?</h1>
+                <p className="t-subhead mt-2 text-center text-brown-70">
+                  Näytämme lähimmät kirpputorit ensin.
+                </p>
+                <div className="mt-6 flex flex-wrap justify-center gap-2">
+                  {cities.map((option) => (
+                    <Chip key={option} selected={city === option} onClick={() => set('city', option)}>
+                      {option}
                     </Chip>
                   ))}
                 </div>
@@ -146,42 +129,32 @@ export default function OnboardingPage() {
         </AnimatePresence>
       </div>
 
-      <div className="mt-4 flex justify-center gap-2" role="tablist" aria-label={t('app.name')}>
-        {Array.from({ length: pages }).map((_, index) => (
+      <div className="mt-4 flex justify-center gap-2">
+        {[0, 1, 2].map((index) => (
           <button
             key={index}
             type="button"
-            aria-label={`${index + 1}/${pages}`}
-            aria-selected={index === page}
-            role="tab"
+            aria-label={`Vaihe ${index + 1}/3`}
             onClick={() => go(index)}
             className="flex h-11 w-11 items-center justify-center"
           >
             <motion.span
-              animate={{ width: index === page ? 22 : 7, opacity: index === page ? 1 : 0.35 }}
+              animate={{ width: index === step ? 22 : 7, opacity: index === step ? 1 : 0.35 }}
               transition={transition}
-              className="block h-[7px] rounded-full bg-accent"
+              className="block h-[7px] rounded-full bg-terracotta"
             />
           </button>
         ))}
       </div>
 
       <div className="mt-3">
-        <Button full size="lg" onClick={() => go(page + 1)}>
-          {page === pages - 1 ? t('common.start') : t('common.continue')}
+        <Button full size="lg" onClick={() => go(step + 1)}>
+          {step === 2 ? 'Valmista' : 'Jatka'}
         </Button>
-        <p className="t-caption1 mt-3 text-center text-ink-secondary">{t('onboarding.noAccount')}</p>
+        <p className="t-caption mt-3 text-center text-brown-70">
+          Ei tarvitse luoda tiliä. Voit selata heti.
+        </p>
       </div>
-    </div>
-  );
-}
-
-function Slide({ pose, title, body }: { pose: 'wave' | 'search'; title: string; body: string }) {
-  return (
-    <div className="text-center">
-      <Mascot pose={pose} size={148} className="mx-auto" />
-      <h2 className="t-large-title mt-6">{title}</h2>
-      <p className="t-body mt-3 text-ink-secondary">{body}</p>
     </div>
   );
 }

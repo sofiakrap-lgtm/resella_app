@@ -9,7 +9,7 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 export const metadata: Metadata = {
   title: 'ReSello',
   description:
-    'ReSello, löydä aarteesi läheltä. Hae tuotteita kaikilta kirpputoreilta ja näe, missä pöydässä ne ovat.',
+    'ReSello, löydä aarteesi läheltä. Selaa kirpputorien tuotteita ja näe heti, missä kaapissa ne odottavat.',
   manifest: `${BASE_PATH}/manifest.webmanifest`,
   appleWebApp: {
     capable: true,
@@ -27,10 +27,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   viewportFit: 'cover',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#faf1e0' },
-    { media: '(prefers-color-scheme: dark)', color: '#191008' },
-  ],
+  themeColor: '#fffbf4',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

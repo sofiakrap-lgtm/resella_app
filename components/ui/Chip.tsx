@@ -4,17 +4,21 @@ import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
 import { useTapScale, useTransition } from '@/lib/motion';
 
-interface ChipProps {
+export function Chip({
+  children,
+  selected = false,
+  onClick,
+  icon,
+  className = '',
+  ariaLabel,
+}: {
   children: ReactNode;
   selected?: boolean;
   onClick?: () => void;
   icon?: ReactNode;
   className?: string;
   ariaLabel?: string;
-}
-
-/** Interactive pill. Keeps a 44pt touch target even though it looks compact. */
-export function Chip({ children, selected = false, onClick, icon, className = '', ariaLabel }: ChipProps) {
+}) {
   const tap = useTapScale();
   const transition = useTransition('press');
   return (
@@ -29,8 +33,8 @@ export function Chip({ children, selected = false, onClick, icon, className = ''
         'inline-flex min-h-11 max-w-full shrink-0 items-center gap-1.5 rounded-full px-4 t-subhead',
         'border transition-colors duration-150',
         selected
-          ? 'border-accent bg-accent text-on-accent font-semibold'
-          : 'border-separator bg-surface text-ink',
+          ? 'border-terracotta-ink bg-terracotta-ink text-on-terracotta font-semibold'
+          : 'border-separator bg-cream text-brown',
         className,
       ].join(' ')}
     >
@@ -48,20 +52,20 @@ export function Tag({
   className = '',
 }: {
   children: ReactNode;
-  tone?: 'neutral' | 'accent' | 'warn' | 'success' | 'danger';
+  tone?: 'neutral' | 'accent' | 'positive' | 'warning' | 'danger';
   icon?: ReactNode;
   className?: string;
 }) {
   const tones = {
-    neutral: 'bg-surface-2 text-ink-secondary',
-    accent: 'bg-accent-soft text-accent',
-    warn: 'bg-accent-soft text-warning',
-    success: 'bg-accent-soft text-success',
-    danger: 'bg-accent-soft text-danger',
+    neutral: 'bg-cream-sink text-brown-70',
+    accent: 'bg-cream-panel text-terracotta-ink',
+    positive: 'bg-cream-panel text-positive',
+    warning: 'bg-cream-panel text-warning',
+    danger: 'bg-cream-panel text-danger',
   } as const;
   return (
     <span
-      className={`inline-flex max-w-full items-center gap-1 rounded-full px-2.5 py-1 t-caption1 ${tones[tone]} ${className}`}
+      className={`inline-flex max-w-full items-center gap-1 rounded-full px-2.5 py-1 t-caption ${tones[tone]} ${className}`}
     >
       {icon}
       {children}

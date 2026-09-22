@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { productPhotoUrl } from '@/lib/assets';
+import { productImage } from '@/lib/imagePath';
 import { SafeImage } from './SafeImage';
 
 interface ImageCarouselProps {
@@ -28,7 +28,7 @@ export function ImageCarousel({ photos, alt, label, className = '', layoutId, ov
   };
 
   return (
-    <motion.div layoutId={layoutId} className={`relative bg-surface-2 ${className}`}>
+    <motion.div layoutId={layoutId} className={`relative bg-cream-sink ${className}`}>
       <div
         ref={scroller}
         onScroll={onScroll}
@@ -37,7 +37,7 @@ export function ImageCarousel({ photos, alt, label, className = '', layoutId, ov
         {photos.map((photo, photoIndex) => (
           <div key={photo} className="h-full w-full shrink-0 snap-center">
             <SafeImage
-              src={productPhotoUrl(photo)}
+              src={productImage(photo)}
               alt={`${alt} ${photoIndex + 1}/${photos.length}`}
               label={label}
               className="h-full w-full object-cover"
@@ -54,7 +54,7 @@ export function ImageCarousel({ photos, alt, label, className = '', layoutId, ov
               key={photo}
               className="h-1.5 w-1.5 rounded-full transition-opacity"
               style={{
-                background: 'var(--color-surface)',
+                background: 'var(--color-cream)',
                 opacity: dotIndex === index ? 1 : 0.45,
                 boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
               }}

@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion, type PanInfo } from 'framer-motion';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
-import { useApp } from '@/lib/state';
 import { useTransition } from '@/lib/motion';
 import { IconButton } from './Button';
 import { CloseIcon } from './Icons';
@@ -40,7 +39,6 @@ export function Sheet({
   zIndexClass = 'z-50',
   backdrop = true,
 }: SheetProps) {
-  const { t } = useApp();
   const transition = useTransition('sheet');
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerHeight, setContainerHeight] = useState(0);
@@ -105,12 +103,12 @@ export function Sheet({
             {backdrop ? (
               <motion.button
                 type="button"
-                aria-label={t('common.close')}
+                aria-label={'Sulje'}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="pointer-events-auto absolute inset-0 bg-black/30"
+                className="pointer-events-auto absolute inset-0 bg-[rgba(60,36,21,0.35)]"
               />
             ) : null}
             <motion.div
@@ -126,15 +124,15 @@ export function Sheet({
               dragConstraints={{ top: 0, bottom: sheetHeight }}
               onDragEnd={handleDragEnd}
               style={{ height: sheetHeight || undefined }}
-              className="pointer-events-auto absolute inset-x-0 bottom-0 flex flex-col overflow-hidden rounded-t-[22px] bg-surface shadow-raised"
+              className="pointer-events-auto absolute inset-x-0 bottom-0 flex flex-col overflow-hidden rounded-t-[22px] bg-cream shadow-raised"
             >
               <div className="glass-flat shrink-0 rounded-t-[22px] border-b border-separator px-4 pb-2 pt-2">
-                <div className="mx-auto h-1.5 w-10 rounded-full bg-ink-tertiary" aria-hidden="true" />
+                <div className="mx-auto h-1.5 w-10 rounded-full bg-brown-50" aria-hidden="true" />
                 {title ? (
                   <div className="mt-2 flex items-center justify-between">
                     <h2 className="t-headline">{title}</h2>
                     {dismissible ? (
-                      <IconButton ariaLabel={t('common.close')} onClick={onClose}>
+                      <IconButton ariaLabel={'Sulje'} onClick={onClose}>
                         <CloseIcon size={20} />
                       </IconButton>
                     ) : null}

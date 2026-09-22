@@ -1,24 +1,26 @@
 'use client';
 
 import { useApp } from './state';
-import { spring, reducedTransition } from './tokens';
 
-type SpringName = keyof typeof spring;
+/** iOS style springs. Only transform and opacity are ever animated. */
+export const spring = {
+  default: { type: 'spring', stiffness: 170, damping: 26, mass: 1 },
+  lively: { type: 'spring', stiffness: 100, damping: 10, mass: 1 },
+  sheet: { type: 'spring', stiffness: 130, damping: 18, mass: 1 },
+  press: { type: 'spring', stiffness: 400, damping: 30, mass: 0.6 },
+} as const;
 
-/**
- * Returns a Framer Motion transition that respects the reduced motion setting
- * (both the OS level one and the in app toggle).
- */
-export function useTransition(name: SpringName = 'default') {
+const reduced = { duration: 0.15, ease: 'easeOut' } as const;
+
+export function useTransition(name: keyof typeof spring = 'default') {
   const { motionEnabled } = useApp();
-  return motionEnabled ? spring[name] : reducedTransition;
+  return motionEnabled ? spring[name] : reduced;
 }
 
-/** Staggered list entrance, collapses to a plain fade when motion is reduced. */
 export function useStagger(index: number, step = 0.04) {
   const { motionEnabled } = useApp();
-  if (!motionEnabled) return { ...reducedTransition, delay: 0 };
-  return { ...spring.default, delay: Math.min(index * step, 0.4) };
+  if (!motionEnabled) return { ...reduced, delay: 0 };
+  return { ...spring.default, delay: Math.min(index * step, 0.35) };
 }
 
 export function useTapScale(scale = 0.97) {

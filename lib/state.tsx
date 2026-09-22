@@ -1,9 +1,8 @@
 'use client';
 
 /**
- * Single client side store for the demo. Everything is local: no backend, no
- * accounts. State is persisted to localStorage so the demo survives reloads,
- * and it is only read after mount to keep server and client markup identical.
+ * Client side store for the consumer app. Everything is local: no backend and no
+ * account. State is restored after mount so the server and client markup match.
  */
 
 import {
@@ -15,30 +14,8 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { Language, StringKey, translate } from './i18n';
-import { Filters, emptyFilters } from './search';
-
-export type ThemePreference = 'system' | 'light' | 'dark';
-
-export interface SavedSearch {
-  id: string;
-  label: string;
-  filters: Filters;
-  notify: boolean;
-  lastMatchDaysAgo: number | null;
-}
-
-export interface Reservation {
-  id: string;
-  productId: string;
-  kind: 'reservation' | 'purchase';
-  pickupHours: number;
-  createdAtIso: string;
-  code: string;
-  name?: string;
-  phone?: string;
-  total: number;
-}
+import type { CategorySlug, Filters, Reservation, SavedSearch } from './types';
+import { seedSavedSearches } from '@/data/savedSearches';
 
 export interface Toast {
   id: string;
@@ -47,66 +24,55 @@ export interface Toast {
   href?: string;
 }
 
-export interface AppState {
-  ready: boolean;
+interface Stored {
   onboarded: boolean;
-  language: Language;
-  theme: ThemePreference;
   city: string;
-  name: string;
-  tasteCategories: string[];
-  preferredSize: string | null;
+  interests: CategorySlug[];
+  sizes: string[];
   wishlist: string[];
-  favoriteMarkets: string[];
+  followedMarkets: string[];
+  followedSellers: string[];
   savedSearches: SavedSearch[];
   reservations: Reservation[];
+  /** Items this viewer has reserved, shown as "Varattu" to everyone. */
+  reservedIds: string[];
+  readNotifications: string[];
   recentSearches: string[];
-  pinterestConnected: boolean;
-  notificationsEnabled: boolean;
-  locationEnabled: boolean;
-  /** The contextual location prompt is shown once, not on every map visit. */
-  locationPromptSeen: boolean;
   largeText: boolean;
   reduceMotion: boolean;
-  increaseContrast: boolean;
-  reduceTransparency: boolean;
+  highContrast: boolean;
 }
 
-const defaultState: AppState = {
-  ready: false,
+const defaults: Stored = {
   onboarded: false,
-  language: 'fi',
-  theme: 'system',
   city: 'Helsinki',
-  name: 'Sofia',
-  tasteCategories: [],
-  preferredSize: null,
+  interests: [],
+  sizes: [],
   wishlist: [],
-  favoriteMarkets: ['m-ogeli'],
-  savedSearches: [],
+  followedMarkets: ['ogeli-hki'],
+  followedSellers: ['anni-k'],
+  savedSearches: seedSavedSearches,
   reservations: [],
+  reservedIds: [],
+  readNotifications: [],
   recentSearches: [],
-  pinterestConnected: false,
-  notificationsEnabled: true,
-  locationEnabled: false,
-  locationPromptSeen: false,
   largeText: false,
   reduceMotion: false,
-  increaseContrast: false,
-  reduceTransparency: false,
+  highContrast: false,
 };
 
-interface AppContextValue extends AppState {
-  t: (key: StringKey, params?: Record<string, string | number>) => string;
-  set: <K extends keyof AppState>(key: K, value: AppState[K]) => void;
+interface Value extends Stored {
+  ready: boolean;
+  set: <K extends keyof Stored>(key: K, value: Stored[K]) => void;
   toggleWishlist: (productId: string) => void;
-  toggleFavoriteMarket: (marketId: string) => void;
-  addSavedSearch: (label: string, filters: Filters) => void;
+  toggleFollowMarket: (marketId: string) => void;
+  toggleFollowSeller: (sellerId: string) => void;
+  addSavedSearch: (label: string, query: string, filters: Partial<Filters>) => void;
   removeSavedSearch: (id: string) => void;
-  toggleSavedSearchNotify: (id: string) => void;
   addRecentSearch: (query: string) => void;
-  clearRecentSearches: () => void;
-  addReservation: (reservation: Omit<Reservation, 'id' | 'createdAtIso' | 'code'>) => Reservation;
+  reserve: (input: Omit<Reservation, 'id' | 'code' | 'createdAtIso'>) => Reservation;
+  cancelReservation: (id: string) => void;
+  markNotificationsRead: () => void;
   resetDemo: () => void;
   toasts: Toast[];
   pushToast: (toast: Omit<Toast, 'id'>) => void;
@@ -114,136 +80,102 @@ interface AppContextValue extends AppState {
   motionEnabled: boolean;
 }
 
-const AppContext = createContext<AppContextValue | null>(null);
+const AppContext = createContext<Value | null>(null);
+const STORAGE_KEY = 'resello-consumer-v1';
 
-const STORAGE_KEY = 'resello-demo-v1';
-
-function randomCode(): string {
+function code(): string {
   const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code = '';
-  for (let i = 0; i < 6; i += 1) {
-    code += alphabet[Math.floor(Math.random() * alphabet.length)];
-  }
-  return `RS-${code}`;
+  let out = '';
+  for (let i = 0; i < 6; i += 1) out += alphabet[Math.floor(Math.random() * alphabet.length)];
+  return `RS-${out}`;
 }
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AppState>(defaultState);
+  const [state, setState] = useState<Stored>(defaults);
+  const [ready, setReady] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [systemDark, setSystemDark] = useState(false);
   const [systemReducedMotion, setSystemReducedMotion] = useState(false);
 
-  // Restore persisted state after mount, never during render.
   useEffect(() => {
-    let restored: Partial<AppState> = {};
+    let restored: Partial<Stored> = {};
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) restored = JSON.parse(raw) as Partial<AppState>;
+      if (raw) restored = JSON.parse(raw) as Partial<Stored>;
     } catch {
       restored = {};
     }
-    setState((current) => ({ ...current, ...restored, ready: true }));
+    setState((current) => ({ ...current, ...restored }));
+    setReady(true);
   }, []);
 
   useEffect(() => {
-    if (!state.ready) return;
+    if (!ready) return;
     try {
-      const { ready, ...persisted } = state;
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(persisted));
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch {
-      // Storage can be unavailable in private mode, the demo still works.
+      // Private mode, the demo still works without persistence.
     }
-  }, [state]);
+  }, [state, ready]);
 
   useEffect(() => {
-    const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync = () => {
-      setSystemDark(darkQuery.matches);
-      setSystemReducedMotion(motionQuery.matches);
-    };
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setSystemReducedMotion(query.matches);
     sync();
-    darkQuery.addEventListener('change', sync);
-    motionQuery.addEventListener('change', sync);
-    return () => {
-      darkQuery.removeEventListener('change', sync);
-      motionQuery.removeEventListener('change', sync);
-    };
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
   }, []);
 
-  // Reflect the accessibility and theme choices on the document element.
+  // Accessibility settings are reflected on the document element.
   useEffect(() => {
     const root = document.documentElement;
-    const dark = state.theme === 'dark' || (state.theme === 'system' && systemDark);
-    root.classList.toggle('dark', dark);
-    root.style.setProperty('--text-scale', state.largeText ? '1.22' : '1');
-    root.dataset.contrast = state.increaseContrast ? 'high' : 'normal';
+    root.style.setProperty('--text-scale', state.largeText ? '1.2' : '1');
+    root.dataset.contrast = state.highContrast ? 'high' : 'normal';
     root.dataset.motion = state.reduceMotion ? 'reduce' : 'normal';
-    root.dataset.transparency = state.reduceTransparency ? 'reduce' : 'normal';
-    root.lang = state.language;
-  }, [
-    state.theme,
-    state.largeText,
-    state.increaseContrast,
-    state.reduceMotion,
-    state.reduceTransparency,
-    state.language,
-    systemDark,
-  ]);
+  }, [state.largeText, state.highContrast, state.reduceMotion]);
 
-  const set = useCallback(<K extends keyof AppState>(key: K, value: AppState[K]) => {
+  const set = useCallback(<K extends keyof Stored>(key: K, value: Stored[K]) => {
     setState((current) => ({ ...current, [key]: value }));
   }, []);
 
   const pushToast = useCallback((toast: Omit<Toast, 'id'>) => {
-    const id = `toast-${Date.now()}-${Math.round(Math.random() * 1000)}`;
+    const id = `t-${Date.now()}-${Math.round(Math.random() * 999)}`;
     setToasts((current) => [...current, { ...toast, id }]);
-    window.setTimeout(() => {
-      setToasts((current) => current.filter((item) => item.id !== id));
-    }, 4500);
+    window.setTimeout(() => setToasts((current) => current.filter((t) => t.id !== id)), 4200);
   }, []);
 
   const dismissToast = useCallback((id: string) => {
-    setToasts((current) => current.filter((item) => item.id !== id));
+    setToasts((current) => current.filter((toast) => toast.id !== id));
   }, []);
 
-  const value = useMemo<AppContextValue>(() => {
-    const t = (key: StringKey, params?: Record<string, string | number>) =>
-      translate(state.language, key, params);
+  const toggle = (list: string[], value: string) =>
+    list.includes(value) ? list.filter((item) => item !== value) : [value, ...list];
 
-    return {
+  const value = useMemo<Value>(
+    () => ({
       ...state,
-      t,
-      set,
+      ready,
       toasts,
       pushToast,
       dismissToast,
       motionEnabled: !state.reduceMotion && !systemReducedMotion,
+      set,
       toggleWishlist: (productId) =>
+        setState((current) => ({ ...current, wishlist: toggle(current.wishlist, productId) })),
+      toggleFollowMarket: (marketId) =>
         setState((current) => ({
           ...current,
-          wishlist: current.wishlist.includes(productId)
-            ? current.wishlist.filter((id) => id !== productId)
-            : [productId, ...current.wishlist],
+          followedMarkets: toggle(current.followedMarkets, marketId),
         })),
-      toggleFavoriteMarket: (marketId) =>
+      toggleFollowSeller: (sellerId) =>
         setState((current) => ({
           ...current,
-          favoriteMarkets: current.favoriteMarkets.includes(marketId)
-            ? current.favoriteMarkets.filter((id) => id !== marketId)
-            : [marketId, ...current.favoriteMarkets],
+          followedSellers: toggle(current.followedSellers, sellerId),
         })),
-      addSavedSearch: (label, filters) =>
+      addSavedSearch: (label, query, filters) =>
         setState((current) => ({
           ...current,
           savedSearches: [
-            {
-              id: `alert-${Date.now()}`,
-              label,
-              filters,
-              notify: true,
-              lastMatchDaysAgo: null,
-            },
+            { id: `vahti-${Date.now()}`, label, query, filters, newMatches: 0 },
             ...current.savedSearches,
           ],
         })),
@@ -252,69 +184,68 @@ export function AppProvider({ children }: { children: ReactNode }) {
           ...current,
           savedSearches: current.savedSearches.filter((search) => search.id !== id),
         })),
-      toggleSavedSearchNotify: (id) =>
-        setState((current) => ({
-          ...current,
-          savedSearches: current.savedSearches.map((search) =>
-            search.id === id ? { ...search, notify: !search.notify } : search,
-          ),
-        })),
       addRecentSearch: (query) =>
         setState((current) => {
           const trimmed = query.trim();
           if (!trimmed) return current;
           return {
             ...current,
-            recentSearches: [trimmed, ...current.recentSearches.filter((item) => item !== trimmed)].slice(
+            recentSearches: [trimmed, ...current.recentSearches.filter((q) => q !== trimmed)].slice(
               0,
               8,
             ),
           };
         }),
-      clearRecentSearches: () => setState((current) => ({ ...current, recentSearches: [] })),
-      addReservation: (input) => {
+      reserve: (input) => {
         const reservation: Reservation = {
           ...input,
           id: `res-${Date.now()}`,
+          code: code(),
           createdAtIso: new Date().toISOString(),
-          code: randomCode(),
         };
         setState((current) => ({
           ...current,
           reservations: [reservation, ...current.reservations],
+          reservedIds: [...current.reservedIds, input.productId],
         }));
         return reservation;
       },
+      cancelReservation: (id) =>
+        setState((current) => {
+          const target = current.reservations.find((reservation) => reservation.id === id);
+          return {
+            ...current,
+            reservations: current.reservations.filter((reservation) => reservation.id !== id),
+            reservedIds: target
+              ? current.reservedIds.filter((productId) => productId !== target.productId)
+              : current.reservedIds,
+          };
+        }),
+      markNotificationsRead: () =>
+        setState((current) => ({ ...current, readNotifications: ['all'] })),
       resetDemo: () => {
         try {
           window.localStorage.removeItem(STORAGE_KEY);
         } catch {
           // ignore
         }
-        setState({ ...defaultState, ready: true });
+        setState(defaults);
         setToasts([]);
       },
-    };
-  }, [state, set, toasts, pushToast, dismissToast, systemReducedMotion]);
+    }),
+    [state, ready, toasts, set, pushToast, dismissToast, systemReducedMotion],
+  );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
 
-export function useApp(): AppContextValue {
+export function useApp(): Value {
   const context = useContext(AppContext);
   if (!context) throw new Error('useApp must be used inside AppProvider');
   return context;
 }
 
-/** Convenience hook for components that only need the translator. */
-export function useT() {
-  return useApp().t;
-}
-
-/**
- * Current time, resolved after mount so opening hour badges never differ
- * between the server rendered markup and the client.
- */
+/** Current time, resolved after mount so opening hours never mismatch on hydration. */
 export function useNow(): Date | null {
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
@@ -324,5 +255,3 @@ export function useNow(): Date | null {
   }, []);
   return now;
 }
-
-export { emptyFilters };

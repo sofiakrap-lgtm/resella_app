@@ -24,7 +24,7 @@ export function Segmented<T extends string>({
     <div
       role="tablist"
       aria-label={ariaLabel}
-      className={`relative flex rounded-full bg-surface-2 p-1 ${className}`}
+      className={`relative flex rounded-full bg-cream-sink p-1 ${className}`}
     >
       {options.map((option) => {
         const selected = option.value === value;
@@ -36,13 +36,13 @@ export function Segmented<T extends string>({
             aria-selected={selected}
             onClick={() => onChange(option.value)}
             className="relative z-10 min-h-11 min-w-0 flex-1 truncate rounded-full px-3 t-subhead font-semibold"
-            style={{ color: selected ? 'var(--color-text)' : 'var(--color-text-secondary)' }}
+            style={{ color: selected ? 'var(--color-brown)' : 'var(--color-brown-70)' }}
           >
             {selected ? (
               <motion.span
                 layoutId={`segmented-${ariaLabel}`}
                 transition={transition}
-                className="absolute inset-0 -z-10 rounded-full bg-surface shadow-card"
+                className="absolute inset-0 -z-10 rounded-full bg-cream shadow-card"
               />
             ) : null}
             {option.label}

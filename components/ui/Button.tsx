@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import type { ReactNode } from 'react';
 import { useTapScale, useTransition } from '@/lib/motion';
 
-type Variant = 'primary' | 'secondary' | 'glass' | 'plain' | 'danger';
+type Variant = 'primary' | 'secondary' | 'quiet' | 'glass';
 type Size = 'lg' | 'md' | 'sm';
 
 interface BaseProps {
@@ -31,23 +31,21 @@ interface LinkProps extends BaseProps {
 }
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-accent text-on-accent shadow-card',
-  secondary: 'bg-surface text-ink border border-separator shadow-card',
-  glass: 'glass text-ink',
-  plain: 'text-accent',
-  danger: 'bg-surface text-danger border border-separator',
+  primary: 'bg-terracotta-ink text-on-terracotta shadow-card',
+  secondary: 'bg-cream text-brown border border-separator shadow-card',
+  quiet: 'text-terracotta-ink',
+  glass: 'glass text-brown',
 };
 
 const sizes: Record<Size, string> = {
   lg: 'min-h-[52px] px-6 t-headline',
-  md: 'min-h-[44px] px-5 t-callout font-semibold',
-  sm: 'min-h-[44px] px-4 t-subhead font-semibold',
+  md: 'min-h-11 px-5 t-body font-semibold',
+  sm: 'min-h-11 px-4 t-subhead font-semibold',
 };
 
 function classesFor({ variant = 'primary', size = 'md', full, disabled, className = '' }: BaseProps) {
   return [
-    'inline-flex items-center justify-center gap-2 rounded-full select-none',
-    'transition-colors duration-150',
+    'inline-flex items-center justify-center gap-2 rounded-full select-none transition-colors duration-150',
     variants[variant],
     sizes[size],
     full ? 'w-full' : '',
@@ -61,23 +59,17 @@ function classesFor({ variant = 'primary', size = 'md', full, disabled, classNam
 export function Button(props: ButtonProps | LinkProps) {
   const tap = useTapScale();
   const transition = useTransition('press');
-  const { children, icon, ariaLabel } = props;
   const content = (
     <>
-      {icon}
-      {children}
+      {props.icon}
+      {props.children}
     </>
   );
 
   if ('href' in props && props.href) {
     return (
       <motion.div whileTap={tap} transition={transition} className={props.full ? 'w-full' : 'inline-flex'}>
-        <Link
-          href={props.href}
-          onClick={props.onClick}
-          aria-label={ariaLabel}
-          className={classesFor(props)}
-        >
+        <Link href={props.href} onClick={props.onClick} aria-label={props.ariaLabel} className={classesFor(props)}>
           {content}
         </Link>
       </motion.div>
@@ -90,7 +82,7 @@ export function Button(props: ButtonProps | LinkProps) {
       type={buttonProps.type ?? 'button'}
       onClick={buttonProps.onClick}
       disabled={buttonProps.disabled}
-      aria-label={ariaLabel}
+      aria-label={props.ariaLabel}
       whileTap={tap}
       transition={transition}
       className={classesFor(props)}
@@ -100,7 +92,7 @@ export function Button(props: ButtonProps | LinkProps) {
   );
 }
 
-/** Circular icon button, always a 44x44 touch target. */
+/** Circular icon button, always a 44pt touch target. */
 export function IconButton({
   children,
   onClick,
@@ -116,11 +108,11 @@ export function IconButton({
   className?: string;
   href?: string;
 }) {
-  const tap = useTapScale(0.92);
+  const tap = useTapScale(0.9);
   const transition = useTransition('press');
   const classes = [
     'inline-flex h-11 w-11 items-center justify-center rounded-full',
-    active ? 'text-accent-2' : 'text-ink',
+    active ? 'text-terracotta' : 'text-brown',
     className,
   ].join(' ');
 

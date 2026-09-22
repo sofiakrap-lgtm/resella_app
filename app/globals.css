@@ -1,133 +1,79 @@
 @import 'tailwindcss';
-/* Konsta's React entry point registers its own sources, so Tailwind sees the
-   utility classes used by the pre-built components inside node_modules. */
+/* Konsta's React entry registers its own sources, so Tailwind sees the classes
+   used by the pre-built iOS components inside node_modules. */
 @import 'konsta/react/theme.css';
 
 /* ---------------------------------------------------------------------------
-   ReSello design tokens
-   Colour values are brand placeholders and can be swapped in one place.
+   ReSello brand tokens
+   Cream is the canvas, deep brown carries the text, terracotta is the single
+   accent. Alphas are picked so text clears WCAG AA on every surface.
 --------------------------------------------------------------------------- */
 :root {
   --text-scale: 1;
 
-  /* ReSello brand colours: beige #FAF1E0 and dark brown #3C2415.
-     Everything else is a tint or shade of those two, which keeps the view
-     visually calm and easy on the eye. */
-  --color-bg: #faf1e0;
-  --color-bg-elevated: #f3e6cf;
-  --color-surface: #fffbf3;
-  --color-surface-2: #f4e9d5;
-  --color-text: #3c2415;
-  /* Alphas picked so secondary text clears 4.5:1 and tertiary icons clear 3:1
-     on every surface in this palette. */
-  --color-text-secondary: rgba(60, 36, 21, 0.7);
-  --color-text-tertiary: rgba(60, 36, 21, 0.55);
-  --color-accent: #3c2415;
-  --color-accent-strong: #26150a;
-  --color-on-accent: #faf1e0;
-  --color-accent-2: #a65a32;
-  --color-accent-soft: #f1e2c6;
-  --color-separator: rgba(60, 36, 21, 0.16);
-  --color-success: #40643f;
+  --color-cream: #fffbf4;
+  --color-cream-panel: #fff6ea;
+  --color-cream-sink: #f7eddf;
+  --color-brown: #3c2415;
+  --color-brown-70: rgba(60, 36, 21, 0.7);
+  --color-brown-50: rgba(60, 36, 21, 0.55);
+  --color-terracotta: #c0693a;
+  --color-terracotta-ink: #8f4a28;
+  --color-on-terracotta: #fffbf4;
+  --color-separator: rgba(60, 36, 21, 0.14);
+  --color-positive: #3f6b46;
   --color-warning: #8a5310;
   --color-danger: #9c3421;
 
-  --glass-bg: rgba(255, 251, 243, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.55);
-  --glass-shadow: 0 8px 28px rgba(60, 36, 21, 0.16);
-  --glass-blur: 24px;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-lg: 26px;
 
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 22px;
+  --shadow-card: 0 1px 2px rgba(60, 36, 21, 0.05), 0 10px 26px -18px rgba(60, 36, 21, 0.55);
+  --shadow-raised: 0 2px 8px rgba(60, 36, 21, 0.08), 0 22px 50px -26px rgba(60, 36, 21, 0.55);
 
-  --shadow-card: 0 1px 2px rgba(60, 36, 21, 0.06), 0 6px 18px rgba(60, 36, 21, 0.08);
-  --shadow-raised: 0 2px 6px rgba(60, 36, 21, 0.1), 0 16px 40px rgba(60, 36, 21, 0.14);
+  --glass-bg: rgba(255, 251, 244, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-blur: 22px;
 
-  --k-color-primary: var(--color-accent);
+  --k-color-primary: var(--color-terracotta);
   color-scheme: light;
 }
 
-.dark {
-  --color-bg: #191008;
-  --color-bg-elevated: #211710;
-  --color-surface: #261a10;
-  --color-surface-2: #302217;
-  --color-text: #f7eddc;
-  --color-text-secondary: rgba(247, 237, 220, 0.68);
-  --color-text-tertiary: rgba(247, 237, 220, 0.42);
-  --color-accent: #e7cca6;
-  --color-accent-strong: #f2dec3;
-  --color-on-accent: #291a0e;
-  --color-accent-2: #dd9a6c;
-  --color-accent-soft: #33241a;
-  --color-separator: rgba(247, 237, 220, 0.18);
-  --color-success: #8fbf8c;
-  --color-warning: #e0b063;
-  --color-danger: #f0907c;
-
-  --glass-bg: rgba(48, 34, 23, 0.68);
-  --glass-border: rgba(247, 237, 220, 0.14);
-  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.42), 0 8px 22px rgba(0, 0, 0, 0.38);
-  --shadow-raised: 0 2px 8px rgba(0, 0, 0, 0.48), 0 18px 44px rgba(0, 0, 0, 0.52);
-
-  color-scheme: dark;
-}
-
-/* Accessibility: "Lisää kontrastia" setting and the OS level equivalent. */
+/* "Lisää kontrastia" setting and the OS level equivalent. */
 :root[data-contrast='high'] {
-  --color-text-secondary: rgba(46, 27, 15, 0.94);
-  --color-text-tertiary: rgba(46, 27, 15, 0.72);
-  --color-separator: rgba(46, 27, 15, 0.5);
-  --glass-bg: rgba(255, 251, 243, 0.97);
-  --glass-border: rgba(46, 27, 15, 0.45);
+  --color-brown-70: rgba(48, 28, 16, 0.95);
+  --color-brown-50: rgba(48, 28, 16, 0.8);
+  --color-separator: rgba(60, 36, 21, 0.5);
+  --glass-bg: rgba(255, 251, 244, 0.98);
   --glass-blur: 0px;
 }
 
-:root[data-contrast='high'].dark {
-  --color-text-secondary: rgba(247, 237, 220, 0.94);
-  --color-text-tertiary: rgba(247, 237, 220, 0.76);
-  --color-separator: rgba(247, 237, 220, 0.55);
-  --glass-bg: rgba(25, 16, 8, 0.97);
-  --glass-border: rgba(247, 237, 220, 0.45);
-}
-
 @theme inline {
-  /* Konsta derives its palette from a literal hex, the runtime accent stays in
-     sync through --k-color-primary above. */
-  --color-brand-primary: #3c2415;
-  --color-bg: var(--color-bg);
-  --color-bg-elevated: var(--color-bg-elevated);
-  --color-surface: var(--color-surface);
-  --color-surface-2: var(--color-surface-2);
-  --color-ink: var(--color-text);
-  --color-ink-secondary: var(--color-text-secondary);
-  --color-ink-tertiary: var(--color-text-tertiary);
-  --color-accent: var(--color-accent);
-  --color-accent-strong: var(--color-accent-strong);
-  --color-on-accent: var(--color-on-accent);
-  --color-accent-2: var(--color-accent-2);
-  --color-accent-soft: var(--color-accent-soft);
+  /* Konsta derives its palette from a literal hex. */
+  --color-brand-primary: #c0693a;
+
+  --color-cream: var(--color-cream);
+  --color-cream-panel: var(--color-cream-panel);
+  --color-cream-sink: var(--color-cream-sink);
+  --color-brown: var(--color-brown);
+  --color-brown-70: var(--color-brown-70);
+  --color-brown-50: var(--color-brown-50);
+  --color-terracotta: var(--color-terracotta);
+  --color-terracotta-ink: var(--color-terracotta-ink);
+  --color-on-terracotta: var(--color-on-terracotta);
   --color-separator: var(--color-separator);
-  --color-success: var(--color-success);
+  --color-positive: var(--color-positive);
   --color-warning: var(--color-warning);
   --color-danger: var(--color-danger);
 
-  --radius-sm: var(--radius-sm);
-  --radius-md: var(--radius-md);
-  --radius-lg: var(--radius-lg);
-
+  --radius-card: var(--radius);
   --shadow-card: var(--shadow-card);
   --shadow-raised: var(--shadow-raised);
 
-  /* Helvetica Now is the brand typeface. It is licensed, so it is used when it
-     is installed and the native iOS faces carry the look everywhere else. */
   --font-sans:
-    'Helvetica Now Text', 'Helvetica Now Display', 'Helvetica Now', -apple-system,
-    BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Helvetica,
-    Arial, sans-serif;
+    'Helvetica Now Text', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
+    'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 html {
@@ -137,63 +83,48 @@ html {
 
 body {
   margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: var(--color-cream);
+  color: var(--color-brown);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
 /* ---------------------------------------------------------------------------
-   Typography, Apple HIG scale (pt values mapped 1:1 to px at scale 1)
+   Type scale, generous line height for easy reading
 --------------------------------------------------------------------------- */
-.t-large-title { font-size: 2.125rem; line-height: 2.5625rem; font-weight: 700; letter-spacing: -0.02em; }
-.t-title1 { font-size: 1.75rem; line-height: 2.125rem; font-weight: 700; letter-spacing: -0.02em; }
-.t-title2 { font-size: 1.375rem; line-height: 1.75rem; font-weight: 600; letter-spacing: -0.01em; }
-.t-title3 { font-size: 1.25rem; line-height: 1.5625rem; font-weight: 600; letter-spacing: -0.01em; }
-.t-headline { font-size: 1.0625rem; line-height: 1.375rem; font-weight: 600; }
-.t-body { font-size: 1.0625rem; line-height: 1.375rem; font-weight: 400; }
-.t-callout { font-size: 1rem; line-height: 1.3125rem; font-weight: 400; }
-.t-subhead { font-size: 0.9375rem; line-height: 1.25rem; font-weight: 400; }
-.t-footnote { font-size: 0.8125rem; line-height: 1.125rem; font-weight: 400; }
-.t-caption1 { font-size: 0.75rem; line-height: 1rem; font-weight: 400; }
-.t-caption2 { font-size: 0.6875rem; line-height: 0.8125rem; font-weight: 400; }
+.t-large-title { font-size: 2.125rem; line-height: 1.16; font-weight: 700; letter-spacing: -0.02em; }
+.t-title1 { font-size: 1.6rem; line-height: 1.2; font-weight: 700; letter-spacing: -0.015em; }
+.t-title2 { font-size: 1.3rem; line-height: 1.25; font-weight: 700; letter-spacing: -0.01em; }
+.t-title3 { font-size: 1.12rem; line-height: 1.3; font-weight: 600; }
+.t-headline { font-size: 1rem; line-height: 1.4; font-weight: 600; }
+.t-body { font-size: 1rem; line-height: 1.5; }
+.t-subhead { font-size: 0.9375rem; line-height: 1.5; }
+.t-footnote { font-size: 0.8125rem; line-height: 1.45; }
+.t-caption { font-size: 0.75rem; line-height: 1.35; }
+.t-label {
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
 
 /* ---------------------------------------------------------------------------
-   Liquid Glass, navigation layer only (never behind body copy)
+   Liquid Glass, navigation layer only
 --------------------------------------------------------------------------- */
 .glass {
   background: var(--glass-bg);
   backdrop-filter: blur(var(--glass-blur)) saturate(180%);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
   border: 0.5px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  box-shadow: 0 10px 30px -18px rgba(60, 36, 21, 0.6);
 }
 
-.glass-flat {
-  background: var(--glass-bg);
-  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-}
-
-/* Reduce transparency: swap the material for a solid surface. */
 @media (prefers-reduced-transparency: reduce) {
   :root {
-    --glass-bg: rgba(255, 251, 243, 0.98);
+    --glass-bg: rgba(255, 251, 244, 0.98);
     --glass-blur: 0px;
   }
-  .dark {
-    --glass-bg: rgba(38, 26, 16, 0.98);
-  }
-}
-
-:root[data-transparency='reduce'] {
-  --glass-bg: rgba(255, 251, 243, 0.98);
-  --glass-blur: 0px;
-}
-
-:root[data-transparency='reduce'].dark {
-  --glass-bg: rgba(38, 26, 16, 0.98);
 }
 
 /* ---------------------------------------------------------------------------
@@ -202,19 +133,22 @@ body {
 .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 
-.squircle { border-radius: var(--radius-md); overflow: hidden; }
-
-.tap-target { min-width: 44px; min-height: 44px; }
-
-.safe-top { padding-top: env(safe-area-inset-top, 0px); }
-.safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.25;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
 
 .shimmer {
   background: linear-gradient(
     100deg,
-    var(--color-surface-2) 30%,
-    color-mix(in oklab, var(--color-surface-2) 60%, var(--color-surface)) 50%,
-    var(--color-surface-2) 70%
+    var(--color-cream-sink) 30%,
+    color-mix(in oklab, var(--color-cream-sink) 55%, var(--color-cream)) 50%,
+    var(--color-cream-sink) 70%
   );
   background-size: 220% 100%;
   animation: shimmer 1.4s linear infinite;
@@ -226,7 +160,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--color-terracotta);
   outline-offset: 2px;
   border-radius: 6px;
 }

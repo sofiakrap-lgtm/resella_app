@@ -184,3 +184,22 @@ export const SettingsIcon = (p: IconProps) => (
     <path d="M12 3.5v2.2M12 18.3v2.2M20.5 12h-2.2M5.7 12H3.5M18 6l-1.6 1.6M7.6 16.4 6 18M18 18l-1.6-1.6M7.6 7.6 6 6" />
   </Base>
 );
+
+export const StarIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m12 4.5 2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4L4.2 10.2l5.4-.8L12 4.5Z" />
+  </Base>
+);
+
+export const QrIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4.5 4.5h5v5h-5zM14.5 4.5h5v5h-5zM4.5 14.5h5v5h-5z" />
+    <path d="M14.5 14.5h2v2h-2zM17.5 17.5h2v2h-2z" />
+  </Base>
+);
+
+export const GridIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4.5 4.5h6v6h-6zM13.5 4.5h6v6h-6zM4.5 13.5h6v6h-6zM13.5 13.5h6v6h-6z" />
+  </Base>
+);

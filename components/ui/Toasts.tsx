@@ -17,13 +17,13 @@ export function ToastHost() {
         {toasts.map((toast) => {
           const body = (
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-on-accent">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-terracotta-ink text-on-terracotta">
                 <BellIcon size={18} />
               </span>
               <span className="min-w-0">
                 <span className="t-subhead block font-semibold">{toast.title}</span>
                 {toast.body ? (
-                  <span className="t-caption1 block truncate text-ink-secondary">{toast.body}</span>
+                  <span className="t-caption block truncate text-brown-70">{toast.body}</span>
                 ) : null}
               </span>
             </div>

@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, type ReactNode } from 'react';
-import { useApp } from '@/lib/state';
 import { IconButton } from './Button';
 import { ChevronLeft } from './Icons';
 
@@ -24,7 +23,6 @@ export function ScreenHeader({
   right,
   transparent = false,
 }: ScreenHeaderProps) {
-  const { t } = useApp();
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
 
@@ -43,14 +41,14 @@ export function ScreenHeader({
   return (
     <header
       className={`sticky top-0 z-30 transition-colors duration-200 ${
-        glass ? 'glass-flat border-b border-separator' : 'border-b border-transparent'
+        glass ? 'glass border-b border-separator' : 'border-b border-transparent'
       }`}
     >
       <div className="flex min-h-[44px] items-center gap-1 px-2">
         <div className="flex w-11 shrink-0 items-center">
           {back ? (
             <IconButton
-              ariaLabel={t('common.back')}
+              ariaLabel={'Takaisin'}
               onClick={() => (typeof back === 'string' ? router.push(back) : router.back())}
             >
               <ChevronLeft size={24} />
@@ -74,7 +72,7 @@ export function LargeTitle({ children, subtitle }: { children: ReactNode; subtit
   return (
     <div className="px-4 pb-1 pt-1">
       <h2 className="t-large-title">{children}</h2>
-      {subtitle ? <p className="t-subhead mt-1 text-ink-secondary">{subtitle}</p> : null}
+      {subtitle ? <p className="t-subhead mt-1 text-brown-70">{subtitle}</p> : null}
     </div>
   );
 }

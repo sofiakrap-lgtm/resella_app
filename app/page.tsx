@@ -13,7 +13,7 @@ export default function EntryPage() {
 
   useEffect(() => {
     if (!ready) return;
-    router.replace(onboarded ? '/home' : '/onboarding');
+    router.replace(onboarded ? '/koti' : '/onboarding');
   }, [ready, onboarded, router]);
 
   return (
