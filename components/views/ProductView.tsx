@@ -166,6 +166,9 @@ export function ProductView() {
         <section className="section screen-x">
           <div className="overflow-hidden rounded-[16px] bg-cream shadow-card">
             {product.brand ? <DetailRow label="Merkki" value={product.brand} /> : null}
+            {product.audience === 'Ei kokoa' ? null : (
+              <DetailRow label="Kenelle" value={product.audience} />
+            )}
             <DetailRow label="Väri" value={product.color} />
             {category ? <DetailRow label="Kategoria" value={category.name} /> : null}
             <DetailRow label="Lisätty" value={addedLabel(product.addedDaysAgo)} />

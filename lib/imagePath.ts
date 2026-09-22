@@ -23,9 +23,17 @@ function assetUrl(folder: string, name: string): string {
   return `${ASSET_BASE}/${folder}/${name}.${files[`${folder}/${name}`] ?? 'jpg'}`;
 }
 
-/** `prod-naiset-014` -> `/assets/product-photos/prod-naiset-014.jpg` */
-export function productImage(name: string): string {
-  return assetUrl('product-photos', name);
+/**
+ * Product photos are named by the product sheet, extension included, for
+ * example `Arc_teryx_Beta_LT.png`. The manifest still wins when it knows the
+ * file, so converting a photo to .jpg needs no change to the sheet.
+ */
+export function productImage(fileName: string): string {
+  const dot = fileName.lastIndexOf('.');
+  const base = dot > 0 ? fileName.slice(0, dot) : fileName;
+  const fallback = dot > 0 ? fileName.slice(dot + 1) : 'jpg';
+  const ext = files[`product-photos/${base}`] ?? fallback;
+  return `${ASSET_BASE}/product-photos/${base}.${ext}`;
 }
 
 /** `market-ogeli-hki` -> `/assets/demo/market-ogeli-hki.jpg` */

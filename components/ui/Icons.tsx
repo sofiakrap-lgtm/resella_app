@@ -205,8 +205,9 @@ export const GridIcon = (p: IconProps) => (
 );
 
 /* ---------------------------------------------------------------------------
-   Category icons. One per top level category, so Selaa reads as pictures
-   before it reads as words.
+   Category icons. One per top level category in the product sheet, so Selaa
+   reads as pictures before it reads as words. Keyed by the `icon` field in
+   data/categories.ts.
 --------------------------------------------------------------------------- */
 
 const DressIcon = (p: IconProps) => (
@@ -222,10 +223,77 @@ const ShirtIcon = (p: IconProps) => (
   </Base>
 );
 
+/** Zip up jacket: collar points, centre zip, ribbed hem. */
+const JacketIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M9 4 4 6.5l1.5 4 1.5-.7V20h10V9.8l1.5.7L20 6.5 15 4l-3 2.5L9 4Z" />
+    <path d="M12 6.5V20" />
+  </Base>
+);
+
+/**
+ * A peak, not a garment. Four jacket silhouettes cannot be told apart at
+ * 28px, so the outdoor category takes the one mark that never collides.
+ */
+const ShellIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M2.5 19 9 7l3.5 6.5" />
+    <path d="M8.5 19 15 6l6.5 13H2.5Z" />
+    <path d="M13 9.8 15 6l2 3.8-2 1-2-1Z" />
+  </Base>
+);
+
+/**
+ * Long belted coat. The belt is drawn as two stubs that stop short of the
+ * centre closure: a full width line would cross it and read as a window.
+ */
+const CoatIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M9 2.5 4.5 5l-1 5.5 2-.6V21.5h13V9.9l2 .6-1-5.5-4.5-2.5-3 2-3-2Z" />
+    <path d="M12 4.5v9" />
+    <path d="M5.5 12.5h4" />
+    <path d="M14.5 12.5h4" />
+  </Base>
+);
+
+/** Blazer: notch lapels meeting low, and a welt pocket. */
+const BlazerIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M9 3 4.5 5.5 6 21h12l1.5-15.5L15 3l-3 7-3-7Z" />
+    <path d="M9 3l3 7 3-7" />
+    <path d="M7.5 15h3" />
+  </Base>
+);
+
+/** Two legs with a waistband, spaced enough to read at 28px. */
+const TrousersIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M5.5 3h13l-1 18h-4.5L12 12l-1 9H6.5L5.5 3Z" />
+    <path d="M5.5 6h13" />
+  </Base>
+);
+
+const SkirtIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M7.5 3h9l3.5 14H4L7.5 3Z" />
+    <path d="M7.5 3h9" />
+  </Base>
+);
+
 const ChildIcon = (p: IconProps) => (
   <Base {...p}>
     <path d="M9 3 6 5.5l2 3V13l-1 8h4v-6h2v6h4l-1-8V8.5l2-3L15 3H9Z" />
     <path d="M12 3v5" />
+  </Base>
+);
+
+const SportIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 9v6" />
+    <path d="M20 9v6" />
+    <path d="M7 6.5v11" />
+    <path d="M17 6.5v11" />
+    <path d="M7 12h10" />
   </Base>
 );
 
@@ -234,6 +302,15 @@ const LampIcon = (p: IconProps) => (
     <path d="M9 3h6l4 8H5l4-8Z" />
     <path d="M12 11v7" />
     <path d="M8.5 21h7" />
+  </Base>
+);
+
+/** A stack of folded linen, for home textiles. */
+const CushionIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 5.5h13a2.5 2.5 0 0 1 0 5H4v-5Z" />
+    <path d="M4 11.5h13a2.5 2.5 0 0 1 0 5H4v-5Z" />
+    <path d="M4 17.5h9a2.5 2.5 0 0 1 0 4H4v-4Z" />
   </Base>
 );
 
@@ -259,21 +336,30 @@ const BagIcon = (p: IconProps) => (
   </Base>
 );
 
-const DiscIcon = (p: IconProps) => (
+const GlassesIcon = (p: IconProps) => (
   <Base {...p}>
-    <circle cx="12" cy="12" r="8.5" />
-    <circle cx="12" cy="12" r="2" />
+    <path d="M3 10h7v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4Z" />
+    <path d="M14 10h7v4a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-4Z" />
+    <path d="M10 11.5h4" />
   </Base>
 );
 
-/** Keyed by category slug, see data/categories.ts. */
+/** Keyed by the `icon` field in data/categories.ts. */
 export const categoryIcons: Record<string, (p: IconProps) => React.ReactElement> = {
-  naiset: DressIcon,
-  miehet: ShirtIcon,
-  lapset: ChildIcon,
-  koti: LampIcon,
-  astiat: CupIcon,
-  kengat: ShoeIcon,
-  asusteet: BagIcon,
-  viihde: DiscIcon,
+  dress: DressIcon,
+  shirt: ShirtIcon,
+  jacket: JacketIcon,
+  shell: ShellIcon,
+  coat: CoatIcon,
+  blazer: BlazerIcon,
+  trousers: TrousersIcon,
+  skirt: SkirtIcon,
+  child: ChildIcon,
+  sport: SportIcon,
+  lamp: LampIcon,
+  cushion: CushionIcon,
+  cup: CupIcon,
+  shoe: ShoeIcon,
+  bag: BagIcon,
+  glasses: GlassesIcon,
 };

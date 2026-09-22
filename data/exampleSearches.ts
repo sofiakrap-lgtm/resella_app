@@ -1,10 +1,11 @@
+/**
+ * GENEROITU TIEDOSTO, ÄLÄ MUOKKAA KÄSIN.
+ * Luodaan komennolla `npm run data` tiedostoista
+ * data/source/tuotteet.csv ja data/source/paikat.json.
+ */
 import type { Filters } from '@/lib/types';
 import { emptyFilters } from '@/lib/filters';
 
-/**
- * Scripted searches for the demo. Each one returns real items from the mock
- * index, so nothing is ever promised that does not exist on a table.
- */
 export interface ExampleSearch {
   label: string;
   /** Marked as a natural language query, shown with a sparkle. */
@@ -14,43 +15,9 @@ export interface ExampleSearch {
   note: string;
 }
 
-export const exampleSearches: ExampleSearch[] = [
-  {
-    label: 'haalari 7v Helsinki',
-    filters: {
-      ...emptyFilters,
-      query: 'haalari',
-      categories: ['lapset'],
-      sizes: ['122'],
-      cities: ['Helsinki'],
-    },
-    note: '7-vuotiaalle sopii yleensä koko 122.',
-  },
-  {
-    label: 'villapaita',
-    filters: { ...emptyFilters, query: 'villapaita' },
-    note: 'Neuleita kaikilta kirpputoreilta.',
-  },
-  {
-    label: 'Iittala astiat',
-    filters: { ...emptyFilters, brands: ['Iittala'], categories: ['astiat'] },
-    note: 'Iittalan astiat, jotka ovat juuri nyt pöydillä.',
-  },
-  {
-    label: 'vinyylit alle 10 euroa',
-    filters: { ...emptyFilters, query: 'vinyyli', maxPrice: 10 },
-    note: 'Levyjä alle kympillä.',
-  },
-  {
-    label: 'etsin 7-vuotiaalle haalaria Helsingin alueelta',
-    isAi: true,
-    filters: {
-      ...emptyFilters,
-      query: 'haalari',
-      categories: ['lapset'],
-      sizes: ['122'],
-      cities: ['Helsinki'],
-    },
-    note: 'Tulkitsin haun näin: lasten haalari, koko 122, Helsinki.',
-  },
-];
+const raw = [{label:"lasten talvihaalari",filters:{query:"haalari",categories:["lastenvaatteet"]},note:"Haalareita ja ulkoiluasuja, 6 lastenvaatetta yhteensä."},{label:"lenkkarit koko 40",filters:{query:"",categories:["kengat"],sizes:["40"]},note:"Kengät koossa 40, kaikilta kirpputoreilta."},{label:"Iittala",filters:{query:"",brands:["Iittala"]},note:"Iittalaa pöydillä juuri nyt, 6 kappaletta."},{label:"Y2K",filters:{query:"y2k"},note:"Kaksituhattaluvun alkua, 26 löytöä."},{label:"etsin miehelle kuoritakkia ulkoiluun, koko M",isAi:true,filters:{query:"kuoritakki",audiences:["Miesten"],sizes:["M"]},note:"Tulkitsin haun näin: kuoritakki, miesten, koko M."}];
+
+export const exampleSearches: ExampleSearch[] = raw.map((item) => ({
+  ...item,
+  filters: { ...emptyFilters, ...item.filters } as Filters,
+}));

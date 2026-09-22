@@ -1,29 +1,31 @@
 /** Shared types for the ReSello consumer app. */
 
-export type Condition = 'Uusi' | 'Erinomainen' | 'Hyvä' | 'Käytetty';
+/** The four grades used in the product sheet. */
+export type Condition = 'Erinomainen' | 'Hyvä' | 'Kohtalainen' | 'Kulunut';
 export type ProductStatus = 'Saatavilla' | 'Varattu' | 'Myyty';
 
-export type CategorySlug =
-  | 'naiset'
-  | 'miehet'
-  | 'lapset'
-  | 'koti'
-  | 'astiat'
-  | 'kengat'
-  | 'asusteet'
-  | 'viihde';
+/** Who a size is cut for. "Ei kokoa" covers dishes and homeware. */
+export type Audience = 'Naisten' | 'Miesten' | 'Unisex' | 'Lasten' | 'Ei kokoa';
 
-export interface Subcategory {
-  slug: string;
-  name: string;
-}
+/**
+ * Categories come from the product sheet, so this is a plain string rather
+ * than a union: adding a row with a new category must not break the build.
+ */
+export type CategorySlug = string;
+
+/** Icon key, see categoryIcons in components/ui/Icons.tsx. */
+export type CategoryIcon =
+  | 'shoe' | 'shirt' | 'bag' | 'coat' | 'jacket' | 'shell' | 'blazer'
+  | 'glasses' | 'cup' | 'trousers' | 'child' | 'sport' | 'dress'
+  | 'lamp' | 'skirt' | 'cushion';
 
 export interface Category {
   slug: CategorySlug;
   name: string;
   /** Short line shown under the tile. */
   blurb: string;
-  subcategories: Subcategory[];
+  icon: CategoryIcon;
+  subcategories: string[];
   sizes: string[];
   brands: string[];
 }
@@ -39,7 +41,6 @@ export interface Market {
   id: string;
   name: string;
   city: string;
-  district: string;
   address: string;
   hours: Record<Weekday, OpeningHours | null>;
   lat: number;
@@ -72,10 +73,15 @@ export interface Product {
   category: CategorySlug;
   subcategory: string;
   size: string | null;
+  /** Null for unbranded items, listed in the sheet as "Merkitön". */
   brand: string | null;
+  audience: Audience;
   color: string;
   condition: Condition;
   priceEur: number;
+  /** Search terms from the sheet, matched alongside the title and brand. */
+  keywords: string[];
+  /** File names as dropped into /assets/product-photos, extension included. */
   images: string[];
   sellerId: string;
   marketId: string;
@@ -97,6 +103,7 @@ export interface SavedSearch {
 export interface Filters {
   query: string;
   categories: CategorySlug[];
+  audiences: Audience[];
   sizes: string[];
   colors: string[];
   brands: string[];

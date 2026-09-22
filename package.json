@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "build:export": "NEXT_EXPORT=1 next build",
     "check-assets": "node scripts/check-assets.mjs",
-    "kuvalista": "node scripts/kuvalista.mjs"
+    "kuvalista": "node scripts/kuvalista.mjs",
+    "data": "node scripts/generate-data.mjs"
   },
   "dependencies": {
     "framer-motion": "^13.4.0",

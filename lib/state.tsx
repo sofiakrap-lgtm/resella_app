@@ -49,7 +49,7 @@ const defaults: Stored = {
   interests: [],
   sizes: [],
   wishlist: [],
-  followedMarkets: ['ogeli-hki'],
+  followedMarkets: ['hertsika-hki'],
   followedSellers: ['anni-k'],
   savedSearches: seedSavedSearches,
   reservations: [],

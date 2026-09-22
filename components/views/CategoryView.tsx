@@ -58,14 +58,14 @@ export function CategoryView() {
         <h2 className="t-headline screen-x">Alakategoriat</h2>
         <ul className="mt-1">
           {category.subcategories.map((sub) => {
-            const count = items.filter((product) => product.subcategory === sub.slug).length;
+            const count = items.filter((product) => product.subcategory === sub).length;
             return (
-              <li key={sub.slug}>
+              <li key={sub}>
                 <Link
-                  href={link({ query: sub.name.split(' ')[0].toLowerCase() })}
+                  href={link({ query: sub.toLowerCase() })}
                   className="flex min-h-11 items-center justify-between gap-3 border-b border-separator py-3 screen-x"
                 >
-                  <span className="t-body">{sub.name}</span>
+                  <span className="t-body">{sub}</span>
                   <span className="inline-flex items-center gap-2">
                     <span className="t-footnote text-brown-70">{count}</span>
                     <ChevronRight size={16} className="text-brown-50" />

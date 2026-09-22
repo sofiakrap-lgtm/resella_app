@@ -1,189 +1,280 @@
 # Kuvalista
 
-Tämä tiedosto luodaan datasta komennolla `npm run kuvalista`, joten se ei
-voi vanhentua. Ohjeet lataamiseen: [README.md](README.md).
+Tämä tiedosto luodaan tuotetaulukosta komennolla `npm run kuvalista`,
+joten se ei voi vanhentua. Ohjeet lataamiseen: [README.md](README.md).
 
-Tähdellä `*` merkityt ovat demon pääpolulla, eli ne näkyvät esittelyssä
-ensimmäisenä. Jos aika on vähissä, lataa ensin vain ne.
+Tähdellä `*` merkityt ovat demon pääpolulla. Jos aika on vähissä,
+lataa ensin vain ne.
 
 Puuttuva kuva ei riko mitään: tilalle piirtyy brändin mukainen paikkamerkki.
-Tarkista tilanne milloin tahansa komennolla `npm run check-assets`.
+Tarkista tilanne komennolla `npm run check-assets`, tai lue raportti
+GitHubin Actions-sivulta pushin jälkeen.
 
 ## 1. Logot, 4 tiedostoa
 
 | Tiedosto | Mitä |
 |---|---|
-| `assets/logos/logo-wordmark.svg` * | Nimilogo, tumma, vaalealle taustalle |
-| `assets/logos/logo-wordmark-light.svg` * | Nimilogo, kerma, tummalle taustalle |
-| `assets/logos/logo-mark.svg` * | Neliömäinen logo, tumma |
-| `assets/logos/logo-mark-light.svg` * | Neliömäinen logo, kerma |
+| `assets/logos/logo-wordmark.svg` * | Nimilogo, tumma |
+| `assets/logos/logo-wordmark-light.svg` * | Nimilogo, kerma |
+| `assets/logos/logo-mark.svg` * | Neliölogo, tumma |
+| `assets/logos/logo-mark-light.svg` * | Neliölogo, kerma |
 
 ## 2. Grafiikat, 8 tiedostoa
 
-Muodot ovat koristeita ja ne ottavat värinsä ympäristöstä (`currentColor`).
+Muodot ovat koristeita ja ottavat värinsä ympäristöstä.
 
-| Tiedosto | Mitä | Missä näkyy |
-|---|---|---|
-| `assets/graphics/shape-star.svg` * | Tähti | Korostukset, tyhjät tilat |
-| `assets/graphics/shape-wave.svg` * | Aalto | Taustakoristeet |
-| `assets/graphics/shape-pebble.svg` * | Kivet | Taustakoristeet |
-| `assets/graphics/connector-mascot.svg` | Hahmo, perus | Profiili, kaupunkivalinta |
-| `assets/graphics/connector-wave.svg` | Hahmo vilkuttaa | Tervetulo, etusivu |
-| `assets/graphics/connector-search.svg` | Hahmo etsii | Haku |
-| `assets/graphics/connector-empty.svg` | Hahmo apea | Ei osumia |
-| `assets/graphics/connector-celebrate.svg` | Hahmo juhlii | Varaus valmis |
+| Tiedosto | Mitä |
+|---|---|
+| `assets/graphics/shape-star.svg` * | Tähti |
+| `assets/graphics/shape-wave.svg` * | Aalto |
+| `assets/graphics/shape-pebble.svg` * | Kivet |
+| `assets/graphics/connector-mascot.svg` | Hahmo, perus |
+| `assets/graphics/connector-wave.svg` | Hahmo vilkuttaa |
+| `assets/graphics/connector-search.svg` | Hahmo etsii |
+| `assets/graphics/connector-empty.svg` | Hahmo apea |
+| `assets/graphics/connector-celebrate.svg` | Hahmo juhlii |
 
-## 3. Kirpputorikuvat, 10 tiedostoa
+## 3. Kirpputorikuvat, 7 tiedostoa
 
-Vaakakuva, suositus 1600 x 900 px, `.jpg`.
+Vaakakuva, suositus 1600 x 900 px.
 
 | Tiedosto | Kirpputori | Kaupunki |
 |---|---|---|
-| `assets/demo/market-ogeli-hki.jpg` * | Ogelin kirppis | Helsinki |
-| `assets/demo/market-patina-hki.jpg` * | Punavuoren Patina | Helsinki |
-| `assets/demo/market-vekara-hki.jpg` | Vekarakirppis | Helsinki |
-| `assets/demo/market-metka-tre.jpg` | Metka | Tampere |
-| `assets/demo/market-nurkka-tku.jpg` | Nurkka | Turku |
-| `assets/demo/market-koto-oul.jpg` | Koto Kirpputori | Oulu |
-| `assets/demo/market-kangas-jkl.jpg` | Kankaan Kirppis | Jyväskylä |
-| `assets/demo/market-hiiden-vih.jpg` | Hiiden Kirppis | Vihti |
-| `assets/demo/market-lykky-rau.jpg` | Lykky | Rauma |
-| `assets/demo/market-keidas-sal.jpg` | Kirppis-Keidas | Salo |
+| `assets/demo/market-tapanila-hki.jpg` * | Tapanilan kirppis | Helsinki |
+| `assets/demo/market-ogeli-hki.jpg` | Ogelin Kirppis | Helsinki |
+| `assets/demo/market-hertsika-hki.jpg` * | Hertsikan kirppis | Helsinki |
+| `assets/demo/market-bella-esp.jpg` | Bella Kirppis Suomenoja | Espoo |
+| `assets/demo/market-relove-hki.jpg` | Relove Freda | Helsinki |
+| `assets/demo/market-skidilandia-hki.jpg` | Skidilandia | Helsinki |
+| `assets/demo/market-siisti-hki.jpg` | Siisti Kirppis | Helsinki |
 
-## 4. Myyjäkuvat, 14 tiedostoa
+## 4. Myyjäkuvat, 12 tiedostoa
 
-Neliö, suositus 600 x 600 px, `.jpg`. Ei tunnistettavia kasvoja: kädet, kaappi,
-vaaterekki tai muu tunnelmakuva riittää, koska myyjät ovat keksittyjä.
+Neliö, suositus 600 x 600 px. Ei tunnistettavia kasvoja: kädet, pöytä tai
+vaaterekki riittää, koska myyjät ovat keksittyjä.
 
-| Tiedosto | Myyjä |
-|---|---|
-| `assets/demo/seller-anni-k.jpg` * | Anni K. |
-| `assets/demo/seller-jussi-m.jpg` | Jussi M. |
-| `assets/demo/seller-meri-l.jpg` | Meri L. |
-| `assets/demo/seller-perhe-virtanen.jpg` * | Perhe Virtanen |
-| `assets/demo/seller-tuomas-r.jpg` | Tuomas R. |
-| `assets/demo/seller-sanni-h.jpg` | Sanni H. |
-| `assets/demo/seller-elias-p.jpg` | Elias P. |
-| `assets/demo/seller-kaisa-t.jpg` | Kaisa T. |
-| `assets/demo/seller-oulun-oona.jpg` | Oona S. |
-| `assets/demo/seller-rauman-riikka.jpg` | Riikka V. |
-| `assets/demo/seller-salon-sami.jpg` | Sami A. |
-| `assets/demo/seller-venla-n.jpg` | Venla N. |
-| `assets/demo/seller-aleksi-v.jpg` | Aleksi V. |
-| `assets/demo/seller-pihla-e.jpg` | Pihla E. |
+| Tiedosto | Myyjä | Kirpputori |
+|---|---|---|
+| `assets/demo/seller-jussi-m.jpg` * | Jussi M. | Tapanilan kirppis, pöytä 12 |
+| `assets/demo/seller-tuomas-r.jpg` * | Tuomas R. | Tapanilan kirppis, pöytä 27 |
+| `assets/demo/seller-aleksi-v.jpg` * | Aleksi V. | Tapanilan kirppis, pöytä 33 |
+| `assets/demo/seller-sanni-h.jpg` * | Sanni H. | Tapanilan kirppis, pöytä 41 |
+| `assets/demo/seller-meri-l.jpg` | Meri L. | Ogelin Kirppis, pöytä 8 |
+| `assets/demo/seller-anni-k.jpg` * | Anni K. | Hertsikan kirppis, pöytä 19 |
+| `assets/demo/seller-venla-n.jpg` * | Venla N. | Hertsikan kirppis, pöytä 55 |
+| `assets/demo/seller-pihla-e.jpg` | Pihla E. | Bella Kirppis Suomenoja, pöytä 3 |
+| `assets/demo/seller-kaisa-t.jpg` | Kaisa T. | Bella Kirppis Suomenoja, pöytä 18 |
+| `assets/demo/seller-perhe-virtanen.jpg` | Perhe Virtanen | Skidilandia, pöytä 7 |
+| `assets/demo/seller-elias-p.jpg` | Elias P. | Siisti Kirppis, pöytä 22 |
+| `assets/demo/seller-oona-s.jpg` | Oona S. | Relove Freda, pöytä 3 |
 
-## 5. Tuotekuvat, 64 pääkuvaa
+## 5. Tuotekuvat, 121 tiedostoa
 
-Pystykuva, suositus 1200 x 1600 px, `.jpg`. Jokaiselle tuotteelle voi lisätä
-kaksi lisäkuvaa samalla nimellä ja päätteellä `-2` ja `-3`, esimerkiksi
-`prod-naiset-001-2.jpg`. Lisäkuvat ovat vapaaehtoisia.
+Nimet tulevat suoraan tuotetaulukosta, älä nimeä niitä uudelleen.
+Kaikki menevät kansioon `assets/product-photos`.
 
-### Naiset, 9 kpl
+### Kengät, 18 kpl
 
 | Tiedosto | Tuote |
 |---|---|
-| `assets/product-photos/prod-naiset-001.jpg` * | Villakangastakki |
-| `assets/product-photos/prod-naiset-002.jpg` * | Marimekko Tasaraita paita |
-| `assets/product-photos/prod-naiset-003.jpg` | Nanso villapaita |
-| `assets/product-photos/prod-naiset-004.jpg` | Vintage samettimekko |
-| `assets/product-photos/prod-naiset-005.jpg` | Levi’s 501 farkut |
-| `assets/product-photos/prod-naiset-006.jpg` | Samuji neulemekko |
-| `assets/product-photos/prod-naiset-007.jpg` | Trenssitakki |
-| `assets/product-photos/prod-naiset-008.jpg` | Raidallinen neule |
-| `assets/product-photos/prod-naiset-009.jpg` | Plisseerattu hame |
+| `Adidas_Stan_Smith_lenkkarit_40_valkoinen_vihreä.png` * | Adidas Stan Smith lenkkarit 40 valkoinen vihreä |
+| `Adidas_Superstar_lenkkarit_38_valkoinen.png` * | Adidas Superstar lenkkarit 38 valkoinen musta |
+| `Birkenstock_Arizona_sandaalit_39_ruskea.png` * | Birkenstock Arizona sandaalit 39 ruskea |
+| `Buffalo_London_platform.png` | Buffalo London platform nilkkurit 38 musta |
+| `Converse_Chuck_Taylor_All_Star_korkeavartiset_39.png` | Converse Chuck Taylor korkeavartiset 39 musta |
+| `Crocs_Classic_Clog_puukengät_42_vaaleanvihreät.png` | Crocs Classic Clog 42 salvianvihreä |
+| `Diesel_korkokengät.png` | Diesel korkonilkkurit 38 ruskea |
+| `Dr__Martens_1460_maiharit_39_kirsikanpunainen.png` | Dr. Martens 1460 maiharit 39 musta |
+| `Miu_Miu_korkokengät.png` | Miu Miu nilkkaremmiavokkaat 38 musta |
+| `Miu_Miu_kitten_heels.png` | Miu Miu kitten heels 38 vaaleanpunainen |
+| `Puma_Speedcat_kengät_38_musta.png` | Puma Speedcat kengät 38 musta |
+| `New_Balance_550_lenkkarit_41_valkoinen.png` | New Balance 550 lenkkarit 41 valkoinen |
+| `Nike_Blazer_Mid_77_lenkkarit_41_valkoinen.png` | Nike Blazer Mid 77 lenkkarit 41 valkoinen |
+| `Vans_Old_Skool_lenkkarit_40_musta.png` | Vans Old Skool lenkkarit 40 musta |
+| `Salomon_XT-6_kengät_40_musta.png` | Salomon XT-6 kengät 40 musta |
+| `Steve_Madden_korkokengät.png` | Steve Madden korkokengät 38 musta |
+| `Timberland_6_inch_maiharit_42_vehnänkeltainen.png` | Timberland 6 Inch maiharit 42 vehnänkeltainen |
+| `UGG_Classic_Mini_nilkkurit_38_kastanjanruskea.png` | UGG Classic Mini nilkkurit 38 kastanjanruskea |
 
-### Miehet, 7 kpl
-
-| Tiedosto | Tuote |
-|---|---|
-| `assets/product-photos/prod-miehet-010.jpg` | Villakangastakki |
-| `assets/product-photos/prod-miehet-011.jpg` | Levi’s 511 farkut |
-| `assets/product-photos/prod-miehet-012.jpg` | Villapaita, harmaa |
-| `assets/product-photos/prod-miehet-013.jpg` | Marimekko Jokapoika paita |
-| `assets/product-photos/prod-miehet-014.jpg` | Reima kuoritakki |
-| `assets/product-photos/prod-miehet-015.jpg` | Flanellipaita |
-| `assets/product-photos/prod-miehet-016.jpg` | Neuletakki |
-
-### Lapset, 10 kpl
+### Yläosat, 17 kpl
 
 | Tiedosto | Tuote |
 |---|---|
-| `assets/product-photos/prod-lapset-017.jpg` * | Reima Tec talvihaalari |
-| `assets/product-photos/prod-lapset-018.jpg` | Lindex kevythaalari |
-| `assets/product-photos/prod-lapset-019.jpg` | Reima kurahaalari |
-| `assets/product-photos/prod-lapset-020.jpg` | Polarn O. Pyret välikausihaalari |
-| `assets/product-photos/prod-lapset-021.jpg` | Juhlamekko tyllihelmalla |
-| `assets/product-photos/prod-lapset-022.jpg` | Marimekko lasten mekko |
-| `assets/product-photos/prod-lapset-023.jpg` | Molo softshell takki |
-| `assets/product-photos/prod-lapset-024.jpg` | Name It samettimekko |
-| `assets/product-photos/prod-lapset-025.jpg` | Trikoohousut, 2 paria |
-| `assets/product-photos/prod-lapset-026.jpg` | Villatakki, käsintehty |
+| `Carhartt_WIP_hoodie.png` * | Carhartt WIP huppari L oliivinvihreä |
+| `Abercrombie___Fitch_huppari_S_vaaleanharmaa.png` | Abercrombie & Fitch huppari S vaaleanharmaa |
+| `Ed_Hardy_paita_M_musta.png` | Ed Hardy t-paita M musta |
+| `Filippa_K_neule_S_beige.png` | Filippa K neule S harmaa |
+| `Dior_toppi.png` | Christian Dior silkkitoppi 38 luonnonvalkoinen |
+| `Hollister_huppari_M_harmaa.png` | Hollister huppari M tummansininen |
+| `Marimekko_Tasaraita_paita_M_punavalkoinen.png` | Marimekko Tasaraita paita M punavalkoinen |
+| `Miss_Sixty_toppi.png` | Miss Sixty toppi S vaaleansininen |
+| `Monivärinen_raitaneule.png` | Käsinneulottu raitaneule M monivärinen |
+| `Ralph_Lauren_polo.png` | Ralph Lauren pikeepaita L tummansininen |
+| `Ruudullinen_poolopusero__punavalkoinen.png` | Ruutupoolo S luonnonvalkoinen punainen |
+| `Vihreä_puolivetoketjuneule.png` | Puolivetoketjuneule S oliivinvihreä |
+| `Vihreä_ribbineule_vetoketjulla.png` | Ribbineule vetoketjulla M vaaleanvihreä |
+| `Stone_Island_neule_L_vihreä.png` | Stone Island neule L oliivinvihreä |
+| `Tommy_Hilfiger_sweatshirt.png` | Tommy Hilfiger collegepaita L luonnonvalkoinen |
+| `Toteme_paita_36_raidallinen.png` | Raidallinen kauluspaita 36 sinivalkoinen |
+| `Toteme_paita_36_valkoinen.png` | Totême kauluspaita 36 valkoinen |
 
-### Koti ja sisustus, 8 kpl
-
-| Tiedosto | Tuote |
-|---|---|
-| `assets/product-photos/prod-koti-027.jpg` * | Rottinkituoli |
-| `assets/product-photos/prod-koti-028.jpg` | Pöytälamppu, messinki |
-| `assets/product-photos/prod-koti-029.jpg` | Marimekko Unikko verhot |
-| `assets/product-photos/prod-koti-030.jpg` | Finlayson päiväpeite |
-| `assets/product-photos/prod-koti-031.jpg` | Artek jakkara 60 |
-| `assets/product-photos/prod-koti-032.jpg` | Kynttilälyhdyt, 3 kpl |
-| `assets/product-photos/prod-koti-033.jpg` | Samettinen koristetyyny |
-| `assets/product-photos/prod-koti-034.jpg` | Seinäkello, 70-luku |
-
-### Astiat, 9 kpl
+### Laukut, 17 kpl
 
 | Tiedosto | Tuote |
 |---|---|
-| `assets/product-photos/prod-astiat-035.jpg` * | Iittala Teema lautaset, 4 kpl |
-| `assets/product-photos/prod-astiat-036.jpg` | Arabia Paratiisi vati |
-| `assets/product-photos/prod-astiat-037.jpg` | Iittala Kartio lasit, 6 kpl |
-| `assets/product-photos/prod-astiat-038.jpg` | Arabia 24h kulhot, 4 kpl |
-| `assets/product-photos/prod-astiat-039.jpg` | Marimekko Oiva mukit, 2 kpl |
-| `assets/product-photos/prod-astiat-040.jpg` | Pentik kahvikupit, 4 kpl |
-| `assets/product-photos/prod-astiat-041.jpg` | Iittala Aalto maljakko |
-| `assets/product-photos/prod-astiat-042.jpg` | Rörstrand Mon Amie kulho |
-| `assets/product-photos/prod-astiat-043.jpg` | Arabia Kilta lautanen |
+| `Baby_Phat_laukku.png` | Baby Phat lakkanahkalaukku valkoinen |
+| `Fendi_Baguette_vintage.png` | Fendi Baguette laukku ruskea Zucca |
+| `Fjällräven_Kånken_reppu.png` | Fjällräven Kånken reppu okra |
+| `Coach_iso_ruskea_nahkalaukku.png` | Coach nahkalaukku konjakinruskea |
+| `Coach_pieni_söpö_laukku.png` | Coach Signature olkalaukku beige |
+| `Dior_Saddle_bag_vintage.png` | Dior Saddle Bag denim Oblique |
+| `Eastpak_Padded_Pak_r.png` | Eastpak Padded Pak'r reppu musta |
+| `Juicy_Couture_olkalaukku.png` | Juicy Couture veluurilaukku vaaleanpunainen |
+| `Gucci_laukku_vintage.png` | Gucci GG Supreme olkalaukku vintage |
+| `Guess_laukku.png` | Guess olkalaukku beige logokuosi |
+| `Guess_Y2K_mini_laukku.png` | Guess mini baguette laukku vaaleanpunainen |
+| `Herschel_Little_America.png` | Herschel Little America reppu tummansininen |
+| `Longchamp_Le_Pliage.png` | Longchamp Le Pliage kassi tummansininen |
+| `Louis_Vuitton_Neverfull_MM.png` | Louis Vuitton Neverfull MM monogrammi |
+| `Michael_Kors_laukku.png` | Michael Kors laukku kamelinruskea |
+| `Prada_nylon_mini_bag_vintage.png` | Prada nylon mini bag musta |
+| `Sandqvist_reppu.png` | Sandqvist reppu oliivinvihreä |
 
-### Kengät, 7 kpl
-
-| Tiedosto | Tuote |
-|---|---|
-| `assets/product-photos/prod-kengat-044.jpg` | Converse Chuck Taylor |
-| `assets/product-photos/prod-kengat-045.jpg` | Vagabond nilkkurit |
-| `assets/product-photos/prod-kengat-046.jpg` | Nokian kumisaappaat |
-| `assets/product-photos/prod-kengat-047.jpg` | Reima kumisaappaat |
-| `assets/product-photos/prod-kengat-048.jpg` | Juhlakengät lapselle |
-| `assets/product-photos/prod-kengat-049.jpg` | Nahkasandaalit |
-| `assets/product-photos/prod-kengat-050.jpg` | Talvisaappaat, villavuori |
-
-### Asusteet, 6 kpl
+### Takit, 11 kpl
 
 | Tiedosto | Tuote |
 |---|---|
-| `assets/product-photos/prod-asusteet-051.jpg` * | Vintage nahkalaukku |
-| `assets/product-photos/prod-asusteet-052.jpg` | Marimekko kangaskassi |
-| `assets/product-photos/prod-asusteet-053.jpg` | Silkkihuivi, 60-luku |
-| `assets/product-photos/prod-asusteet-054.jpg` | Kalevala Koru riipus |
-| `assets/product-photos/prod-asusteet-055.jpg` | Villasukat, käsintehdyt |
-| `assets/product-photos/prod-asusteet-056.jpg` | Villahattu |
+| `Adidas_Firebird_verryttelytakki.png` | Adidas Firebird verryttelytakki S musta |
+| `Levi_s_Sherpa_trucker_takki.png` | Levi's Sherpa trucker takki M sininen |
+| `Luhta_toppatakki_40_sininen.png` | Luhta toppatakki 40 tummansininen |
+| `Moncler_Maya_takki_2_musta.png` | Moncler Maya takki 2 musta |
+| `Nike_Windrunner_takki.png` | Nike Windrunner tuulitakki M sininen |
+| `Peak_Performance_takki.png` | Peak Performance untuvatakki M tummansininen |
+| `Vihreä_nahkatakki.png` | Nahkatakki M oliivinvihreä |
+| `Viininpunainen_verryttelytakki.png` | Adidas verryttelytakki M viininpunainen |
+| `Superdry_takki.png` | Superdry takki M tummansininen |
+| `The_North_Face_Nuptse_700.png` | The North Face Nuptse 700 takki L musta |
+| `Uniqlo_Ultra_Light_Down_takki_M_vihreä.png` | Uniqlo Ultra Light Down takki M vihreä |
 
-### Viihde, 8 kpl
+### Asusteet, 8 kpl
 
 | Tiedosto | Tuote |
 |---|---|
-| `assets/product-photos/prod-viihde-057.jpg` | Vinyyli: suomirock 1978 |
-| `assets/product-photos/prod-viihde-058.jpg` | Vinyyli: jazzkokoelma |
-| `assets/product-photos/prod-viihde-059.jpg` | Tove Jansson: Muumilaakson marraskuu |
-| `assets/product-photos/prod-viihde-060.jpg` | Keittokirja, 70-luku |
-| `assets/product-photos/prod-viihde-061.jpg` | Lautapeli: Afrikan tähti |
-| `assets/product-photos/prod-viihde-062.jpg` | Sarjakuva-albumit, 5 kpl |
-| `assets/product-photos/prod-viihde-063.jpg` | Vinyyli: klassinen sinfonia |
-| `assets/product-photos/prod-viihde-064.jpg` | Palapeli 1000 palaa |
+| `Acne_Studios_huivi.png` | Acne Studios villahuivi puuteripinkki |
+| `Burberry_Nova_check_huivi.png` | Burberry Nova check villahuivi beige |
+| `Dior_aurinkolasit.png` | Dior shield-aurinkolasit hopea |
+| `Dior_aurinkolasit_vintage.png` | Dior aurinkolasit strasseilla hopea |
+| `Ray-Ban_Wayfarer.png` | Ray-Ban Wayfarer aurinkolasit musta |
+| `Oakley_aurinkolasit_vintage.png` | Oakley aurinkolasit vintage hopea |
+| `Versace_aurinkolasit_vintage.png` | Versace aurinkolasit vintage kulta |
+| `Von_Dutch_lippis.png` | Von Dutch lippis vaaleanpunainen |
+
+### Ulkoiluvaatteet, 7 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Arc_teryx_Beta_LT.png` * | Arc'teryx Beta LT kuoritakki L musta |
+| `Arc_teryx_Atom_LT_Hoody.png` * | Arc'teryx Atom LT Hoody välitakki M siniharmaa |
+| `Halti_kuoritakki.png` | Halti kuoritakki M tummanvihreä |
+| `Helly_Hansen_kuoritakki.png` | Helly Hansen kuoritakki M punainen |
+| `Rukka_ajopuku_vintage_L_musta.png` | Rukka ajopuku L musta sininen |
+| `Patagonia_Nano_Puff.png` | Patagonia Nano Puff takki M vihreä |
+| `Patagonia_Retro-X_fleece.png` | Patagonia Retro-X fleece M luonnonvalkoinen |
+
+### Päällystakit, 7 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Barbour_takki.png` * | Barbour vahakangastakki L oliivinvihreä |
+| `Carhartt_Detroit_jacket.png` * | Carhartt Detroit Jacket L beige villavuori |
+| `Carhartt_Detroit_jacket__2_.png` * | Carhartt Chore Coat XL harmaanvihreä |
+| `Arket_villakangastakki.png` | Arket villakangastakki 38 beigenharmaa |
+| `COS_takki.png` | COS villakangastakki 38 beige |
+| `Marc_O_Polo_takki.png` | Marc O'Polo villakangastakki 38 kamelinruskea |
+| `Zara_trenssi.png` | Zara trenssi M beige |
+
+### Astiat, 7 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Arabia_Kilta_astia.png` * | Arabia Kilta kulho vaaleanvihreä |
+| `Arabia_Paratiisi_lautanen.png` * | Arabia Paratiisi lautanen 26 cm |
+| `Arabia_Teema_kahvikuppi.png` * | Arabia Teema muki 0,3 l luonnonvalkoinen |
+| `Iittala_Teema_lautanen.png` | Iittala Teema lautanen 21 cm valkoinen 4 kpl |
+| `Iittala_Ultima_Thule_lasi.png` | Iittala Ultima Thule juomalasi 0,3 l |
+| `Iittala_Taika_muki.png` | Iittala Taika muki 0,3 l sinivalkoinen |
+| `Muki_Arabia.png` | Arabia muki 0,3 l harmaaraita |
+
+### Housut, 7 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Diesel_flared_jeans.png` | Diesel flared farkut W30 tumma sininen |
+| `Jack___Jones_farkut_W32_L32_tummansininen.png` | Jack & Jones farkut W32 L32 vaalea sininen |
+| `Levi_s_501_vintage_farkut_W30_L32_vaaleat.png` | Levi's 501 vintage farkut W30 L32 vaaleat |
+| `Miss_Sixty_flared_jeans.png` | Miss Sixty flared farkut W29 sininen |
+| `Nike_Tech_Fleece_housut_M_harmaa.png` | Nike Tech Fleece housut M harmaa |
+| `Only_farkut_W28_L30_tummat.png` | Only farkut W28 L30 tumma sininen |
+| `Weekday_Rowe_farkut_W29_L32_siniset.png` | Weekday Rowe farkut W29 L32 siniset |
+
+### Lastenvaatteet, 6 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Didriksons_kurahaalari_100_cm_sininen.png` | Didriksons kurahaalari 100 cm sinapinkeltainen |
+| `Lindex_vauvanvaate_setti.png` | Lindex vauvansetti 62 cm keltainen |
+| `Mini_Rodini_paita.png` | Mini Rodini t-paita 104 cm eläinprintti |
+| `Reima_kurahaalari_110_cm_keltainen.png` | Reima talvihaalari 110 cm petroolinsininen |
+| `Name_It_lastenvaatepaketti.png` | Name It lastenvaatepaketti 98 cm |
+| `Polarn_O__Pyret_välikausihaalari.png` | Polarn O. Pyret talvihaalari 86 cm salvianvihreä |
+
+### Urheiluvaatteet, 5 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Casall_urheilutoppi_38_tummansininen.png` | Casall urheilutoppi 38 siniharmaa |
+| `Craft_merinokerrasto_M_musta.png` | Craft merinokerrasto M musta |
+| `Kari_Traa_villasetti_S_vaaleanpunainen.png` | Kari Traa villasetti S vaaleanpunainen |
+| `Gymshark_leggingsit_M_musta.png` | Gymshark leggingsit M musta |
+| `Icebreaker_merinopaita_M_harmaa.png` | Icebreaker merinopaita M harmaa |
+
+### Mekot, 4 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Ganni_mekko_36_kukkakuosi.png` | Ganni mekko 36 musta kukkakuosi |
+| `Monki_mekko_S_pinkki.png` | Monki minimekko S laventeli |
+| `NA-KD_mekko_M_vihreä.png` | NA-KD satiinimekko M smaragdinvihreä |
+| `Nelly_juhlamekko_36_oranssi.png` | Nelly kietaisumekko 36 poltettu oranssi |
+
+### Sisustus, 3 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Iittala_Aalto_maljakko.png` | Iittala Aalto maljakko 16 cm kirkas |
+| `Iittala_Birds_by_Toikka_lintu.png` | Iittala Birds by Toikka lasilintu harmaa |
+| `Iittala_Kastehelmi_tuikku.png` | Iittala Kastehelmi tuikku kirkas |
+
+### Hameet, 2 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Miss_Sixty_minihame.png` | Miss Sixty farkkuminihame W29 vaalea sininen |
+| `Raidallinen_minihame.png` | Raidallinen minihame 38 oranssi |
+
+### Jakut, 1 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Mango_bleiseri_38_beige.png` | Mango bleiseri 38 beige |
+
+### Kodintekstiilit, 1 kpl
+
+| Tiedosto | Tuote |
+|---|---|
+| `Marimekko_Unikko_tyynyliina.png` | Marimekko Unikko pöytäliina vaaleanpunainen |
 
 ## Yhteenveto
 
-- Kaikkiaan 100 kuvaa: 4 logoa, 8 grafiikkaa, 10 kirpputorikuvaa, 14 myyjäkuvaa ja 64 tuotekuvaa.
-- Demon pääpolku (tähdellä merkityt): 17 kuvaa.
-- Lisäkuvia voi halutessaan lisätä 2 kpl per tuote, eli enintään 128 kpl.
+- Kaikkiaan 152 kuvaa: 4 logoa, 8 grafiikkaa, 7 kirpputorikuvaa, 12 myyjäkuvaa ja 121 tuotekuvaa.
+- Demon pääpolku (tähdellä merkityt): 27 kuvaa.

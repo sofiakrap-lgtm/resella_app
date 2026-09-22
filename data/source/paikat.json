@@ -1,0 +1,82 @@
+{
+  "_comment": "Tiedot joita CSV ei sisällä: osoitteet, koordinaatit, aukioloajat, myyjien nimet. Koordinaatit ovat likimääräisiä kaupunginosan keskipisteitä, eivät tarkkoja osoitepisteitä.",
+  "markets": {
+    "Tapanilan kirppis": {
+      "id": "tapanila-hki",
+      "address": "Vanha Tapanilantie 12",
+      "lat": 60.2537,
+      "lng": 25.04,
+      "description": "Iso itsepalvelukirppis Tapanilassa. Vahva miesten ja ulkoiluvaatteiden valikoima.",
+      "followerCount": 1840,
+      "hours": { "ma": ["10.00", "19.00"], "ti": ["10.00", "19.00"], "ke": ["10.00", "19.00"], "to": ["10.00", "19.00"], "pe": ["10.00", "19.00"], "la": ["10.00", "17.00"], "su": ["11.00", "17.00"] }
+    },
+    "Ogelin Kirppis": {
+      "id": "ogeli-hki",
+      "address": "Kylänvanhimmantie 29",
+      "lat": 60.229,
+      "lng": 24.97,
+      "description": "Oulunkylän klassikko. Suomalaista designia, astioita ja sisustusta.",
+      "followerCount": 1210,
+      "hours": { "ma": ["11.00", "19.00"], "ti": ["11.00", "19.00"], "ke": ["11.00", "19.00"], "to": ["11.00", "19.00"], "pe": ["11.00", "19.00"], "la": ["10.00", "17.00"], "su": null }
+    },
+    "Hertsikan kirppis": {
+      "id": "hertsika-hki",
+      "address": "Linnanrakentajantie 2",
+      "lat": 60.193,
+      "lng": 25.033,
+      "description": "Herttoniemen kirppis. Skandinaavista muotia ja vahva Y2K-osasto.",
+      "followerCount": 1530,
+      "hours": { "ma": ["10.00", "20.00"], "ti": ["10.00", "20.00"], "ke": ["10.00", "20.00"], "to": ["10.00", "20.00"], "pe": ["10.00", "20.00"], "la": ["10.00", "18.00"], "su": ["12.00", "18.00"] }
+    },
+    "Bella Kirppis Suomenoja": {
+      "id": "bella-esp",
+      "address": "Martinsillantie 8",
+      "lat": 60.156,
+      "lng": 24.715,
+      "description": "Espoon Suomenojan kirppis. Arkivaatteita, urheilua ja lastentarvikkeita.",
+      "followerCount": 890,
+      "hours": { "ma": ["10.00", "19.00"], "ti": ["10.00", "19.00"], "ke": ["10.00", "19.00"], "to": ["10.00", "19.00"], "pe": ["10.00", "19.00"], "la": ["10.00", "17.00"], "su": ["12.00", "17.00"] }
+    },
+    "Relove Freda": {
+      "id": "relove-hki",
+      "address": "Fredrikinkatu 34",
+      "lat": 60.166,
+      "lng": 24.937,
+      "description": "Kahvila ja kirppis Fredrikinkadulla. Merkkilaukkuja ja designia.",
+      "followerCount": 3420,
+      "hours": { "ma": ["10.00", "19.00"], "ti": ["10.00", "19.00"], "ke": ["10.00", "19.00"], "to": ["10.00", "20.00"], "pe": ["10.00", "20.00"], "la": ["10.00", "18.00"], "su": ["12.00", "18.00"] }
+    },
+    "Skidilandia": {
+      "id": "skidilandia-hki",
+      "address": "Mäkelänkatu 56",
+      "lat": 60.22,
+      "lng": 24.93,
+      "description": "Vain lastentavaraa. Vaatteet, haalarit ja tarvikkeet vauvasta kouluikään.",
+      "followerCount": 640,
+      "hours": { "ma": null, "ti": ["11.00", "18.00"], "ke": ["11.00", "18.00"], "to": ["11.00", "18.00"], "pe": ["11.00", "18.00"], "la": ["10.00", "16.00"], "su": null }
+    },
+    "Siisti Kirppis": {
+      "id": "siisti-hki",
+      "address": "Hämeentie 105",
+      "lat": 60.21,
+      "lng": 25.01,
+      "description": "Pieni ja tarkasti kuratoitu. Vintagea ja merkittömiä löytöjä.",
+      "followerCount": 470,
+      "hours": { "ma": ["12.00", "18.00"], "ti": ["12.00", "18.00"], "ke": ["12.00", "18.00"], "to": ["12.00", "18.00"], "pe": ["12.00", "18.00"], "la": ["11.00", "16.00"], "su": null }
+    }
+  },
+  "sellers": {
+    "M-012": { "id": "jussi-m", "name": "Jussi M.", "bio": "Retkeilen paljon ja kierrätän varusteet kun ne eivät enää ole omassa käytössä.", "rating": 4.9, "reviewsCount": 87, "followerCount": 310, "tableValidUntil": "12.10." },
+    "M-027": { "id": "tuomas-r", "name": "Tuomas R.", "bio": "Miesten vaatteita, enimmäkseen workwearia ja streetwearia. Tyhjennän kaappia neljä kertaa vuodessa.", "rating": 4.7, "reviewsCount": 142, "followerCount": 520, "tableValidUntil": "5.10." },
+    "M-033": { "id": "aleksi-v", "name": "Aleksi V.", "bio": "Keräilen reppuja enemmän kuin ehdin käyttää. Kaikki tarkistettu ja puhdistettu.", "rating": 4.8, "reviewsCount": 54, "followerCount": 180, "tableValidUntil": "28.9." },
+    "M-041": { "id": "sanni-h", "name": "Sanni H.", "bio": "Kenkiä ja vain kenkiä. Koot ja kunto luettu tarkasti, ei yllätyksiä.", "rating": 4.9, "reviewsCount": 203, "followerCount": 740, "tableValidUntil": "19.10." },
+    "M-008": { "id": "meri-l", "name": "Meri L.", "bio": "Suomalaista designia. Arabiaa, Iittalaa ja Marimekkoa, osa perintönä saatua.", "rating": 5.0, "reviewsCount": 96, "followerCount": 430, "tableValidUntil": "30.9." },
+    "M-019": { "id": "anni-k", "name": "Anni K.", "bio": "Ostan vähän ja hyvää, ja myyn eteenpäin kun tyyli muuttuu. Enimmäkseen neuleita ja takkeja.", "rating": 4.9, "reviewsCount": 168, "followerCount": 910, "tableValidUntil": "5.10." },
+    "M-055": { "id": "venla-n", "name": "Venla N.", "bio": "Y2K kaikessa muodossaan. Jos se näyttää vuodelta 2003, se on todennäköisesti minun.", "rating": 4.6, "reviewsCount": 121, "followerCount": 1180, "tableValidUntil": "26.10." },
+    "M-003": { "id": "pihla-e", "name": "Pihla E.", "bio": "Arkivaatteita ja asusteita. Kaikki pesty ja silitetty ennen hyllyyn vientiä.", "rating": 4.8, "reviewsCount": 77, "followerCount": 260, "tableValidUntil": "3.10." },
+    "M-018": { "id": "kaisa-t", "name": "Kaisa T.", "bio": "Treenivaatteita ja ulkoilukamaa. Vaihdan varusteita usein, joten kiertoa riittää.", "rating": 4.7, "reviewsCount": 63, "followerCount": 195, "tableValidUntil": "10.10." },
+    "M-007": { "id": "perhe-virtanen", "name": "Perhe Virtanen", "bio": "Kolme lasta, joten vaatteita jää nopeasti pieniksi. Kaikki pesty ja tarkistettu.", "rating": 4.9, "reviewsCount": 214, "followerCount": 580, "tableValidUntil": "14.10." },
+    "M-022": { "id": "elias-p", "name": "Elias P.", "bio": "Vintagea ja merkittömiä löytöjä. Etsin asioita joita ei tule toista kertaa vastaan.", "rating": 4.8, "reviewsCount": 45, "followerCount": 340, "tableValidUntil": "7.10." },
+    "M-103": { "id": "oona-s", "name": "Oona S.", "bio": "Merkkilaukkuja ja designia. Jokaisen kohdalla kerrottu tarkasti mitä on kulunut ja mikä ei.", "rating": 5.0, "reviewsCount": 189, "followerCount": 2140, "tableValidUntil": "31.10." }
+  }
+}
