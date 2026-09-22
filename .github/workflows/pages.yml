@@ -32,6 +32,19 @@ jobs:
 
       - run: npm ci
 
+      # Writes the image report into the run summary, so the state of the
+      # photos can be read on the Actions page without a terminal.
+      - name: Check the images
+        if: always()
+        run: |
+          {
+            echo '## Kuvien tila'
+            echo ''
+            echo '```'
+            npm run check-assets --silent 2>&1 | sed 's/\x1b\[[0-9;]*m//g'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Build the static export
         env:
           NEXT_EXPORT: '1'
