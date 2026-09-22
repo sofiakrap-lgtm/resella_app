@@ -56,29 +56,35 @@ Kun tiedostot ovat paikallaan, aja `npm run sync-assets` (tai käynnistä
 
 | Kansio | Tiedosto | Mihin näkyy |
 |---|---|---|
-| `assets/logos/` | `resello-logo.svg` | Koko logo (merkki ja nimi) |
-| `assets/logos/` | `resello-wordmark.svg` | Pelkkä nimilogo |
-| `assets/logos/` | `resello-icon.svg` | Neliömäinen sovellusikoni |
-| `assets/graphics/` | `connector-mascot.svg` | Connector-hahmo, perusasento |
+| `assets/logos/` | `logo-wordmark.svg` | Nimilogo tummana, vaalealla taustalla |
+| `assets/logos/` | `logo-wordmark-light.svg` | Nimilogo kermana, tummalla taustalla |
+| `assets/logos/` | `logo-mark.svg` | Neliömäinen logo, tumma |
+| `assets/logos/` | `logo-mark-light.svg` | Neliömäinen logo, kerma |
+| `assets/graphics/` | `shape-star.svg`, `shape-wave.svg`, `shape-pebble.svg` | Koristemuodot, ottavat värinsä ympäristöstä |
+| `assets/graphics/` | `connector-mascot.svg` | Hahmo, perusasento |
 | `assets/graphics/` | `connector-wave.svg` | Hahmo vilkuttaa (tervetuloa, koti) |
-| `assets/graphics/` | `connector-search.svg` | Hahmo etsii (älykäs haku, tyylihaku) |
+| `assets/graphics/` | `connector-search.svg` | Hahmo etsii (haku) |
 | `assets/graphics/` | `connector-empty.svg` | Hahmo tyhjässä tilassa (ei osumia) |
 | `assets/graphics/` | `connector-celebrate.svg` | Hahmo juhlii (varaus valmis) |
-| `assets/product-photos/` | `p-001.jpg`, `p-001-2.jpg`, `p-001-3.jpg` | Tuotteen p-001 kuvat 1, 2 ja 3 |
-| `assets/demo/` | `market-ogeli.jpg` | Kirppiksen m-ogeli kuva |
-| `assets/demo/` | `demo-style-1.jpg` ... `demo-style-3.jpg` | Kuvahaun esimerkkikuvat |
+| `assets/product-photos/` | `prod-naiset-001.jpg`, `-2.jpg`, `-3.jpg` | Tuotteen kuvat 1, 2 ja 3 |
+| `assets/demo/` | `market-ogeli-hki.jpg` | Kirpputorin kuva |
+| `assets/demo/` | `seller-anni-k.jpg` | Myyjän kuva |
 
 ### Nimeämissäännöt
 
-- Tuotekuvat: `p-XXX.jpg` on pääkuva, `p-XXX-2.jpg` ja `p-XXX-3.jpg` ovat
-  lisäkuvat. Tuotetunnukset löytyvät tiedostosta `lib/mockData.ts`.
-- Kirppiskuvat: `market-<tunnus>.jpg`, esimerkiksi `market-lanttila.jpg`.
-  Tunnukset ovat samassa tiedostossa (`photo`-kenttä).
-- Suositellut koot: tuotekuva 1200 x 1500 px (4:5), kirppiskuva 1600 x 900 px,
-  hahmot ja logot SVG-muodossa.
+- Tuotekuvat: `prod-<kategoria>-<numero>.jpg` on pääkuva, `-2.jpg` ja `-3.jpg`
+  ovat vapaaehtoiset lisäkuvat. Täydellinen lista on tiedostossa KUVALISTA.md,
+  joka luodaan datasta komennolla `npm run kuvalista`.
+- Kirpputorikuvat: `market-<tunnus>.jpg`, tunnukset tiedostossa `data/markets.ts`
+  (`coverImage`-kenttä).
+- Myyjäkuvat: `seller-<tunnus>.jpg`, tunnukset tiedostossa `data/sellers.ts`
+  (`avatar`-kenttä). Myyjät ovat keksittyjä, joten älä käytä tunnistettavia
+  kasvoja.
+- Suositellut koot: tuotekuva 1200 x 1600 px (3:4), kirpputorikuva 1600 x 900 px,
+  myyjäkuva 600 x 600 px, hahmot ja logot SVG-muodossa.
 - Tiedostomuodot: `.jpg` valokuville, `.svg` logoille ja hahmoille.
 
-Kuvien polut on koottu yhteen tiedostoon `lib/assets.ts`. Jos haluat muuttaa
+Kuvien polut on koottu yhteen tiedostoon `lib/imagePath.ts`. Jos haluat muuttaa
 nimeämistapaa, muuta se siellä, älä komponenteissa.
 
 ## In English
@@ -93,12 +99,15 @@ Next.js serves statically.
 
 Naming rules:
 
-- Product photos: `p-XXX.jpg` is the main photo, `p-XXX-2.jpg` and `p-XXX-3.jpg`
-  are the additional ones. Product ids live in `lib/mockData.ts`.
-- Market photos: `market-<id>.jpg`, for example `market-lanttila.jpg` (see the
-  `photo` field in `lib/mockData.ts`).
-- Logos and the Connector mascot: SVG, file names listed in the table above.
-- Suggested sizes: products 1200 x 1500 px (4:5), markets 1600 x 900 px.
+- Product photos: `prod-<category>-<number>.jpg` is the main photo,
+  `-2.jpg` and `-3.jpg` are the optional extras. The full list is in
+  KUVALISTA.md, generated from the data with `npm run kuvalista`.
+- Market photos: `market-<id>.jpg` (see `coverImage` in `data/markets.ts`).
+- Seller photos: `seller-<id>.jpg` (see `avatar` in `data/sellers.ts`). Sellers
+  are fictional, so do not use recognisable faces.
+- Logos, shapes and the mascot: SVG, file names listed in the table above.
+- Suggested sizes: products 1200 x 1600 px (3:4), markets 1600 x 900 px,
+  sellers 600 x 600 px.
 
-All paths are resolved in `lib/assets.ts`. Change the convention there, not in
-the components.
+All paths are resolved in `lib/imagePath.ts`. Change the convention there, not
+in the components.

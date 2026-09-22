@@ -27,9 +27,24 @@ export function sellerImage(name: string): string {
   return `${ASSET_BASE}/demo/${name}.jpg`;
 }
 
+/**
+ * Real brand files, dropped into /assets/logos. The "light" variants are
+ * cream coloured, for dark or photographic backgrounds.
+ */
 export const logos = {
-  primary: `${ASSET_BASE}/logos/resello-logo.svg`,
-  wordmark: `${ASSET_BASE}/logos/resello-wordmark.svg`,
+  wordmark: `${ASSET_BASE}/logos/logo-wordmark.svg`,
+  wordmarkLight: `${ASSET_BASE}/logos/logo-wordmark-light.svg`,
+  mark: `${ASSET_BASE}/logos/logo-mark.svg`,
+  markLight: `${ASSET_BASE}/logos/logo-mark-light.svg`,
+};
+
+export type ShapeName = 'star' | 'wave' | 'pebble';
+
+/** Decorative brand shapes. They inherit the surrounding colour. */
+export const shapes: Record<ShapeName, string> = {
+  star: `${ASSET_BASE}/graphics/shape-star.svg`,
+  wave: `${ASSET_BASE}/graphics/shape-wave.svg`,
+  pebble: `${ASSET_BASE}/graphics/shape-pebble.svg`,
 };
 
 export type MascotPose = 'default' | 'wave' | 'search' | 'empty' | 'celebrate';

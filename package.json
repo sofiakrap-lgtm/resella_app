@@ -11,7 +11,8 @@
     "sync-assets": "node scripts/sync-assets.mjs",
     "typecheck": "tsc --noEmit",
     "build:export": "NEXT_EXPORT=1 next build",
-    "check-assets": "node scripts/check-assets.mjs"
+    "check-assets": "node scripts/check-assets.mjs",
+    "kuvalista": "node scripts/kuvalista.mjs"
   },
   "dependencies": {
     "framer-motion": "^13.4.0",

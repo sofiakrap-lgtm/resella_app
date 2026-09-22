@@ -1,23 +1,19 @@
 /**
- * Tarkistaa /assets kansion sisällön mock-dataa vasten.
+ * Tarkistaa /assets kansion sisällön dataa vasten.
  *
  *   npm run check-assets
  *
  * Kertoo mitkä kuvat löytyvät, mitkä puuttuvat ja mitkä tiedostonimet eivät
  * vastaa mitään, eli ovat todennäköisesti kirjoitusvirheitä.
  */
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readExpected, demoPathNames } from './expected-assets.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const assets = path.join(root, 'assets');
-
-const DEMO_PATH_PRODUCTS = [
-  'p-001', 'p-002', 'p-007', 'p-011', 'p-012', 'p-010', 'p-020', 'p-021',
-  'p-030', 'p-032', 'p-034', 'p-050', 'p-051', 'p-056', 'p-062',
-];
 
 const green = (s) => `\u001b[32m${s}\u001b[0m`;
 const red = (s) => `\u001b[31m${s}\u001b[0m`;
@@ -27,8 +23,7 @@ const dim = (s) => `\u001b[2m${s}\u001b[0m`;
 async function listFiles(folder) {
   const dir = path.join(assets, folder);
   if (!existsSync(dir)) return [];
-  const entries = await readdir(dir);
-  return entries.filter((name) => !name.startsWith('.'));
+  return (await readdir(dir)).filter((name) => !name.startsWith('.'));
 }
 
 function baseName(file) {
@@ -36,29 +31,8 @@ function baseName(file) {
 }
 
 async function main() {
-  const source = await readFile(path.join(root, 'lib/mockData.ts'), 'utf8');
-
-  const productIds = [...source.matchAll(/product\(\{\s*\n\s*id: '([^']+)'/g)].map((m) => m[1]);
-  const marketPhotos = [...source.matchAll(/photo: '(market-[^']+)'/g)].map((m) => m[1]);
-
-  const expected = {
-    logos: ['resello-logo', 'resello-wordmark', 'resello-icon'],
-    graphics: [
-      'connector-mascot',
-      'connector-wave',
-      'connector-search',
-      'connector-empty',
-      'connector-celebrate',
-    ],
-    'product-photos': productIds.flatMap((id) => [id, `${id}-2`, `${id}-3`]),
-    demo: [...marketPhotos, 'demo-style-1', 'demo-style-2', 'demo-style-3'],
-  };
-
-  const demoPath = new Set([
-    ...expected.graphics,
-    ...marketPhotos,
-    ...DEMO_PATH_PRODUCTS,
-  ]);
+  const { meta, ...expected } = await readExpected();
+  const demoPath = demoPathNames({ ...expected, meta });
 
   let found = 0;
   let demoFound = 0;
@@ -77,19 +51,22 @@ async function main() {
       if (!names.includes(baseName(file))) unknown.push(`${folder}/${file}`);
     }
     for (const name of names) {
-      if (demoPath.has(name)) {
-        if (present.has(name)) demoFound += 1;
-        else missingDemo.push(`assets/${folder}/${name}`);
-      }
+      if (!demoPath.has(name)) continue;
+      if (present.has(name)) demoFound += 1;
+      else missingDemo.push(`assets/${folder}/${name}`);
     }
 
     const label = `assets/${folder}`.padEnd(24);
-    const line = `${hits.length} / ${names.length}`;
-    console.log(`  ${hits.length === names.length ? green('OK  ') : dim('    ')} ${label} ${line}`);
+    console.log(
+      `  ${hits.length === names.length ? green('OK  ') : dim('    ')} ${label} ${hits.length} / ${names.length}`,
+    );
   }
 
   console.log('');
-  console.log(`  Demon pääpolku: ${demoFound === demoPath.size ? green(`${demoFound} / ${demoPath.size}`) : yellow(`${demoFound} / ${demoPath.size}`)}`);
+  const demoLine = `${demoFound} / ${demoPath.size}`;
+  console.log(
+    `  Demon pääpolku: ${demoFound === demoPath.size ? green(demoLine) : yellow(demoLine)}`,
+  );
 
   if (missingDemo.length) {
     console.log(`\n  ${yellow('Pääpolulta puuttuu:')}`);

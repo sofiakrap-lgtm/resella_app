@@ -1,4 +1,9 @@
-/** ReSello logo mark, drawn inline so the app never depends on a file. */
+'use client';
+
+import { logos } from '@/lib/imagePath';
+import { SafeImage } from './SafeImage';
+
+/** Small logo mark, drawn inline so tiny placements never depend on a file. */
 export function BrandMark({ size = 24, className = '' }: { size?: number; className?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true" className={className}>
@@ -15,11 +20,32 @@ export function BrandMark({ size = 24, className = '' }: { size?: number; classN
   );
 }
 
-export function BrandWordmark({ className = '' }: { className?: string }) {
+/**
+ * The real wordmark from /assets/logos. If the file is not there yet, the
+ * drawn mark and the name stand in, so the layout never breaks.
+ */
+export function BrandWordmark({
+  height = 28,
+  light = false,
+  className = '',
+}: {
+  height?: number;
+  light?: boolean;
+  className?: string;
+}) {
   return (
-    <span className={`inline-flex items-center gap-2 ${className}`}>
-      <BrandMark size={22} />
-      <span className="t-headline tracking-tight">ReSello</span>
-    </span>
+    <SafeImage
+      src={light ? logos.wordmarkLight : logos.wordmark}
+      alt="ReSello"
+      fallbackType="logo"
+      className={className}
+      style={{ height, width: 'auto' }}
+      fallback={
+        <span className={`inline-flex items-center gap-2 ${className}`}>
+          <BrandMark size={Math.round(height * 0.8)} />
+          <span className="t-title3 tracking-tight">ReSello</span>
+        </span>
+      }
+    />
   );
 }

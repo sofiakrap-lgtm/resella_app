@@ -44,7 +44,7 @@ export default function OnboardingPage() {
   return (
     <div className="flex flex-1 flex-col px-6 pb-8 pt-4">
       <div className="flex items-center justify-between">
-        <BrandWordmark />
+        <BrandWordmark height={24} />
         <button type="button" onClick={finish} className="min-h-11 px-2 t-subhead text-terracotta-ink">
           Ohita
         </button>

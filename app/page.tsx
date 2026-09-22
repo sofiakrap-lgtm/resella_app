@@ -19,7 +19,7 @@ export default function EntryPage() {
   return (
     <div className="flex h-[70vh] flex-col items-center justify-center gap-4">
       <Mascot pose="wave" size={120} />
-      <BrandWordmark />
+      <BrandWordmark height={40} />
     </div>
   );
 }

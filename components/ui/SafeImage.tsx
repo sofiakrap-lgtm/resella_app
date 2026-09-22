@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import type { FallbackType } from '@/lib/imagePath';
 import { BrandMark } from './BrandMark';
 
@@ -14,6 +14,7 @@ interface SafeImageProps {
   priority?: boolean;
   /** Small thumbnails show the mark only, a caption would be clipped. */
   compact?: boolean;
+  style?: CSSProperties;
 }
 
 /** Warm placeholder tints, picked deterministically so a grid stays varied. */
@@ -61,6 +62,7 @@ export function SafeImage({
   fallback,
   priority,
   compact = false,
+  style,
 }: SafeImageProps) {
   const [failed, setFailed] = useState(false);
 
@@ -76,7 +78,7 @@ export function SafeImage({
         role="img"
         aria-label={alt}
         className={`flex flex-col items-center justify-center gap-1.5 overflow-hidden text-brown-70 ${className}`}
-        style={{ background: `linear-gradient(150deg, ${from} 0%, ${to} 100%)` }}
+        style={{ background: `linear-gradient(150deg, ${from} 0%, ${to} 100%)`, ...style }}
       >
         <span className="flex items-center gap-1.5">
           <BrandMark size={compact ? 16 : 20} />
@@ -102,6 +104,7 @@ export function SafeImage({
       src={src}
       alt={alt}
       className={className}
+      style={style}
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
       ref={(node) => {
