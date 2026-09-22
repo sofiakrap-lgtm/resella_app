@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { products, type Product, type StyleTag } from '@/lib/mockData';
 import { demoImageUrl } from '@/lib/assets';
 import { useApp } from '@/lib/state';
+import type { StringKey } from '@/lib/i18n';
 import { useTransition } from '@/lib/motion';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { Button } from '@/components/ui/Button';
@@ -34,10 +35,16 @@ type Phase = 'idle' | 'connecting' | 'analyzing' | 'connected' | 'error';
 
 const DETECTED_STYLE: StyleTag[] = ['skandi', 'vintage', 'maanläheinen'];
 
-const PRESET_IMAGES = [
-  { id: 'demo-style-1', label: 'Beige villakangastakki', match: ['minimalistinen', 'maanläheinen'] },
-  { id: 'demo-style-2', label: 'Valkoiset Teema-astiat', match: ['skandi', 'minimalistinen'] },
-  { id: 'demo-style-3', label: 'Ruskea nahkalaukku', match: ['vintage', 'maanläheinen'] },
+interface PresetImage {
+  id: string;
+  labelKey: StringKey;
+  match: StyleTag[];
+}
+
+const PRESET_IMAGES: PresetImage[] = [
+  { id: 'demo-style-1', labelKey: 'pinterest.style1', match: ['minimalistinen', 'maanläheinen'] },
+  { id: 'demo-style-2', labelKey: 'pinterest.style2', match: ['skandi', 'minimalistinen'] },
+  { id: 'demo-style-3', labelKey: 'pinterest.style3', match: ['vintage', 'maanläheinen'] },
 ];
 
 export default function PinterestPage() {
@@ -75,7 +82,7 @@ function PinterestContent() {
     }, 2600);
   };
 
-  const runImageSearch = (preset: (typeof PRESET_IMAGES)[number]) => {
+  const runImageSearch = (preset: PresetImage) => {
     setSearching(true);
     setImageSearch(null);
     window.setTimeout(() => {
@@ -101,7 +108,7 @@ function PinterestContent() {
           <Button className="mt-5" size="lg" full onClick={connect} icon={<SparkleIcon size={20} />}>
             {t('pinterest.connect')}
           </Button>
-          <p className="t-caption1 mt-3 text-ink-tertiary">{t('pinterest.privacyNote')}</p>
+          <p className="t-caption1 mt-3 text-ink-secondary">{t('pinterest.privacyNote')}</p>
         </section>
       ) : phase === 'connecting' || phase === 'analyzing' ? (
         <section className="flex flex-col items-center px-8 pt-16 text-center">
@@ -126,7 +133,7 @@ function PinterestContent() {
         <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={transition}>
           <div className="px-4 pt-4">
             <p className="t-footnote text-ink-secondary">{t('pinterest.styleTitle')}</p>
-            <h2 className="t-title2 mt-1">Skandi-vintage, maanläheiset sävyt</h2>
+            <h2 className="t-title2 mt-1">{t('pinterest.styleSummary')}</h2>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {DETECTED_STYLE.map((tag) => (
                 <Tag key={tag} tone="accent">
@@ -179,7 +186,7 @@ function PinterestContent() {
               key={preset.id}
               type="button"
               onClick={() => runImageSearch(preset)}
-              aria-label={`${t('pinterest.pickImage')}: ${preset.label}`}
+              aria-label={`${t('pinterest.pickImage')}: ${t(preset.labelKey)}`}
               className="w-[132px] shrink-0 text-left"
             >
               <span
@@ -190,12 +197,12 @@ function PinterestContent() {
               >
                 <SafeImage
                   src={demoImageUrl(preset.id)}
-                  alt={preset.label}
-                  label={preset.label}
+                  alt={t(preset.labelKey)}
+                  label={t(preset.labelKey)}
                   className="h-full w-full object-cover"
                 />
               </span>
-              <span className="t-caption1 mt-1.5 block">{preset.label}</span>
+              <span className="t-caption1 mt-1.5 block">{t(preset.labelKey)}</span>
             </button>
           ))}
         </div>
@@ -217,7 +224,7 @@ function PinterestContent() {
         ) : null}
       </section>
 
-      <p className="t-caption1 mt-8 px-4 text-center text-ink-tertiary">{t('pinterest.privacyNote')}</p>
+      <p className="t-caption1 mt-8 px-4 text-center text-ink-secondary">{t('pinterest.privacyNote')}</p>
 
       <QuickView product={quickView} onClose={() => setQuickView(null)} />
     </div>

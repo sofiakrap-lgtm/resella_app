@@ -17,6 +17,9 @@ import { QuickView } from '@/components/product/QuickView';
 import { BellIcon, ShareIcon, CloseIcon, SearchIcon, ChevronRight } from '@/components/ui/Icons';
 import Link from 'next/link';
 
+/** Alerts that have already reported a match in this session. */
+const notifiedAlerts = new Set<string>();
+
 export default function SavedPage() {
   return (
     <Suspense fallback={null}>
@@ -53,11 +56,13 @@ function SavedContent() {
 
   const saved = wishlist.map((id) => productById(id)).filter((p): p is Product => Boolean(p));
 
-  // Mocked push: the first alert reports a match shortly after it is created.
+  // Mocked push: a new alert reports a match once, not on every visit.
   useEffect(() => {
     if (!ready || !savedSearches.length) return;
     const newest = savedSearches[0];
+    if (notifiedAlerts.has(newest.id)) return;
     const timer = window.setTimeout(() => {
+      notifiedAlerts.add(newest.id);
       pushToast({ title: `${t('saved.alertHit')} "${newest.label}"`, href: '/saved' });
     }, 2500);
     return () => window.clearTimeout(timer);

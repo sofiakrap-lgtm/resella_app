@@ -45,6 +45,7 @@ export default function SettingsPage() {
               key={option}
               active={language === option}
               onClick={() => set('language', option)}
+              className="min-h-11"
             >
               {option === 'fi' ? 'Suomi' : 'English'}
             </SegmentedButton>
@@ -60,6 +61,7 @@ export default function SettingsPage() {
               key={option.value}
               active={theme === option.value}
               onClick={() => set('theme', option.value)}
+              className="min-h-11"
             >
               {option.label}
             </SegmentedButton>

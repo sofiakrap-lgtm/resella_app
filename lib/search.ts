@@ -94,6 +94,8 @@ export function filterProducts(filters: Filters, sort: SortKey = 'relevance'): P
     .filter((product) => {
       const market = marketById(product.marketId);
       if (!market) return false;
+      // A sold item is gone from the floor, it stays reachable by direct link.
+      if (product.status === 'sold') return false;
       if (filters.city && market.city !== filters.city) return false;
       if (filters.marketId && product.marketId !== filters.marketId) return false;
       if (filters.categories.length && !filters.categories.includes(product.category)) return false;

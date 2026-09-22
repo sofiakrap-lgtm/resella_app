@@ -223,7 +223,7 @@ function ResultsContent() {
         />
       ) : (
         <>
-          <p className="t-caption1 px-4 pb-1 pt-2 text-ink-tertiary">{t('results.quickViewHint')}</p>
+          <p className="t-caption1 px-4 pb-1 pt-2 text-ink-secondary">{t('results.quickViewHint')}</p>
           <div>
             {results.slice(0, visible).map((product, index) => (
               <ProductCard

@@ -155,7 +155,7 @@ export default function OnboardingPage() {
             aria-selected={index === page}
             role="tab"
             onClick={() => go(index)}
-            className="flex h-11 w-6 items-center justify-center"
+            className="flex h-11 w-11 items-center justify-center"
           >
             <motion.span
               animate={{ width: index === page ? 22 : 7, opacity: index === page ? 1 : 0.35 }}

@@ -37,7 +37,7 @@ export function OpenStatus({ market, className = '' }: { market: Market; classNa
 
 /** Full week, today highlighted. */
 export function OpeningHoursList({ market }: { market: Market }) {
-  const { language } = useApp();
+  const { t, language } = useApp();
   const now = useNow();
   const todayKey = now ? weekdayKey(now) : null;
 
@@ -54,7 +54,7 @@ export function OpeningHoursList({ market }: { market: Market }) {
           >
             <span>{WEEKDAY_LABELS[day][language]}</span>
             <span className={hours ? '' : 'text-ink-secondary'}>
-              {hours ? `${hours.open} - ${hours.close}` : language === 'fi' ? 'Suljettu' : 'Closed'}
+              {hours ? `${hours.open} - ${hours.close}` : t('common.closed')}
             </span>
           </li>
         );

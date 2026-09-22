@@ -91,6 +91,9 @@ export const fi = {
   'search.allCities': 'Kaikki kaupungit',
   'search.aiLink': 'Kokeile älykästä hakua',
   'search.suggestions': 'Ehdotukset',
+  'search.sizesKids': 'Lasten koot',
+  'search.sizesAdult': 'Aikuisten koot',
+  'search.sizesShoes': 'Kengät',
 
   'ai.title': 'Älykäs haku',
   'ai.scope':
@@ -187,6 +190,10 @@ export const fi = {
   'pinterest.imageSearchBody': 'Valitse kuva, niin etsimme vastaavat tuotteet kirppiksiltä.',
   'pinterest.pickImage': 'Valitse kuva',
   'pinterest.searching': 'Etsitään vastaavia',
+  'pinterest.style1': 'Beige villakangastakki',
+  'pinterest.style2': 'Valkoiset Teema-astiat',
+  'pinterest.style3': 'Ruskea nahkalaukku',
+  'pinterest.styleSummary': 'Skandi-vintage, maanläheiset sävyt',
   'pinterest.privacyNote':
     'Demossa yhdistäminen on esimerkki. Oikeassa käytössä tyylianalyysi tehdään lennossa, emmekä tallenna Pinterest-aineistoa.',
 
@@ -370,6 +377,9 @@ export const en: Record<StringKey, string> = {
   'search.allCities': 'All cities',
   'search.aiLink': 'Try smart search',
   'search.suggestions': 'Suggestions',
+  'search.sizesKids': 'Kids sizes',
+  'search.sizesAdult': 'Adult sizes',
+  'search.sizesShoes': 'Shoes',
 
   'ai.title': 'Smart search',
   'ai.scope': 'Tell me what you need and I will suggest markets and items on sale right now.',
@@ -464,6 +474,10 @@ export const en: Record<StringKey, string> = {
   'pinterest.imageSearchBody': 'Pick an image and we will find matching items at the markets.',
   'pinterest.pickImage': 'Pick an image',
   'pinterest.searching': 'Finding matches',
+  'pinterest.style1': 'Beige wool coat',
+  'pinterest.style2': 'White Teema tableware',
+  'pinterest.style3': 'Brown leather bag',
+  'pinterest.styleSummary': 'Scandi vintage, earthy tones',
   'pinterest.privacyNote':
     'In this demo connecting is an example. In production the style analysis runs on the fly and we do not store Pinterest content.',
 

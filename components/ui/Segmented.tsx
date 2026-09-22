@@ -35,7 +35,7 @@ export function Segmented<T extends string>({
             role="tab"
             aria-selected={selected}
             onClick={() => onChange(option.value)}
-            className="relative z-10 min-h-11 flex-1 rounded-full px-3 t-subhead font-semibold"
+            className="relative z-10 min-h-11 min-w-0 flex-1 truncate rounded-full px-3 t-subhead font-semibold"
             style={{ color: selected ? 'var(--color-text)' : 'var(--color-text-secondary)' }}
           >
             {selected ? (

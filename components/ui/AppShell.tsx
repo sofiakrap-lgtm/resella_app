@@ -29,7 +29,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <StatusBarMock />
             <main
               id="app-scroll"
-              className="hide-scrollbar flex flex-1 flex-col overflow-y-auto overscroll-y-contain"
+              className="hide-scrollbar flex flex-1 flex-col overflow-y-auto overflow-x-hidden overscroll-y-contain"
             >
               <div className={`flex flex-1 flex-col ${chromeless || fullBleed ? '' : 'pb-[104px]'}`}>
                 {children}

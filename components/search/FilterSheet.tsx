@@ -87,9 +87,9 @@ export function FilterSheet({ open, onClose, filters, onApply, resultCount }: Fi
         ) : null}
 
         <Group title={t('search.filterSize')}>
-          <SizeGroup label="Lasten koot" sizes={kidsSizes} draft={draft} setDraft={setDraft} toggle={toggle} />
-          <SizeGroup label="Aikuisten koot" sizes={adultSizes} draft={draft} setDraft={setDraft} toggle={toggle} />
-          <SizeGroup label="Kengät" sizes={shoeSizes} draft={draft} setDraft={setDraft} toggle={toggle} />
+          <SizeGroup label={t('search.sizesKids')} sizes={kidsSizes} draft={draft} setDraft={setDraft} toggle={toggle} />
+          <SizeGroup label={t('search.sizesAdult')} sizes={adultSizes} draft={draft} setDraft={setDraft} toggle={toggle} />
+          <SizeGroup label={t('search.sizesShoes')} sizes={shoeSizes} draft={draft} setDraft={setDraft} toggle={toggle} />
         </Group>
 
         <Group title={t('search.filterCategory')}>

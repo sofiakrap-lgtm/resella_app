@@ -38,16 +38,25 @@ export function ProductCard({
   const market = marketById(product.marketId);
   const saved = wishlist.includes(product.id);
   const holdTimer = useRef<number | null>(null);
+  const holdStart = useRef<{ x: number; y: number } | null>(null);
 
   const distance = market ? distanceKm(originFor(city), market) : null;
 
-  const startHold = () => {
+  const startHold = (event: { clientX: number; clientY: number }) => {
     if (!onQuickView) return;
+    holdStart.current = { x: event.clientX, y: event.clientY };
     holdTimer.current = window.setTimeout(() => onQuickView(product), 550);
   };
   const cancelHold = () => {
     if (holdTimer.current) window.clearTimeout(holdTimer.current);
     holdTimer.current = null;
+    holdStart.current = null;
+  };
+  /** A scroll gesture must not turn into a quick view. */
+  const moveHold = (event: { clientX: number; clientY: number }) => {
+    const start = holdStart.current;
+    if (!start) return;
+    if (Math.abs(event.clientX - start.x) > 8 || Math.abs(event.clientY - start.y) > 8) cancelHold();
   };
 
   const statusOverlay =
@@ -64,9 +73,11 @@ export function ProductCard({
       ariaLabel={saved ? t('a11y.unsaveProduct') : t('a11y.saveProduct')}
       active={saved}
       onClick={() => toggleWishlist(product.id)}
-      className="glass !h-9 !w-9"
     >
-      <HeartIcon size={18} filled={saved} />
+      {/* The circle reads small, the touch target stays 44pt. */}
+      <span className="glass flex h-9 w-9 items-center justify-center rounded-full">
+        <HeartIcon size={18} filled={saved} />
+      </span>
     </IconButton>
   );
 
@@ -86,7 +97,9 @@ export function ProductCard({
         transition={transition}
         whileTap={tap}
         onPointerDown={startHold}
+        onPointerMove={moveHold}
         onPointerUp={cancelHold}
+        onPointerCancel={cancelHold}
         onPointerLeave={cancelHold}
         onContextMenu={(event) => {
           if (onQuickView) {
@@ -111,13 +124,13 @@ export function ProductCard({
               <Tag>{product.condition}</Tag>
             </span>
             <span className="t-footnote mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-ink-secondary">
-              <span className="inline-flex items-center gap-1">
-                <LocationIcon size={14} />
-                {market?.name}
+              <span className="inline-flex max-w-full items-center gap-1">
+                <LocationIcon size={14} className="shrink-0" />
+                <span className="truncate">{market?.name}</span>
               </span>
-              <span className="inline-flex items-center gap-1">
-                <TagIcon size={14} />
-                {product.spot}
+              <span className="inline-flex max-w-full items-center gap-1">
+                <TagIcon size={14} className="shrink-0" />
+                <span className="truncate">{product.spot}</span>
               </span>
               {showDistance && distance !== null ? <span>{formatDistance(distance)}</span> : null}
             </span>
@@ -137,7 +150,9 @@ export function ProductCard({
       whileTap={tap}
       className={fullWidth ? 'w-full' : 'w-[168px] shrink-0'}
       onPointerDown={startHold}
+      onPointerMove={moveHold}
       onPointerUp={cancelHold}
+      onPointerCancel={cancelHold}
       onPointerLeave={cancelHold}
       onContextMenu={(event) => {
         if (onQuickView) {

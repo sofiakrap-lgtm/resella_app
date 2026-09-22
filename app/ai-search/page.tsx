@@ -79,7 +79,7 @@ export default function AiSearchPage() {
         <div ref={bottomRef} />
       </div>
 
-      <p className="t-caption1 mt-6 px-4 text-center text-ink-tertiary">{t('ai.disclaimer')}</p>
+      <p className="t-caption1 mt-6 px-4 text-center text-ink-secondary">{t('ai.disclaimer')}</p>
 
       {/* Composer floats above the tab bar, on the navigation layer. */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 px-4 pb-[94px]">

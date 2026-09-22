@@ -18,8 +18,10 @@
   --color-surface: #fffbf3;
   --color-surface-2: #f4e9d5;
   --color-text: #3c2415;
-  --color-text-secondary: rgba(60, 36, 21, 0.62);
-  --color-text-tertiary: rgba(60, 36, 21, 0.34);
+  /* Alphas picked so secondary text clears 4.5:1 and tertiary icons clear 3:1
+     on every surface in this palette. */
+  --color-text-secondary: rgba(60, 36, 21, 0.7);
+  --color-text-tertiary: rgba(60, 36, 21, 0.55);
   --color-accent: #3c2415;
   --color-accent-strong: #26150a;
   --color-on-accent: #faf1e0;
@@ -52,8 +54,8 @@
   --color-surface: #261a10;
   --color-surface-2: #302217;
   --color-text: #f7eddc;
-  --color-text-secondary: rgba(247, 237, 220, 0.64);
-  --color-text-tertiary: rgba(247, 237, 220, 0.36);
+  --color-text-secondary: rgba(247, 237, 220, 0.68);
+  --color-text-tertiary: rgba(247, 237, 220, 0.42);
   --color-accent: #e7cca6;
   --color-accent-strong: #f2dec3;
   --color-on-accent: #291a0e;

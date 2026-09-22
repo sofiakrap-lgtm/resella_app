@@ -34,7 +34,7 @@ export function TabBar() {
         {tabs.map(({ href, key, Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
           return (
-            <motion.div key={href} whileTap={tap} transition={transition} className="flex-1">
+            <motion.div key={href} whileTap={tap} transition={transition} className="min-w-0 flex-1">
               <Link
                 href={href}
                 aria-label={t(key)}
@@ -47,7 +47,7 @@ export function TabBar() {
                 ) : (
                   <Icon size={23} />
                 )}
-                <span className="t-caption2" style={{ fontWeight: active ? 600 : 400 }}>
+                <span className="t-caption2 max-w-full truncate" style={{ fontWeight: active ? 600 : 400 }}>
                   {t(key)}
                 </span>
               </Link>

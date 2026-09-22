@@ -26,7 +26,7 @@ export function Chip({ children, selected = false, onClick, icon, className = ''
       whileTap={tap}
       transition={transition}
       className={[
-        'inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full px-4 t-subhead',
+        'inline-flex min-h-11 max-w-full shrink-0 items-center gap-1.5 rounded-full px-4 t-subhead',
         'border transition-colors duration-150',
         selected
           ? 'border-accent bg-accent text-on-accent font-semibold'
@@ -61,7 +61,7 @@ export function Tag({
   } as const;
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 t-caption1 ${tones[tone]} ${className}`}
+      className={`inline-flex max-w-full items-center gap-1 rounded-full px-2.5 py-1 t-caption1 ${tones[tone]} ${className}`}
     >
       {icon}
       {children}

@@ -119,8 +119,12 @@ kiinteäksi, jos käyttöjärjestelmä tai asetus pyytää vähemmän läpinäky
 
 ### Saavutettavuus
 
-- Kosketuskohteet vähintään 44 x 44 pt.
-- Tekstin koko skaalautuu (`Suurenna teksti` asetuksissa), layoutit kestävät sen.
+- Kosketuskohteet vähintään 44 x 44 pt, mitattu selaimessa jokaisesta näkymästä.
+- Tekstin koko skaalautuu (`Suurenna teksti` asetuksissa). Layout on testattu
+  1,6-kertaiseen kokoon asti ilman vaakavieritystä. Sitä isommilla kertoimilla
+  (yli 2x, iOS:n AX-koot) tuotelistan rivit alkavat ahtautua.
+- Kontrastit on mitattu: leipäteksti ja sekundaariteksti yli 4,5:1, ikonit ja
+  käyttöliittymäelementit yli 3:1, sekä vaaleassa että tummassa tilassa.
 - `Vähennä liikettä`, `Lisää kontrastia` ja `Vähennä läpinäkyvyyttä` on kytketty
   oikeasti kiinni, samoin järjestelmän omat vastaavat asetukset.
 - Merkitystä ei välitetä pelkällä värillä: kunto, tila ja aukiolo kerrotaan myös
