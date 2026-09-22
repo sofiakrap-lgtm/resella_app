@@ -16,12 +16,12 @@ interface SafeImageProps {
 
 /** Warm, brand adjacent placeholder tints, picked deterministically per image. */
 const TINTS: Array<[string, string]> = [
-  ['#EDE6DB', '#DCD2C2'],
-  ['#E6E9E1', '#CFD7C8'],
-  ['#F0E4DC', '#E0CCC0'],
-  ['#E7E4EC', '#D3CFDD'],
-  ['#EFE9D8', '#DED5BC'],
-  ['#E3E8EA', '#CCD5D9'],
+  ['#F1E2C6', '#DFCBA6'],
+  ['#EDE0CC', '#D8C3A2'],
+  ['#F2E0D2', '#E0C3AC'],
+  ['#E9E2D0', '#D3C8AC'],
+  ['#F0E6D6', '#DCCBB0'],
+  ['#EADCC8', '#D4BE9C'],
 ];
 
 function tintFor(seed: string): [string, string] {

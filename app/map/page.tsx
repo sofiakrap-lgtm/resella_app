@@ -87,7 +87,7 @@ function MapContent() {
   };
 
   return (
-    <div className="relative flex min-h-full flex-col">
+    <div className="relative flex flex-1 flex-col">
       {loading ? (
         <Skeleton className="h-full min-h-[560px] w-full flex-1 rounded-none" />
       ) : (

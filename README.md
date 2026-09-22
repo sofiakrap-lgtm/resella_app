@@ -94,6 +94,22 @@ assets/         Sofian kuvat (katso assets/README.md)
 - **Kartta** on tarkoituksella offline: tyylitelty piirros ja lineaarinen
   projektio. Ei rajapinta-avaimia, toimii aina.
 
+### Brändi
+
+Värit tulevat ReSellon brändistä: beige `#FAF1E0` ja tummanruskea `#3C2415`.
+Kaikki muut sävyt ovat näiden kahden vaaleampia tai tummempia versioita, plus
+yksi lämmin korostus (`#A65A32`) pieniin yksityiskohtiin, kuten Connector-hahmon
+yhdistävään lankaan. Näin näkymä pysyy visuaalisesti rauhallisena eikä kuormita
+silmää. Tumma tila on sama paletti käännettynä. Värit määritellään yhdessä
+paikassa, tiedoston `app/globals.css` alussa.
+
+Brändin kirjasin on Helvetica Now. Se on lisensoitu, joten sitä ei ladata
+verkosta. Fonttipino käyttää sitä, jos se on asennettu, ja muuten iOS:n omia
+leikkauksia (SF Pro), jolloin natiivi tuntuma säilyy. Jos hankit lisenssin,
+lisää tiedostot ja `@font-face` säännöt, muuta ei tarvita.
+
+Connector-hahmo on vain kuluttajapuolella, ei koskaan yrittäjän kassanäkymässä.
+
 ### Liquid Glass
 
 Lasi on vain navigointikerroksessa: tab bar, navigointipalkki, sheetin ylälaita,

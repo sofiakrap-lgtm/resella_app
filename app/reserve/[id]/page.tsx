@@ -37,6 +37,7 @@ function ReserveContent() {
   const market = product ? marketById(product.marketId) : undefined;
 
   const [pickupHours, setPickupHours] = useState(24);
+  const [card, setCard] = useState({ number: '', expiry: '', cvc: '' });
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [status, setStatus] = useState<'idle' | 'processing' | 'error'>('idle');
@@ -135,10 +136,28 @@ function ReserveContent() {
             <section className="px-4 pt-6">
               <h2 className="t-headline mb-2">{t('reserve.orPayCard')}</h2>
               <div className="space-y-2">
-                <Field label={t('reserve.cardNumber')} value="" onChange={() => undefined} placeholder="4242 4242 4242 4242" inputMode="numeric" />
+                <Field
+                  label={t('reserve.cardNumber')}
+                  value={card.number}
+                  onChange={(value) => setCard({ ...card, number: value })}
+                  placeholder="4242 4242 4242 4242"
+                  inputMode="numeric"
+                />
                 <div className="flex gap-2">
-                  <Field label={t('reserve.cardExpiry')} value="" onChange={() => undefined} placeholder="05/29" inputMode="numeric" />
-                  <Field label={t('reserve.cardCvc')} value="" onChange={() => undefined} placeholder="123" inputMode="numeric" />
+                  <Field
+                    label={t('reserve.cardExpiry')}
+                    value={card.expiry}
+                    onChange={(value) => setCard({ ...card, expiry: value })}
+                    placeholder="05/29"
+                    inputMode="numeric"
+                  />
+                  <Field
+                    label={t('reserve.cardCvc')}
+                    value={card.cvc}
+                    onChange={(value) => setCard({ ...card, cvc: value })}
+                    placeholder="123"
+                    inputMode="numeric"
+                  />
                 </div>
               </div>
             </section>

@@ -10,89 +10,92 @@
 :root {
   --text-scale: 1;
 
-  --color-bg: #faf7f2;
-  --color-bg-elevated: #f2ece2;
-  --color-surface: #ffffff;
-  --color-surface-2: #f6f2ec;
-  --color-text: #1c1c1e;
-  --color-text-secondary: rgba(60, 60, 67, 0.6);
-  --color-text-tertiary: rgba(60, 60, 67, 0.32);
-  --color-accent: #3f5c48;
-  --color-accent-strong: #2f4636;
-  --color-on-accent: #ffffff;
-  --color-accent-2: #b8563a;
-  --color-accent-soft: #ede6db;
-  --color-separator: rgba(60, 60, 67, 0.16);
-  --color-success: #2f6b46;
-  --color-warning: #8a5a12;
-  --color-danger: #a62a1f;
+  /* ReSello brand colours: beige #FAF1E0 and dark brown #3C2415.
+     Everything else is a tint or shade of those two, which keeps the view
+     visually calm and easy on the eye. */
+  --color-bg: #faf1e0;
+  --color-bg-elevated: #f3e6cf;
+  --color-surface: #fffbf3;
+  --color-surface-2: #f4e9d5;
+  --color-text: #3c2415;
+  --color-text-secondary: rgba(60, 36, 21, 0.62);
+  --color-text-tertiary: rgba(60, 36, 21, 0.34);
+  --color-accent: #3c2415;
+  --color-accent-strong: #26150a;
+  --color-on-accent: #faf1e0;
+  --color-accent-2: #a65a32;
+  --color-accent-soft: #f1e2c6;
+  --color-separator: rgba(60, 36, 21, 0.16);
+  --color-success: #40643f;
+  --color-warning: #8a5310;
+  --color-danger: #9c3421;
 
-  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg: rgba(255, 251, 243, 0.72);
   --glass-border: rgba(255, 255, 255, 0.55);
-  --glass-shadow: 0 8px 28px rgba(28, 28, 30, 0.14);
+  --glass-shadow: 0 8px 28px rgba(60, 36, 21, 0.16);
   --glass-blur: 24px;
 
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 22px;
 
-  --shadow-card: 0 1px 2px rgba(28, 28, 30, 0.05), 0 6px 18px rgba(28, 28, 30, 0.07);
-  --shadow-raised: 0 2px 6px rgba(28, 28, 30, 0.08), 0 16px 40px rgba(28, 28, 30, 0.12);
+  --shadow-card: 0 1px 2px rgba(60, 36, 21, 0.06), 0 6px 18px rgba(60, 36, 21, 0.08);
+  --shadow-raised: 0 2px 6px rgba(60, 36, 21, 0.1), 0 16px 40px rgba(60, 36, 21, 0.14);
 
   --k-color-primary: var(--color-accent);
   color-scheme: light;
 }
 
 .dark {
-  --color-bg: #14120f;
-  --color-bg-elevated: #1b1815;
-  --color-surface: #1f1c19;
-  --color-surface-2: #262220;
-  --color-text: #f6f2ec;
-  --color-text-secondary: rgba(235, 235, 245, 0.62);
-  --color-text-tertiary: rgba(235, 235, 245, 0.34);
-  --color-accent: #8fb39a;
-  --color-accent-strong: #a9c9b3;
-  --color-on-accent: #11100e;
-  --color-accent-2: #ef9f87;
-  --color-accent-soft: #2c2925;
-  --color-separator: rgba(235, 235, 245, 0.18);
-  --color-success: #7fc79b;
+  --color-bg: #191008;
+  --color-bg-elevated: #211710;
+  --color-surface: #261a10;
+  --color-surface-2: #302217;
+  --color-text: #f7eddc;
+  --color-text-secondary: rgba(247, 237, 220, 0.64);
+  --color-text-tertiary: rgba(247, 237, 220, 0.36);
+  --color-accent: #e7cca6;
+  --color-accent-strong: #f2dec3;
+  --color-on-accent: #291a0e;
+  --color-accent-2: #dd9a6c;
+  --color-accent-soft: #33241a;
+  --color-separator: rgba(247, 237, 220, 0.18);
+  --color-success: #8fbf8c;
   --color-warning: #e0b063;
-  --color-danger: #f08a80;
+  --color-danger: #f0907c;
 
-  --glass-bg: rgba(38, 35, 32, 0.66);
-  --glass-border: rgba(255, 255, 255, 0.14);
-  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --glass-bg: rgba(48, 34, 23, 0.68);
+  --glass-border: rgba(247, 237, 220, 0.14);
+  --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 22px rgba(0, 0, 0, 0.35);
-  --shadow-raised: 0 2px 8px rgba(0, 0, 0, 0.45), 0 18px 44px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.42), 0 8px 22px rgba(0, 0, 0, 0.38);
+  --shadow-raised: 0 2px 8px rgba(0, 0, 0, 0.48), 0 18px 44px rgba(0, 0, 0, 0.52);
 
   color-scheme: dark;
 }
 
 /* Accessibility: "Lisää kontrastia" setting and the OS level equivalent. */
 :root[data-contrast='high'] {
-  --color-text-secondary: rgba(38, 38, 42, 0.92);
-  --color-text-tertiary: rgba(38, 38, 42, 0.7);
-  --color-separator: rgba(28, 28, 30, 0.5);
-  --glass-bg: rgba(255, 255, 255, 0.97);
-  --glass-border: rgba(28, 28, 30, 0.45);
+  --color-text-secondary: rgba(46, 27, 15, 0.94);
+  --color-text-tertiary: rgba(46, 27, 15, 0.72);
+  --color-separator: rgba(46, 27, 15, 0.5);
+  --glass-bg: rgba(255, 251, 243, 0.97);
+  --glass-border: rgba(46, 27, 15, 0.45);
   --glass-blur: 0px;
 }
 
 :root[data-contrast='high'].dark {
-  --color-text-secondary: rgba(246, 242, 236, 0.94);
-  --color-text-tertiary: rgba(246, 242, 236, 0.75);
-  --color-separator: rgba(246, 242, 236, 0.55);
-  --glass-bg: rgba(20, 18, 15, 0.97);
-  --glass-border: rgba(246, 242, 236, 0.45);
+  --color-text-secondary: rgba(247, 237, 220, 0.94);
+  --color-text-tertiary: rgba(247, 237, 220, 0.76);
+  --color-separator: rgba(247, 237, 220, 0.55);
+  --glass-bg: rgba(25, 16, 8, 0.97);
+  --glass-border: rgba(247, 237, 220, 0.45);
 }
 
 @theme inline {
   /* Konsta derives its palette from a literal hex, the runtime accent stays in
      sync through --k-color-primary above. */
-  --color-brand-primary: #3f5c48;
+  --color-brand-primary: #3c2415;
   --color-bg: var(--color-bg);
   --color-bg-elevated: var(--color-bg-elevated);
   --color-surface: var(--color-surface);
@@ -117,9 +120,12 @@
   --shadow-card: var(--shadow-card);
   --shadow-raised: var(--shadow-raised);
 
+  /* Helvetica Now is the brand typeface. It is licensed, so it is used when it
+     is installed and the native iOS faces carry the look everywhere else. */
   --font-sans:
-    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Inter',
-    'Segoe UI', system-ui, Helvetica, Arial, sans-serif;
+    'Helvetica Now Text', 'Helvetica Now Display', 'Helvetica Now', -apple-system,
+    BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Helvetica,
+    Arial, sans-serif;
 }
 
 html {
@@ -171,21 +177,21 @@ body {
 /* Reduce transparency: swap the material for a solid surface. */
 @media (prefers-reduced-transparency: reduce) {
   :root {
-    --glass-bg: rgba(255, 255, 255, 0.98);
+    --glass-bg: rgba(255, 251, 243, 0.98);
     --glass-blur: 0px;
   }
   .dark {
-    --glass-bg: rgba(28, 26, 23, 0.98);
+    --glass-bg: rgba(38, 26, 16, 0.98);
   }
 }
 
 :root[data-transparency='reduce'] {
-  --glass-bg: rgba(255, 255, 255, 0.98);
+  --glass-bg: rgba(255, 251, 243, 0.98);
   --glass-blur: 0px;
 }
 
 :root[data-transparency='reduce'].dark {
-  --glass-bg: rgba(28, 26, 23, 0.98);
+  --glass-bg: rgba(38, 26, 16, 0.98);
 }
 
 /* ---------------------------------------------------------------------------

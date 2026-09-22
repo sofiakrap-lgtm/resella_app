@@ -13,7 +13,7 @@ export function BrandMark({ size = 24, className = '' }: { size?: number; classN
       <rect width="32" height="32" rx="9" fill="var(--color-accent)" />
       <path
         d="M11 22V10.5h5.4a3.6 3.6 0 0 1 0 7.2H13l5.4 4.3"
-        stroke="#fff"
+        stroke="var(--color-on-accent)"
         strokeWidth="2.2"
         strokeLinecap="round"
         strokeLinejoin="round"
