@@ -15,6 +15,26 @@
 
 Tiedostojen pitää olla oikein nimettyjä jo ennen lataamista, katso KUVALISTA.md.
 
+### Tarkista nimet
+
+```bash
+npm run check-assets
+```
+
+Komento kertoo montako kuvaa on paikallaan, mitkä puuttuvat demon pääpolulta ja
+mitkä tiedostonimet eivät vastaa mitään, eli ovat todennäköisesti kirjoitusvirheitä.
+
+**GitHub Desktopilla**
+
+1. `File -> Clone repository`, valitse `sofiakrap-lgtm/resella_app`.
+2. Vaihda haara ylhäältä `Current branch` kohdasta oikeaksi.
+3. `Repository -> Show in Finder` (Mac) tai `Show in Explorer` (Windows).
+4. Kopioi kuvat oikeisiin `assets` alikansioihin.
+5. Palaa GitHub Desktopiin, kirjoita kuvaus ja paina `Commit`, sitten `Push origin`.
+
+Ennen kopiointia kannattaa painaa `Fetch origin` ja `Pull`, jos repoon on tullut
+muutoksia.
+
 **Koneelta gitillä**
 
 ```bash

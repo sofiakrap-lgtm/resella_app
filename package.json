@@ -10,7 +10,8 @@
     "start": "next start",
     "sync-assets": "node scripts/sync-assets.mjs",
     "typecheck": "tsc --noEmit",
-    "build:export": "NEXT_EXPORT=1 next build"
+    "build:export": "NEXT_EXPORT=1 next build",
+    "check-assets": "node scripts/check-assets.mjs"
   },
   "dependencies": {
     "framer-motion": "^13.4.0",

@@ -25,6 +25,7 @@ Muut komennot:
 npm run build        # tuotantokäännös
 npm run start        # tuotantopalvelin
 npm run sync-assets  # kopioi /assets -> /public/assets
+npm run check-assets # tarkistaa kuvien nimet
 npm run typecheck    # TypeScript
 ```
 
