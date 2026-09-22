@@ -44,6 +44,11 @@ jobs:
         run: touch out/.nojekyll
 
       - uses: actions/configure-pages@v5
+        # Turns Pages on for the repository if it is not on yet. If the token
+        # is not allowed to do that, enable it by hand once:
+        # Settings -> Pages -> Source: GitHub Actions.
+        with:
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
