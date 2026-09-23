@@ -125,7 +125,7 @@ export function FilterSheet({
                 max={PRICE_MAX}
                 value={draft.minPrice}
                 onChange={(event) => setDraft({ ...draft, minPrice: Number(event.target.value) })}
-                className="t-body mt-1 min-h-11 w-full rounded-[12px] bg-cream px-3 shadow-card outline-none"
+                className="t-body mt-1 min-h-11 w-full rounded-[12px] bg-surface px-3 shadow-card outline-none"
               />
             </label>
             <label className="flex-1">
@@ -136,7 +136,7 @@ export function FilterSheet({
                 max={PRICE_MAX}
                 value={draft.maxPrice}
                 onChange={(event) => setDraft({ ...draft, maxPrice: Number(event.target.value) })}
-                className="t-body mt-1 min-h-11 w-full rounded-[12px] bg-cream px-3 shadow-card outline-none"
+                className="t-body mt-1 min-h-11 w-full rounded-[12px] bg-surface px-3 shadow-card outline-none"
               />
             </label>
           </div>

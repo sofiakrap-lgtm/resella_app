@@ -11,7 +11,7 @@ import { markets, marketById } from '@/data/markets';
 import { seedNotifications } from '@/data/notifications';
 import { CITY_CENTERS, haversineKm, inCity } from '@/lib/format';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
-import { ProductCard, ProductRow } from '@/components/ProductCard';
+import { ProductCard, ProductList } from '@/components/ProductCard';
 import { MarketCard } from '@/components/MarketHeader';
 import { Button, IconButton } from '@/components/ui/Button';
 import { ErrorState } from '@/components/ui/StateViews';
@@ -127,14 +127,14 @@ function KotiContent() {
       />
 
       <div className="px-4 pb-1 pt-1">
-        <h2 className="t-large-title">ReSello</h2>
+        <h2 className="t-large-title" data-screen-title>ReSello</h2>
         <p className="t-subhead mt-1 text-brown-70">Löydöt {inCity(city)}</p>
       </div>
 
       <div className="mt-4 px-4">
         <Link
           href="/haku"
-          className="flex min-h-11 items-center gap-2 rounded-full bg-cream px-4 py-2.5 shadow-card"
+          className="flex min-h-11 items-center gap-2 rounded-full bg-surface px-4 py-2.5 shadow-card"
         >
           <SearchIcon size={19} className="text-brown-70" />
           <span className="t-body truncate text-brown-70">Hae tuotetta, merkkiä tai kirppistä</span>
@@ -185,9 +185,9 @@ function KotiContent() {
 
           {/* Second section: what this viewer follows, or what suits them. */}
           {beyondHero.length ? (
-            <ProductRow title="Seuraamasi" products={beyondHero} href="/toivelista" />
+            <ProductList title="Seuraamasi" products={beyondHero} href="/toivelista" />
           ) : forYou.length ? (
-            <ProductRow title="Sinulle" products={forYou} href="/selaa" />
+            <ProductList title="Sinulle" products={forYou} href="/selaa" />
           ) : (
             <section className="section screen-x">
               <div className="rounded-[18px] bg-cream-panel p-5 text-center shadow-card">
@@ -212,9 +212,9 @@ function KotiContent() {
                 Katso kaikki
               </Link>
             </div>
-            <div className="hide-scrollbar mt-3 flex gap-3 overflow-x-auto pb-1 screen-x">
-              {nearby.map((market, index) => (
-                <MarketCard key={market.id} market={market} index={index} layout="card" />
+            <div className="mt-3 overflow-hidden rounded-[16px] bg-surface shadow-card mx-4">
+              {nearby.slice(0, 3).map((market, index) => (
+                <MarketCard key={market.id} market={market} index={index} />
               ))}
             </div>
           </section>
@@ -223,18 +223,18 @@ function KotiContent() {
           {more ? (
             <>
               {forYou.length && fromFollows.length ? (
-                <ProductRow title="Sinulle" products={forYou} href="/selaa" />
+                <ProductList title="Sinulle" products={forYou} href="/selaa" />
               ) : null}
-              <ProductRow title="Alle 30 euroa" products={affordable} href="/haku?max=30" />
+              <ProductList title="Alle 30 euroa" products={affordable} href="/haku?max=30" />
               {followedSellerItems.length ? (
-                <ProductRow title="Seuraamiltasi myyjiltä" products={followedSellerItems} />
+                <ProductList title="Seuraamiltasi myyjiltä" products={followedSellerItems} />
               ) : null}
               {followed.length ? (
                 <section className="section">
                   <h3 className="t-title3 screen-x">Seuraamasi kirpputorit</h3>
-                  <div className="hide-scrollbar mt-3 flex gap-3 overflow-x-auto pb-1 screen-x">
+                  <div className="mt-3 overflow-hidden rounded-[16px] bg-surface shadow-card mx-4">
                     {followed.map((market, index) => (
-                      <MarketCard key={market.id} market={market} index={index} layout="card" />
+                      <MarketCard key={market.id} market={market} index={index} />
                     ))}
                   </div>
                 </section>

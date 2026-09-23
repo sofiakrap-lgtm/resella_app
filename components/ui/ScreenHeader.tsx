@@ -25,6 +25,8 @@ export function ScreenHeader({
 }: ScreenHeaderProps) {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
+  /** True while the screen's own title is still on screen under the bar. */
+  const [titleVisible, setTitleVisible] = useState(largeTitleBelow);
 
   useEffect(() => {
     const container = document.getElementById('app-scroll');
@@ -35,7 +37,27 @@ export function ScreenHeader({
     return () => container.removeEventListener('scroll', onScroll);
   }, []);
 
-  const showTitle = largeTitleBelow ? scrolled : true;
+  /**
+   * The bar shows the title only once the screen's own title has gone under
+   * it, so the two are never read at the same time. Screens mark their title
+   * with data-screen-title; without one the scroll position decides.
+   */
+  useEffect(() => {
+    if (!largeTitleBelow) return;
+    const target = document.querySelector('[data-screen-title]');
+    if (!target) {
+      setTitleVisible(false);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => setTitleVisible(entry.isIntersecting),
+      { root: document.getElementById('app-scroll'), rootMargin: '-44px 0px 0px 0px' },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [largeTitleBelow, title]);
+
+  const showTitle = largeTitleBelow ? !titleVisible : true;
   const glass = transparent ? scrolled : true;
 
   return (

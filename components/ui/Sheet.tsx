@@ -124,7 +124,7 @@ export function Sheet({
               dragConstraints={{ top: 0, bottom: sheetHeight }}
               onDragEnd={handleDragEnd}
               style={{ height: sheetHeight || undefined }}
-              className="pointer-events-auto absolute inset-x-0 bottom-0 flex flex-col overflow-hidden rounded-t-[22px] bg-cream shadow-raised"
+              className="pointer-events-auto absolute inset-x-0 bottom-0 flex flex-col overflow-hidden rounded-t-[22px] bg-surface shadow-raised"
             >
               <div className="glass-flat shrink-0 rounded-t-[22px] border-b border-separator px-4 pb-2 pt-2">
                 <div className="mx-auto h-1.5 w-10 rounded-full bg-brown-50" aria-hidden="true" />

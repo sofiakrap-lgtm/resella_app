@@ -34,7 +34,7 @@ export function Chip({
         'border transition-colors duration-150',
         selected
           ? 'border-terracotta-ink bg-terracotta-ink text-on-terracotta font-semibold'
-          : 'border-separator bg-cream text-brown',
+          : 'border-separator bg-surface text-brown',
         className,
       ].join(' ')}
     >

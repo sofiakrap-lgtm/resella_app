@@ -38,6 +38,8 @@ interface Stored {
   reservedIds: string[];
   readNotifications: string[];
   recentSearches: string[];
+  /** Product photos saved as style references, used by the Tyyli view. */
+  styleLikes: string[];
   largeText: boolean;
   reduceMotion: boolean;
   highContrast: boolean;
@@ -56,6 +58,7 @@ const defaults: Stored = {
   reservedIds: [],
   readNotifications: [],
   recentSearches: [],
+  styleLikes: [],
   largeText: false,
   reduceMotion: false,
   highContrast: false,
@@ -70,6 +73,7 @@ interface Value extends Stored {
   addSavedSearch: (label: string, query: string, filters: Partial<Filters>) => void;
   removeSavedSearch: (id: string) => void;
   addRecentSearch: (query: string) => void;
+  toggleStyleLike: (productId: string) => void;
   reserve: (input: Omit<Reservation, 'id' | 'code' | 'createdAtIso'>) => Reservation;
   cancelReservation: (id: string) => void;
   markNotificationsRead: () => void;
@@ -196,6 +200,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
             ),
           };
         }),
+      toggleStyleLike: (productId) =>
+        setState((current) => ({ ...current, styleLikes: toggle(current.styleLikes, productId) })),
       reserve: (input) => {
         const reservation: Reservation = {
           ...input,

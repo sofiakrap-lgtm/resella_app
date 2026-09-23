@@ -118,7 +118,7 @@ export function ProductCard({
         {product.images.map((name, dotIndex) => (
           <span
             key={name}
-            className="h-1.5 w-1.5 rounded-full bg-cream"
+            className="h-1.5 w-1.5 rounded-full bg-surface"
             style={{ opacity: dotIndex === photo ? 1 : 0.45 }}
           />
         ))}
@@ -137,7 +137,7 @@ export function ProductCard({
         transition={transition}
         whileTap={tap}
       >
-        <div className="flex items-center gap-3 border-b border-separator px-4 py-3">
+        <div className="flex items-center gap-3 border-b border-separator px-4 py-3 last:border-b-0">
           <Link href={`/tuote/${product.id}`} className="flex min-w-0 flex-1 items-center gap-3">
             <span
               className="relative block h-[88px] w-[88px] shrink-0 overflow-hidden rounded-[12px] bg-cream-sink"
@@ -181,7 +181,7 @@ export function ProductCard({
             {dots}
             {statusOverlay}
             {badge ? (
-              <span className="absolute left-2 top-2 rounded-full bg-cream px-2 py-0.5 t-caption font-semibold text-brown">
+              <span className="absolute left-2 top-2 rounded-full bg-surface px-2 py-0.5 t-caption font-semibold text-brown">
                 {badge}
               </span>
             ) : null}
@@ -242,6 +242,53 @@ export function ProductRow({
             index={index}
             hideMarket={hideMarket}
             hideNewBadge={hideNewBadge}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Vertical list of products under a heading. Used everywhere except the one
+ * hero carousel per screen: two scroll directions at once is what makes a
+ * feed feel busy.
+ */
+export function ProductList({
+  title,
+  products,
+  href,
+  limit = 4,
+  hideMarket = false,
+}: {
+  title: string;
+  products: Product[];
+  href?: string;
+  limit?: number;
+  hideMarket?: boolean;
+}) {
+  if (!products.length) return null;
+  return (
+    <section className="section">
+      <div className="flex items-baseline justify-between gap-3 screen-x">
+        <h3 className="t-title3">{title}</h3>
+        {href ? (
+          <Link
+            href={href}
+            className="t-subhead inline-flex min-h-11 shrink-0 items-center text-terracotta-ink"
+          >
+            Katso kaikki
+          </Link>
+        ) : null}
+      </div>
+      <div className="mt-3 overflow-hidden rounded-[16px] bg-surface shadow-card mx-4">
+        {products.slice(0, limit).map((product, index) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            layout="row"
+            index={index}
+            hideMarket={hideMarket}
           />
         ))}
       </div>

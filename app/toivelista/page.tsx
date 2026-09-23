@@ -99,7 +99,7 @@ function ToivelistaContent() {
     <div>
       <ScreenHeader title="Toivelista" largeTitleBelow transparent />
       <div className="px-4 pb-1 pt-1">
-        <h1 className="t-large-title">Toivelista</h1>
+        <h1 className="t-large-title" data-screen-title>Toivelista</h1>
       </div>
 
       <div className="px-4 pt-2">

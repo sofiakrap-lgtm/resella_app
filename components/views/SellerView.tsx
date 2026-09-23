@@ -104,7 +104,7 @@ export function SellerView() {
         <div className="flex items-start gap-4 px-4 pt-4">
           <SellerAvatar seller={seller} size={72} />
           <div className="min-w-0 flex-1">
-            <h1 className="t-title2">{seller.name}</h1>
+            <h1 className="t-title2" data-screen-title>{seller.name}</h1>
             <p className="t-footnote mt-1 inline-flex items-center gap-1 text-brown-70">
               <StarIcon size={14} />
               {formatRating(seller.rating)} · {seller.reviewsCount} arvostelua · {seller.followerCount} seuraajaa
@@ -119,7 +119,7 @@ export function SellerView() {
           {seller.isActive && market ? (
             <Link
               href={`/kirpputori/${market.id}`}
-              className="flex items-center gap-3 rounded-[16px] bg-cream px-4 py-3 shadow-card"
+              className="flex items-center gap-3 rounded-[16px] bg-surface px-4 py-3 shadow-card"
             >
               <span className="min-w-0 flex-1">
                 <span className="t-headline block truncate">{market.name}</span>

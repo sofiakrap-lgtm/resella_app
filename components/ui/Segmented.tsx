@@ -20,6 +20,8 @@ export function Segmented<T extends string>({
   className = '',
 }: SegmentedProps<T>) {
   const transition = useTransition();
+  /** Four segments in a phone width need smaller type and tighter padding. */
+  const tight = options.length > 3;
   return (
     <div
       role="tablist"
@@ -35,14 +37,16 @@ export function Segmented<T extends string>({
             role="tab"
             aria-selected={selected}
             onClick={() => onChange(option.value)}
-            className="relative z-10 min-h-11 min-w-0 flex-1 truncate rounded-full px-3 t-subhead font-semibold"
+            className={`relative z-10 min-h-11 min-w-0 flex-1 truncate rounded-full font-semibold ${
+              tight ? 'px-1.5 t-footnote' : 'px-3 t-subhead'
+            }`}
             style={{ color: selected ? 'var(--color-brown)' : 'var(--color-brown-70)' }}
           >
             {selected ? (
               <motion.span
                 layoutId={`segmented-${ariaLabel}`}
                 transition={transition}
-                className="absolute inset-0 -z-10 rounded-full bg-cream shadow-card"
+                className="absolute inset-0 -z-10 rounded-full bg-surface shadow-card"
               />
             ) : null}
             {option.label}

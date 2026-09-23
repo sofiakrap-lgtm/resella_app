@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { seedNotifications } from '@/data/notifications';
 import { productById } from '@/data/products';
@@ -38,9 +39,19 @@ const kindLabels: Record<NotificationKind, string> = {
 
 /** Notification list. Everything here leads somewhere in one tap. */
 export default function IlmoituksetPage() {
+  return (
+    <Suspense fallback={null}>
+      <IlmoituksetContent />
+    </Suspense>
+  );
+}
+
+function IlmoituksetContent() {
+  const search = useSearchParams();
   const now = useNow();
   const { ready, reservations, readNotifications, markNotificationsRead } = useApp();
   const [loading, setLoading] = useState(true);
+  // Demo switch: append ?demo=error to show the error state.
   const [failed, setFailed] = useState(false);
   /** Captured before the badge is cleared, so the unread marks still show once. */
   const [wasUnread, setWasUnread] = useState(false);
@@ -49,6 +60,10 @@ export default function IlmoituksetPage() {
     const timer = window.setTimeout(() => setLoading(false), 300);
     return () => window.clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    setFailed(search.get('demo') === 'error');
+  }, [search]);
 
   // Opening the screen clears the badge, the way a real inbox behaves.
   useEffect(() => {
@@ -128,18 +143,7 @@ export default function IlmoituksetPage() {
         </ul>
       )}
 
-      <div className="flex flex-col items-center px-4 pt-6">
-        <p className="t-caption text-center text-brown-70">
-          Demon ilmoitukset ovat esimerkkejä.
-        </p>
-        <button
-          type="button"
-          onClick={() => setFailed(true)}
-          className="t-caption min-h-11 px-4 text-brown-70 underline"
-        >
-          Näytä virhetila
-        </button>
-      </div>
+
     </div>
   );
 }

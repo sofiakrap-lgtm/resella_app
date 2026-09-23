@@ -16,6 +16,7 @@ import { Segmented } from '@/components/ui/Segmented';
 import { Chip } from '@/components/ui/Chip';
 import { MarketCard } from '@/components/MarketHeader';
 import { SellerCard } from '@/components/SellerHeader';
+import { StyleView } from '@/components/views/StyleView';
 import { MarketMap } from '@/components/MarketMap';
 import { Button } from '@/components/ui/Button';
 import { Sheet } from '@/components/ui/Sheet';
@@ -23,7 +24,7 @@ import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import { RowSkeleton } from '@/components/ui/Skeleton';
 import { SearchIcon, MapIcon, GridIcon, FilterIcon, categoryIcons } from '@/components/ui/Icons';
 
-type Segment = 'kategoriat' | 'kirpputorit' | 'myyjat';
+type Segment = 'kategoriat' | 'kirpputorit' | 'myyjat' | 'tyyli';
 
 export default function SelaaPage() {
   return (
@@ -89,12 +90,12 @@ function SelaaContent() {
 
   return (
     <div>
-      <ScreenHeader title="Selaa" largeTitleBelow transparent />
+      <ScreenHeader title="Selaa" transparent />
 
       <div className="sticky top-[44px] z-20 glass px-4 pb-3 pt-2">
         <Link
           href="/haku"
-          className="flex min-h-11 items-center gap-2 rounded-full bg-cream px-4 py-2.5 shadow-card"
+          className="flex min-h-11 items-center gap-2 rounded-full bg-surface px-4 py-2.5 shadow-card"
         >
           <SearchIcon size={19} className="text-brown-70" />
           <span className="t-body truncate text-brown-70">Hae tai kysy, esim. villapaita koko M</span>
@@ -108,6 +109,7 @@ function SelaaContent() {
               { value: 'kategoriat', label: 'Kategoriat' },
               { value: 'kirpputorit', label: 'Kirpputorit' },
               { value: 'myyjat', label: 'Myyjät' },
+              { value: 'tyyli', label: 'Tyyli' },
             ]}
           />
         </div>
@@ -130,7 +132,7 @@ function SelaaContent() {
               <Link
                 key={category.slug}
                 href={`/selaa/kategoria/${category.slug}`}
-                className="flex min-h-[112px] flex-col justify-between rounded-[16px] bg-cream p-4 shadow-card"
+                className="flex min-h-[112px] flex-col justify-between rounded-[16px] bg-surface p-4 shadow-card"
               >
                 {Icon ? <Icon size={28} className="text-brown" /> : null}
                 <span className="mt-3 block">
@@ -159,7 +161,7 @@ function SelaaContent() {
               type="button"
               onClick={() => setMarketView(marketView === 'lista' ? 'kartta' : 'lista')}
               aria-label={marketView === 'lista' ? 'Näytä kartalla' : 'Näytä listana'}
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream shadow-card"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-surface shadow-card"
             >
               {marketView === 'lista' ? <MapIcon size={20} /> : <GridIcon size={20} />}
             </button>
@@ -202,6 +204,8 @@ function SelaaContent() {
             </div>
           )}
         </section>
+      ) : segment === 'tyyli' ? (
+        <StyleView />
       ) : (
         <section className="mt-4">
           <div className="grid grid-cols-2 gap-3 screen-x">

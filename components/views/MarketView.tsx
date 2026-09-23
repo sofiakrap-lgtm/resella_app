@@ -147,7 +147,7 @@ export function MarketView() {
 
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={transition}>
         <div className="px-4 pt-4">
-          <h1 className="t-title2">{market.name}</h1>
+          <h1 className="t-title2" data-screen-title>{market.name}</h1>
           <p className="t-subhead mt-1 text-brown-70">
             {market.address}, {market.city}
           </p>
@@ -176,7 +176,7 @@ export function MarketView() {
         </div>
 
         <section className="section">
-          <div className="mx-4 overflow-hidden rounded-[16px] bg-cream shadow-card">
+          <div className="mx-4 overflow-hidden rounded-[16px] bg-surface shadow-card">
             <button
               type="button"
               onClick={() => setHoursOpen((current) => !current)}
@@ -286,7 +286,7 @@ export function MarketView() {
         )}
 
         <section className="mt-2 px-4 pb-6">
-          <div className="overflow-hidden rounded-[18px] bg-cream shadow-card">
+          <div className="overflow-hidden rounded-[18px] bg-surface shadow-card">
             <MarketMap markets={[market]} className="h-[180px] w-full" />
             <p className="t-footnote px-4 py-3 text-brown-70">
               {market.address}, {market.city}. {market.tableCount} pöytää.

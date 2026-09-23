@@ -85,7 +85,7 @@ export function MarketCard({
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={transition} whileTap={tap}>
       <Link
         href={`/kirpputori/${market.id}`}
-        className="flex items-center gap-3 border-b border-separator px-4 py-3"
+        className="flex items-center gap-3 border-b border-separator px-4 py-3 last:border-b-0"
       >
         <span className="block h-[68px] w-[68px] shrink-0 overflow-hidden rounded-[14px] bg-cream-sink">
           {photo}

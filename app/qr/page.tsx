@@ -85,13 +85,10 @@ function QrContent() {
         transition={transition}
         className="px-4 pt-3"
       >
-        <div className="overflow-hidden rounded-[24px] bg-cream shadow-raised">
+        <div className="overflow-hidden rounded-[24px] bg-surface shadow-raised">
           <div className="flex items-center justify-between gap-3 border-b border-separator px-5 py-4">
             <BrandWordmark height={20} />
-            <span className="inline-flex items-center gap-1.5 text-positive">
-              <CheckIcon size={16} />
-              <span className="t-subhead font-semibold">{bought ? 'Ostettu' : 'Varattu'}</span>
-            </span>
+            <ConfirmMark label={bought ? 'Ostettu' : 'Varattu'} />
           </div>
 
           <div className="flex flex-col items-center px-5 pb-5 pt-6">
@@ -112,7 +109,7 @@ function QrContent() {
       <section className="px-4 pt-4">
         <Link
           href={`/tuote/${product.id}`}
-          className="flex items-center gap-3 rounded-[18px] bg-cream p-3 shadow-card"
+          className="flex items-center gap-3 rounded-[18px] bg-surface p-3 shadow-card"
         >
           <span className="block h-16 w-16 shrink-0 overflow-hidden rounded-[13px] bg-cream-sink">
             <SafeImage
@@ -131,7 +128,7 @@ function QrContent() {
       </section>
 
       <section className="px-4 pt-4">
-        <div className="rounded-[18px] bg-cream p-4 shadow-card">
+        <div className="rounded-[18px] bg-surface p-4 shadow-card">
           <Link href={`/kirpputori/${market.id}`} className="flex min-h-11 items-center gap-2">
             <LocationIcon size={18} className="shrink-0 text-brown" />
             <span className="min-w-0 flex-1">
@@ -206,9 +203,39 @@ function QrContent() {
 /** One labelled field along the bottom of the pass, like a boarding pass. */
 function PassField({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-cream px-5 py-3">
+    <div className="bg-surface px-5 py-3">
       <dt className="t-label text-brown-70">{label}</dt>
       <dd className="t-subhead mt-0.5 font-semibold">{value}</dd>
     </div>
+  );
+}
+
+/**
+ * One shot confirmation: the mark blooms once when the pass appears, then
+ * rests. No loop, and nothing moves at all when motion is reduced, so the
+ * reward is felt without the screen ever asking for attention again.
+ */
+function ConfirmMark({ label }: { label: string }) {
+  const { motionEnabled } = useApp();
+  const spring = { type: 'spring' as const, stiffness: 340, damping: 18, mass: 0.7 };
+  return (
+    <span className="inline-flex items-center gap-1.5 text-positive">
+      <motion.span
+        className="inline-flex"
+        initial={motionEnabled ? { scale: 0.2, opacity: 0 } : false}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={spring}
+      >
+        <CheckIcon size={16} />
+      </motion.span>
+      <motion.span
+        className="t-subhead font-semibold"
+        initial={motionEnabled ? { opacity: 0, x: -4 } : false}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ ...spring, delay: motionEnabled ? 0.08 : 0 }}
+      >
+        {label}
+      </motion.span>
+    </span>
   );
 }

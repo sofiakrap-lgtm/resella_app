@@ -32,7 +32,7 @@ interface LinkProps extends BaseProps {
 
 const variants: Record<Variant, string> = {
   primary: 'bg-terracotta-ink text-on-terracotta shadow-card',
-  secondary: 'bg-cream text-brown border border-separator shadow-card',
+  secondary: 'bg-surface text-brown border border-separator shadow-card',
   quiet: 'text-terracotta-ink',
   glass: 'glass text-brown',
 };

@@ -62,7 +62,7 @@ export function SellerCard({
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={transition} whileTap={tap}>
         <Link
           href={`/myyja/${seller.id}`}
-          className="flex h-full flex-col items-center gap-2 rounded-[18px] bg-cream p-4 text-center shadow-card"
+          className="flex h-full flex-col items-center gap-2 rounded-[18px] bg-surface p-4 text-center shadow-card"
         >
           <SellerAvatar seller={seller} size={56} />
           <span className="t-subhead font-semibold">{seller.name}</span>

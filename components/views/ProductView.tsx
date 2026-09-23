@@ -140,7 +140,7 @@ export function ProductView() {
         overlay={
           unavailable ? (
             <span className="absolute inset-0 flex items-center justify-center bg-[rgba(60,36,21,0.45)]">
-              <span className="rounded-full bg-cream px-4 py-2 t-headline">{status}</span>
+              <span className="rounded-full bg-surface px-4 py-2 t-headline">{status}</span>
             </span>
           ) : null
         }
@@ -148,7 +148,7 @@ export function ProductView() {
 
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={transition}>
         <div className="px-4 pt-4">
-          <h1 className="t-title2">{product.title}</h1>
+          <h1 className="t-title2" data-screen-title>{product.title}</h1>
           <p className="t-title1 mt-1">{price(product.priceEur)}</p>
           {unavailable ? null : (
             <div className="mt-2">
@@ -164,7 +164,7 @@ export function ProductView() {
 
         {/* The rest of the facts, labelled, where there is room to read them. */}
         <section className="section screen-x">
-          <div className="overflow-hidden rounded-[16px] bg-cream shadow-card">
+          <div className="overflow-hidden rounded-[16px] bg-surface shadow-card">
             {product.brand ? <DetailRow label="Merkki" value={product.brand} /> : null}
             {product.audience === 'Ei kokoa' ? null : (
               <DetailRow label="Kenelle" value={product.audience} />
@@ -178,7 +178,7 @@ export function ProductView() {
         {/* Location: the part that only works because the till knows the table */}
         <section className="mt-5 px-4">
           <h2 className="t-headline mb-2">Missä tämä on</h2>
-          <div className="overflow-hidden rounded-[18px] bg-cream shadow-card">
+          <div className="overflow-hidden rounded-[18px] bg-surface shadow-card">
             <Link href={`/kirpputori/${market.id}`} className="flex items-center gap-3 px-4 py-3">
               <span className="min-w-0 flex-1">
                 <span className="t-headline block truncate">{market.name}</span>
@@ -208,7 +208,7 @@ export function ProductView() {
         {/* Seller: the third browse dimension, reachable from every item */}
         <section className="mt-5 px-4">
           <h2 className="t-headline mb-2">Myyjä</h2>
-          <div className="rounded-[18px] bg-cream p-4 shadow-card">
+          <div className="rounded-[18px] bg-surface p-4 shadow-card">
             <div className="flex items-center gap-3">
               <SellerAvatar seller={seller} size={48} />
               <span className="min-w-0 flex-1">

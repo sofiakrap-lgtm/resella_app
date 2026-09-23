@@ -94,7 +94,7 @@ Tab bar pienenee kun sisältöä vieritetään alaspäin ja palaa kun vieritetä
 | `/` | Splash, ohjaa eteenpäin |
 | `/onboarding` | Kaupunki, kiinnostukset ja koot, ei pakollista tiliä |
 | `/koti` | Feed: uutta tänään, seuratut, sinulle, lähellä sinua |
-| `/selaa` | Kolme ulottuvuutta: Kategoriat, Kirpputorit, Myyjät |
+| `/selaa` | Neljä tapaa selata: Kategoriat, Kirpputorit, Myyjät, Tyyli |
 | `/selaa/kategoria/[slug]` | Kategorian tuotteet, alakategoriat ja suodattimet |
 | `/haku` | Tekstihaku, suodattimet, esimerkkihaut, hakuvahdin tallennus |
 | `/tuote/[id]` | Tuotesivu: kuvat, kirpputori, pöytä, myyjä, varaa tai osta |
@@ -188,12 +188,18 @@ eriytyä.
 
 | Tunniste | Arvo | Käyttö |
 |---|---|---|
-| `--color-cream` | `#FFFBF4` | Kangas |
-| `--color-cream-panel` | `#FFF6EA` | Korostetut kortit ja tagit |
-| `--color-cream-sink` | `#F7EDDF` | Upotetut pinnat, kentät, kuvapohjat |
+| `--color-cream` | `#FFFDFA` | Kangas |
+| `--color-surface` | `#FFFFFF` | Kortit ja kentät |
+| `--color-cream-panel` | `#FBF6EF` | Korostetut kortit ja tagit |
+| `--color-cream-sink` | `#F5EEE4` | Upotetut pinnat, kuvapohjat |
+| `--color-hairline` | `#ECE3D8` | Hiuskarvaviiva |
 | `--color-brown` | `#3C2415` | Teksti ja ikonit |
-| `--color-terracotta` | `#C0693A` | Korostus: ikonit, merkit, valitut pinnit |
-| `--color-terracotta-ink` | `#8F4A28` | Sama korostus silloin kun mukana on tekstiä |
+| `--color-terracotta` | `#C0693A` | Korostus ilman tekstiä |
+| `--color-terracotta-ink` | `#8F4A28` | Sama korostus tekstin kanssa |
+
+Kortit ovat valkoisia lähes valkoisella kankaalla. Aiemmin molemmat olivat
+`#FFFBF4`, joten kortti erottui vain varjosta ja näkymä tuntui litteältä ja
+raskaalta. Syvyys tulee nyt pinnan vaihdosta ja tyhjästä tilasta.
 
 Terrakotta `#C0693A` antaa vain 3,8:1 kontrastin kermaa vasten, joten se on
 koristeväri. Aina kun väri kantaa tekstiä (napit, valitut chipit, aktiivinen
@@ -235,6 +241,9 @@ kiinteäksi, jos käyttöjärjestelmä tai asetus pyytää vähemmän läpinäky
 - **QR-koodi** on deterministinen piirros varauskoodista.
 - **Ilmoitukset** ovat sovelluksen sisäisiä, eivät push-viestejä.
 - **Sijainti** on valittu kaupunki, ei laitteen GPS.
+- **Tyyli** järjestää valikoiman sen mukaan, mitä tallennettujen kuvien kanssa
+  on yhteistä: sama kategoria, sama väri, samoja hakusanoja taulukosta. Ei
+  mallia eikä ulkoista palvelua, sama sanaosuma jota haku käyttää.
 
 ## Tilat esittelyssä
 
@@ -244,9 +253,8 @@ Jokaisella datanäkymällä on lataus-, tyhjä- ja virhetila.
 - **Tyhjä tila** nähdään esimerkiksi haulla, jolle ei ole osumia:
   `/haku?q=kajakki`. Sieltä pääsee tallentamaan hakuvahdin.
 - **Virhetila** on kytketty demoa varten: lisää `?demo=error` osoitteen perään.
-  Toimii näkymissä `/koti`, `/selaa`, `/haku`, `/toivelista`, `/kartta`,
-  `/tuote/[id]`, `/kirpputori/[id]` ja `/myyja/[id]`. Näkymissä `/oma` ja
-  `/ilmoitukset` on oma `Näytä virhetila` -painike.
+  Toimii kaikissa datanäkymissä, myös `/oma` ja `/ilmoitukset`. Sovelluksessa
+  itsessään ei ole demopainikkeita.
 
 ## Demon kulku esittelyssä
 

@@ -17,7 +17,7 @@ export function ListSection({
   return (
     <section className="mt-6">
       {title ? <h2 className="t-footnote px-5 pb-1.5 uppercase tracking-wide text-brown-70">{title}</h2> : null}
-      <div className="mx-4 overflow-hidden rounded-[16px] bg-cream shadow-card">{children}</div>
+      <div className="mx-4 overflow-hidden rounded-[16px] bg-surface shadow-card">{children}</div>
       {footer ? <p className="t-caption px-5 pt-1.5 text-brown-70">{footer}</p> : null}
     </section>
   );

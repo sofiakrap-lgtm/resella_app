@@ -47,10 +47,10 @@ export function CategoryView() {
 
   return (
     <div>
-      <ScreenHeader title={category.name} back />
+      <ScreenHeader title={category.name} back largeTitleBelow transparent />
 
       <div className="pt-3 screen-x">
-        <h1 className="t-large-title">{category.name}</h1>
+        <h1 className="t-large-title" data-screen-title>{category.name}</h1>
         <p className="t-subhead mt-1 text-brown-70">{category.blurb}</p>
       </div>
 
@@ -85,7 +85,7 @@ export function CategoryView() {
               <Link
                 key={size}
                 href={link({ sizes: [size] })}
-                className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-separator bg-cream px-4 t-subhead"
+                className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-separator bg-surface px-4 t-subhead"
               >
                 {size}
               </Link>
@@ -101,7 +101,7 @@ export function CategoryView() {
             <Link
               key={brand}
               href={link({ brands: [brand] })}
-              className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-separator bg-cream px-4 t-subhead"
+              className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-separator bg-surface px-4 t-subhead"
             >
               {brand}
             </Link>

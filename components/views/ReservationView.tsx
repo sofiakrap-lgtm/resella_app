@@ -77,7 +77,7 @@ export function ReservationView() {
 
         <section className="px-4 pt-4">
           <h2 className="t-headline mb-2">Yhteenveto</h2>
-          <div className="flex gap-3 rounded-[18px] bg-cream p-3 shadow-card">
+          <div className="flex gap-3 rounded-[18px] bg-surface p-3 shadow-card">
             <span className="block h-[84px] w-[84px] shrink-0 overflow-hidden rounded-[14px] bg-cream-sink">
               <SafeImage
                 src={productImage(product.images[0])}
@@ -166,7 +166,7 @@ export function ReservationView() {
                 inputMode="tel"
                 placeholder="040 123 4567"
                 aria-invalid={status === 'error'}
-                className="t-body mt-1 min-h-11 w-full rounded-[12px] bg-cream px-3 shadow-card outline-none"
+                className="t-body mt-1 min-h-11 w-full rounded-[12px] bg-surface px-3 shadow-card outline-none"
                 style={{ boxShadow: status === 'error' ? '0 0 0 2px var(--color-danger)' : undefined }}
               />
             </label>
@@ -174,7 +174,7 @@ export function ReservationView() {
         )}
 
         <section className="px-4 pt-6">
-          <div className="rounded-[18px] bg-cream p-4 shadow-card">
+          <div className="rounded-[18px] bg-surface p-4 shadow-card">
             <Row label="Tuote" value={price(product.priceEur)} />
             {buying ? <Row label="ReSello-palvelumaksu" value={price(SERVICE_FEE)} /> : null}
             <div className="mt-2 border-t border-separator pt-2">

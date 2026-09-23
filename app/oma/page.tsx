@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { productById } from '@/data/products';
 import { marketById, markets } from '@/data/markets';
@@ -33,6 +34,15 @@ import {
 
 /** Profile: reservations with their pickup codes, history, follows and settings. */
 export default function OmaPage() {
+  return (
+    <Suspense fallback={null}>
+      <OmaContent />
+    </Suspense>
+  );
+}
+
+function OmaContent() {
+  const search = useSearchParams();
   const now = useNow();
   const transition = useTransition();
   const {
@@ -50,16 +60,15 @@ export default function OmaPage() {
     resetDemo,
     pushToast,
   } = useApp();
+  // Demo switch: append ?demo=error to show the error state.
   const [failed, setFailed] = useState(false);
 
   // Keeps the placeholder rows visible until the stored state is restored.
   const loading = !ready;
 
   useEffect(() => {
-    if (!failed) return;
-    const timer = window.setTimeout(() => setFailed(false), 8000);
-    return () => window.clearTimeout(timer);
-  }, [failed]);
+    setFailed(search.get('demo') === 'error');
+  }, [search]);
 
   const active = reservations.filter((reservation) => reservation.kind === 'varaus');
   const bought = reservations.filter((reservation) => reservation.kind === 'osto');
@@ -94,7 +103,7 @@ export default function OmaPage() {
       />
 
       <div className="px-4 pb-1 pt-1">
-        <h1 className="t-large-title">Oma</h1>
+        <h1 className="t-large-title" data-screen-title>Oma</h1>
       </div>
 
       <motion.section
@@ -103,7 +112,7 @@ export default function OmaPage() {
         transition={transition}
         className="px-4 pt-3"
       >
-        <div className="flex items-center gap-3 rounded-[22px] bg-cream p-4 shadow-card">
+        <div className="flex items-center gap-3 rounded-[22px] bg-surface p-4 shadow-card">
           <Mascot pose="wave" size={56} />
           <div className="min-w-0 flex-1">
             <p className="t-headline truncate">Hei, löytäjä</p>
@@ -111,7 +120,6 @@ export default function OmaPage() {
               {city}, {wishlist.length} tallennettua
             </p>
           </div>
-          <Tag tone="accent">Demo</Tag>
         </div>
       </motion.section>
 
@@ -128,7 +136,7 @@ export default function OmaPage() {
               Omat varaukset
             </h2>
             {active.length === 0 ? (
-              <div className="mx-4 rounded-[16px] bg-cream p-5 text-center shadow-card">
+              <div className="mx-4 rounded-[16px] bg-surface p-5 text-center shadow-card">
                 <p className="t-subhead text-brown-70">
                   Ei voimassa olevia varauksia. Varaa löytö, niin se odottaa sinua kassalla.
                 </p>
@@ -139,7 +147,7 @@ export default function OmaPage() {
                 </div>
               </div>
             ) : (
-              <div className="mx-4 overflow-hidden rounded-[16px] bg-cream shadow-card">
+              <div className="mx-4 overflow-hidden rounded-[16px] bg-surface shadow-card">
                 {active.map((reservation) => {
                   const product = productById(reservation.productId);
                   const market = product ? marketById(product.marketId) : undefined;
@@ -187,13 +195,13 @@ export default function OmaPage() {
           <section className="mt-6">
             <h2 className="t-footnote px-5 pb-1.5 uppercase tracking-wide text-brown-70">Ostot</h2>
             {bought.length === 0 ? (
-              <div className="mx-4 rounded-[16px] bg-cream p-5 text-center shadow-card">
+              <div className="mx-4 rounded-[16px] bg-surface p-5 text-center shadow-card">
                 <p className="t-subhead text-brown-70">
                   Ostoksesi näkyvät täällä kuitteineen.
                 </p>
               </div>
             ) : (
-              <div className="mx-4 overflow-hidden rounded-[16px] bg-cream shadow-card">
+              <div className="mx-4 overflow-hidden rounded-[16px] bg-surface shadow-card">
                 {bought.map((reservation) => {
                   const product = productById(reservation.productId);
                   const market = product ? marketById(product.marketId) : undefined;
@@ -266,6 +274,7 @@ export default function OmaPage() {
             footer="Asetukset tallennetaan vain tähän laitteeseen. Demo ei kerää mitään tietoja."
           >
             <ListRow label="Kaupunki" value={city} icon={<LocationIcon size={20} />} href="/onboarding" />
+            <ListRow label="Versio" value="Demo" icon={<SettingsIcon size={20} />} />
             <Toggle
               label="Suurempi teksti"
               description="Kasvattaa tekstin kokoa koko sovelluksessa"
@@ -290,11 +299,6 @@ export default function OmaPage() {
             <ListRow
               label="Katso esittely uudelleen"
               href="/onboarding"
-              icon={<SettingsIcon size={20} />}
-            />
-            <ListRow
-              label="Näytä virhetila"
-              onClick={() => setFailed(true)}
               icon={<SettingsIcon size={20} />}
             />
             <ListRow
