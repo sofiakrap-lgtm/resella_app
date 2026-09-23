@@ -4,8 +4,8 @@
   "description": "Löydä aarteesi läheltä. Selaa kirpputorien tuotteita ja näe heti, missä kaapissa ne odottavat.",
   "start_url": "koti/",
   "display": "standalone",
-  "background_color": "#fffbf4",
-  "theme_color": "#fffbf4",
+  "background_color": "#fffdfa",
+  "theme_color": "#fffdfa",
   "lang": "fi",
   "icons": [
     { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
