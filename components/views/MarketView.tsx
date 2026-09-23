@@ -54,7 +54,10 @@ export function MarketView() {
     () => (market ? productsByMarket(market.id).filter((product) => product.status !== 'Myyty') : []),
     [market],
   );
-  const fresh = useMemo(() => (market ? newToday(market.id) : []), [market]);
+  const fresh = useMemo(
+    () => (market ? newToday().filter((product) => product.marketId === market.id) : []),
+    [market],
+  );
   const sellers = useMemo(() => (market ? sellersAtMarket(market.id) : []), [market]);
 
   if (!market) {

@@ -76,9 +76,11 @@ function KotiContent() {
       .slice(0, 12);
   }, [interests, sizes]);
 
-  const vinyls = products.filter(
-    (product) => product.subcategory === 'vinyylit' && product.priceEur < 14,
-  );
+  /** A row anyone can act on, whatever they came looking for. */
+  const affordable = products
+    .filter((product) => product.status === 'Saatavilla' && product.priceEur <= 30)
+    .sort((a, b) => a.priceEur - b.priceEur)
+    .slice(0, 12);
 
   /** Today in this city first, then today anywhere, so the hero is never empty. */
   const hero = todayHere.length ? todayHere : newToday();
@@ -223,7 +225,7 @@ function KotiContent() {
               {forYou.length && fromFollows.length ? (
                 <ProductRow title="Sinulle" products={forYou} href="/selaa" />
               ) : null}
-              <ProductRow title="Vinyylit alle 14 euroa" products={vinyls} />
+              <ProductRow title="Alle 30 euroa" products={affordable} href="/haku?max=30" />
               {followedSellerItems.length ? (
                 <ProductRow title="Seuraamiltasi myyjiltä" products={followedSellerItems} />
               ) : null}

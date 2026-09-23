@@ -9,8 +9,9 @@ valikoimaa ei näe mistään ennen kuin menee paikan päälle. Tämä sovellus n
 kaikkien kirpputorien tuotteet yhdestä paikasta ja kertoo tarkalleen, missä
 pöydässä tuote on ja kuka sitä myy.
 
-> Kaikki tiedot ovat esimerkkitietoja. Taustapalvelua ei ole. Myyjät ovat
-> keksittyjä henkilöitä.
+> 121 tuotetta seitsemällä kirpputorilla Helsingissä ja Espoossa. Tuotteet ja
+> kirpputorit ovat oikeita, myyjät ovat keksittyjä henkilöitä eikä
+> taustapalvelua ole.
 
 ## Käynnistys
 
@@ -22,11 +23,13 @@ npm run dev     # http://localhost:3000
 Muut komennot:
 
 ```bash
+npm run data         # luo /data tuotetaulukosta (aja CSV:n muutoksen jälkeen)
+npm run kuvalista    # luo assets/KUVALISTA.md samasta taulukosta
+npm run check-assets # kertoo mitkä kuvat puuttuvat ja mitkä nimet ovat väärin
 npm run build        # tuotantokäännös
 npm run start        # tuotantopalvelin
 npm run build:export # staattinen vienti kansioon ./out
 npm run sync-assets  # kopioi /assets -> /public/assets
-npm run check-assets # tarkistaa kuvien nimet
 npm run typecheck    # TypeScript
 ```
 
@@ -107,6 +110,28 @@ Tab bar pienenee kun sisältöä vieritetään alaspäin ja palaa kun vieritetä
 Kaikki näkymät ovat kuluttajan näkymiä. Kassa-, tilitys- ja hallintanäkymät
 eivät kuulu tähän sovellukseen.
 
+## Data
+
+Kaikki tuotetiedot tulevat yhdestä tiedostosta:
+
+```
+data/source/tuotteet.csv    121 tuotetta: nimi, merkki, kategoria, koko, väri,
+                            kunto, hinta, kirpputori, pöytä, myyjä, hakusanat
+data/source/paikat.json     se mitä taulukossa ei ole: kirpputorien osoitteet,
+                            koordinaatit ja aukioloajat, myyjien nimet ja esittelyt
+```
+
+Komento `npm run data` lukee nämä ja kirjoittaa kansion `/data`. **Älä muokkaa
+`/data`-kansion tiedostoja käsin**, ne ylikirjoitetaan. Kun haluat muuttaa
+tuotetta, muuta CSV:tä ja aja komento uudelleen.
+
+Samasta lähteestä syntyvät myös hakuvahdit, ilmoitukset ja esimerkkihaut, joten
+ne osuvat aina oikeisiin tuotteisiin. `npm run kuvalista` ja
+`npm run check-assets` lukevat saman tiedoston, joten kuvalista ei voi vanhentua.
+
+Tuotekuvien nimet tulevat CSV:n sarakkeesta `Kuvatiedosto` sellaisenaan,
+esimerkiksi `Arc_teryx_Beta_LT.png`. Älä nimeä kuvia uudelleen.
+
 ## Rakenne
 
 ```
@@ -120,13 +145,8 @@ components/
   FilterSheet.tsx     Suodatinpaneeli
   MarketMap.tsx       Offline-kartta
 data/
-  categories.ts       8 kategoriaa alakategorioineen, koot ja merkit
-  markets.ts          10 kirpputoria, aukioloajat ja sijainnit
-  sellers.ts          14 myyjää, pöytänumero ja vuokran voimassaolo
-  products.ts         64 tuotetta, kirpputori ja pöytä johdetaan myyjästä
-  exampleSearches.ts  Esimerkkihaut, mukana yksi luonnollisen kielen haku
-  notifications.ts    Ilmoitusten siemenet
-  savedSearches.ts    Hakuvahtien siemenet
+  source/             Lähdeaineisto, tätä muokataan
+  *.ts                Generoitu, älä muokkaa
 lib/
   types.ts            Jaetut tyypit
   filters.ts          Suodatus, haku, samankaltaiset tuotteet
@@ -135,14 +155,21 @@ lib/
   state.tsx           Sovelluksen tila (localStorage)
   imagePath.ts        Kuvapolut ja paikkamerkkityypit
   motion.ts           Jousianimaatiot
-assets/               Sofian kuvat (katso assets/README.md)
+scripts/
+  generate-data.mjs   CSV -> /data
+  kuvalista.mjs       CSV -> assets/KUVALISTA.md
+  expected-assets.mjs Odotettujen kuvien lista, jaettu yllä olevien kesken
+  sync-assets.mjs     /assets -> /public/assets + kuvamanifesti
+  check-assets.mjs    Kuvien tarkistus
+assets/               Kuvat (katso assets/README.md)
 marketing/            Landing page (erillinen sivu, ei osa sovellusta)
 ```
 
 Kolme selausulottuvuutta on kytketty toisiinsa ristiin: tuotteesta pääsee sekä
 kirpputorille että myyjälle, kirpputorilta myyjiin ja tuotteisiin, myyjältä
 takaisin kirpputorille ja hänen tuotteisiinsa. Tuotteen kirpputori ja pöytä
-johdetaan aina myyjästä (`data/products.ts`), joten tiedot eivät voi eriytyä.
+johdetaan myyjästä, ja myyjän pöytä tulee taulukosta, joten tiedot eivät voi
+eriytyä.
 
 ## Teknisiä valintoja
 
@@ -227,6 +254,7 @@ Jokaisella datanäkymällä on lataus-, tyhjä- ja virhetila.
 2. `/koti`: uutta tänään seuraamiltasi kirpputoreilta.
 3. `/selaa`: näytä kolme tapaa selata, vaihda Kategoriat -> Myyjät.
 4. Avaa myyjä, näytä pöytänumero ja vuokran voimassaolo.
-5. Avaa tuote, näytä kirpputori, pöytä ja saatavuus. Varaa noudettavaksi.
+5. Avaa tuote, näytä merkki, kunto, kirpputori, pöytä ja saatavuus.
+   Varaa noudettavaksi.
 6. `/qr`: noutokoodi ja laskuri.
 7. `/oma`: varaus näkyy laskurin kanssa. Suurenna teksti asetuksista.

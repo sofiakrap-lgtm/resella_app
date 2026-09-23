@@ -1,23 +1,24 @@
-import type { CategorySlug, Filters, Product } from './types';
+import type { Audience, CategorySlug, Filters, Product } from './types';
 import { products } from '@/data/products';
 import { marketById } from '@/data/markets';
 
 export const emptyFilters: Filters = {
   query: '',
   categories: [],
+  audiences: [],
   sizes: [],
   colors: [],
   brands: [],
   conditions: [],
   minPrice: 0,
-  maxPrice: 150,
+  maxPrice: 1000,
   marketIds: [],
   cities: [],
   onlyAvailable: false,
   onlyNewToday: false,
 };
 
-export const PRICE_MAX = 150;
+export const PRICE_MAX = 1000;
 
 function normalise(value: string): string {
   return value
@@ -42,7 +43,9 @@ function haystack(product: Product): string {
       product.size ?? '',
       product.color,
       product.condition,
+      product.audience,
       product.description,
+      product.keywords.join(' '),
       market?.name ?? '',
       market?.city ?? '',
     ].join(' '),
@@ -64,6 +67,7 @@ export function applyFilters(filters: Filters, list: Product[] = products): Prod
     if (product.status === 'Myyty') return false;
     if (!matchesQuery(product, filters.query)) return false;
     if (filters.categories.length && !filters.categories.includes(product.category)) return false;
+    if (filters.audiences.length && !filters.audiences.includes(product.audience)) return false;
     if (filters.sizes.length && (!product.size || !filters.sizes.includes(product.size)))
       return false;
     if (filters.colors.length && !filters.colors.includes(product.color)) return false;
@@ -83,6 +87,7 @@ export function applyFilters(filters: Filters, list: Product[] = products): Prod
 export function activeFilterCount(filters: Filters): number {
   return (
     filters.categories.length +
+    filters.audiences.length +
     filters.sizes.length +
     filters.colors.length +
     filters.brands.length +
@@ -122,6 +127,7 @@ export function filtersToQuery(filters: Filters): string {
   };
   if (filters.query) params.set('q', filters.query);
   list('cat', filters.categories);
+  list('kenelle', filters.audiences);
   list('size', filters.sizes);
   list('color', filters.colors);
   list('brand', filters.brands);
@@ -140,6 +146,7 @@ export function queryToFilters(params: URLSearchParams): Filters {
   return {
     query: params.get('q') ?? '',
     categories: list('cat') as CategorySlug[],
+    audiences: list('kenelle') as Audience[],
     sizes: list('size'),
     colors: list('color'),
     brands: list('brand'),

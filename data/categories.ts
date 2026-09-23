@@ -1,128 +1,18 @@
+/**
+ * GENEROITU TIEDOSTO, ÄLÄ MUOKKAA KÄSIN.
+ * Luodaan komennolla `npm run data` tiedostoista
+ * data/source/tuotteet.csv ja data/source/paikat.json.
+ */
 import type { Category } from '@/lib/types';
 
-/**
- * Top level categories. These are first class navigation items in Selaa, never
- * hidden behind a generic "kauppa" link.
- */
-export const categories: Category[] = [
-  {
-    slug: 'naiset',
-    name: 'Naiset',
-    blurb: 'Takit, neuleet, mekot, farkut',
-    subcategories: [
-      { slug: 'takit', name: 'Takit ja ulkovaatteet' },
-      { slug: 'neuleet', name: 'Neuleet ja villapaidat' },
-      { slug: 'mekot', name: 'Mekot ja hameet' },
-      { slug: 'housut', name: 'Housut ja farkut' },
-      { slug: 'paidat', name: 'Paidat ja topit' },
-    ],
-    sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    brands: ['Marimekko', 'Nanso', 'Filippa K', 'Samuji', 'Levi’s', 'Merkitön'],
-  },
-  {
-    slug: 'miehet',
-    name: 'Miehet',
-    blurb: 'Villapaidat, farkut, takit',
-    subcategories: [
-      { slug: 'takit', name: 'Takit ja ulkovaatteet' },
-      { slug: 'neuleet', name: 'Neuleet ja villapaidat' },
-      { slug: 'housut', name: 'Housut ja farkut' },
-      { slug: 'paidat', name: 'Paidat' },
-    ],
-    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    brands: ['Levi’s', 'Marimekko', 'Makia', 'Reima', 'Merkitön'],
-  },
-  {
-    slug: 'lapset',
-    name: 'Lapset',
-    blurb: 'Haalarit, ulkovaatteet, koot 74 - 140',
-    subcategories: [
-      { slug: 'haalarit', name: 'Haalarit' },
-      { slug: 'ulkovaatteet', name: 'Ulkovaatteet' },
-      { slug: 'mekot', name: 'Mekot ja juhlavaatteet' },
-      { slug: 'arkivaatteet', name: 'Arkivaatteet' },
-    ],
-    sizes: ['74', '86', '92', '98', '104', '110', '116', '122', '128', '134', '140'],
-    brands: ['Reima', 'Polarn O. Pyret', 'Lindex', 'Molo', 'Name It', 'Merkitön'],
-  },
-  {
-    slug: 'koti',
-    name: 'Koti ja sisustus',
-    blurb: 'Tekstiilit, valaisimet, huonekalut',
-    subcategories: [
-      { slug: 'tekstiilit', name: 'Tekstiilit' },
-      { slug: 'valaisimet', name: 'Valaisimet' },
-      { slug: 'huonekalut', name: 'Pienhuonekalut' },
-      { slug: 'koristeet', name: 'Koriste-esineet' },
-    ],
-    sizes: [],
-    brands: ['Marimekko', 'Finlayson', 'Iittala', 'Artek', 'Merkitön'],
-  },
-  {
-    slug: 'astiat',
-    name: 'Astiat',
-    blurb: 'Lautaset, mukit, lasit, maljakot',
-    subcategories: [
-      { slug: 'lautaset', name: 'Lautaset ja vadit' },
-      { slug: 'mukit', name: 'Mukit ja kupit' },
-      { slug: 'lasit', name: 'Lasit' },
-      { slug: 'maljakot', name: 'Maljakot' },
-    ],
-    sizes: [],
-    brands: ['Iittala', 'Arabia', 'Pentik', 'Rörstrand', 'Merkitön'],
-  },
-  {
-    slug: 'kengat',
-    name: 'Kengät',
-    blurb: 'Tennarit, saappaat, juhlakengät',
-    subcategories: [
-      { slug: 'tennarit', name: 'Tennarit' },
-      { slug: 'saappaat', name: 'Saappaat' },
-      { slug: 'juhlakengat', name: 'Juhlakengät' },
-    ],
-    sizes: ['24', '28', '30', '36', '37', '38', '39', '40', '42', '44'],
-    brands: ['Converse', 'Reima', 'Vagabond', 'Nokian', 'Merkitön'],
-  },
-  {
-    slug: 'asusteet',
-    name: 'Asusteet',
-    blurb: 'Laukut, huivit, korut',
-    subcategories: [
-      { slug: 'laukut', name: 'Laukut' },
-      { slug: 'huivit', name: 'Huivit ja hatut' },
-      { slug: 'korut', name: 'Korut' },
-    ],
-    sizes: [],
-    brands: ['Marimekko', 'Kalevala', 'Lumi', 'Merkitön'],
-  },
-  {
-    slug: 'viihde',
-    name: 'Viihde',
-    blurb: 'Kirjat, vinyylit, pelit',
-    subcategories: [
-      { slug: 'kirjat', name: 'Kirjat' },
-      { slug: 'vinyylit', name: 'Vinyylit' },
-      { slug: 'pelit', name: 'Pelit' },
-    ],
-    sizes: [],
-    brands: ['Merkitön'],
-  },
-];
+export const categories: Category[] = [{slug:"kengat",name:"Kengät",blurb:"Lenkkarit, maiharit ja korot",icon:"shoe",subcategories:["Korkokengät","Lenkkarit","Maiharit","Nilkkurit","Platform","Puukengät","Sandaalit"],sizes:["38","39","40","41","42"],brands:["Adidas","Birkenstock","Buffalo London","Converse","Crocs","Diesel","Dr. Martens","Miu Miu","New Balance","Nike","Puma","Salomon","Steve Madden","Timberland","UGG","Vans"]},{slug:"ylaosat",name:"Yläosat",blurb:"Neuleet, huput ja paidat",icon:"shirt",subcategories:["Collegepaita","Huppari","Kauluspaita","Neule","Neuletakki","Pikeepaita","Pitkähihainen","Poolopusero","T-paita","Toppi"],sizes:["36","38","L","M","S"],brands:["Abercrombie & Fitch","Carhartt WIP","Christian Dior","Ed Hardy","Filippa K","Hollister","Marimekko","Merkitön","Miss Sixty","Ralph Lauren","Stone Island","Tommy Hilfiger","Totême"]},{slug:"laukut",name:"Laukut",blurb:"Reput, olkalaukut ja kassit",icon:"bag",subcategories:["Kassi","Käsilaukku","Olkalaukku","Reppu"],sizes:[],brands:["Baby Phat","Coach","Dior","Eastpak","Fendi","Fjällräven","Gucci","Guess","Herschel","Juicy Couture","Longchamp","Louis Vuitton","Michael Kors","Prada","Sandqvist"]},{slug:"takit",name:"Takit",blurb:"Untuvat, farkkutakit ja tuulitakit",icon:"jacket",subcategories:["Farkkutakki","Nahkatakki","Toppatakki","Tuulitakki","Untuvatakki","Verryttelytakki","Välikausitakki"],sizes:["2 (M)","40","L","M","S"],brands:["Adidas","Levi's","Luhta","Merkitön","Moncler","Nike","Peak Performance","Superdry","The North Face","Uniqlo"]},{slug:"asusteet",name:"Asusteet",blurb:"Huivit, lasit ja lippikset",icon:"glasses",subcategories:["Aurinkolasit","Huivi","Lippis"],sizes:[],brands:["Acne Studios","Burberry","Dior","Oakley","Ray-Ban","Versace","Von Dutch"]},{slug:"ulkoiluvaatteet",name:"Ulkoiluvaatteet",blurb:"Kuoritakit, fleecet ja kerrastot",icon:"shell",subcategories:["Ajopuku","Fleecetakki","Kuoritakki","Välitakki"],sizes:["L","M"],brands:["Arc'teryx","Halti","Helly Hansen","Patagonia","Rukka"]},{slug:"paallystakit",name:"Päällystakit",blurb:"Villakangas, trenssit ja vahakangas",icon:"coat",subcategories:["Trenssi","Työtakki","Vahakangastakki","Villakangastakki"],sizes:["38","L","M","XL"],brands:["Arket","Barbour","COS","Carhartt","Marc O'Polo","Zara"]},{slug:"astiat",name:"Astiat",blurb:"Mukit, lautaset ja lasit",icon:"cup",subcategories:["Kulho","Lasi","Lautanen","Muki"],sizes:["0,3 l","1 kpl","21 cm","26 cm"],brands:["Arabia","Iittala"]},{slug:"housut",name:"Housut",blurb:"Farkut ja collegehousut",icon:"trousers",subcategories:["Collegehousut","Farkut"],sizes:["M","W28 L30","W29","W29 L32","W30","W30 L32","W32 L32"],brands:["Diesel","Jack & Jones","Levi's","Miss Sixty","Nike","Only","Weekday"]},{slug:"lastenvaatteet",name:"Lastenvaatteet",blurb:"Haalarit, setit ja paidat",icon:"child",subcategories:["Kurahaalari","Setti","T-paita","Talvihaalari"],sizes:["100 cm","104 cm","110 cm","62 cm","86 cm","98 cm"],brands:["Didriksons","Lindex","Mini Rodini","Name It","Polarn O. Pyret","Reima"]},{slug:"urheiluvaatteet",name:"Urheiluvaatteet",blurb:"Treeni, kerrastot ja leggingsit",icon:"sport",subcategories:["Kerrasto","Leggingsit","Pitkähihainen","Urheilutoppi"],sizes:["38","M","S"],brands:["Casall","Craft","Gymshark","Icebreaker","Kari Traa"]},{slug:"mekot",name:"Mekot",blurb:"Arkeen ja juhlaan",icon:"dress",subcategories:["Juhlamekko","Lyhythihainen mekko","Pitkähihainen mekko"],sizes:["36","M","S"],brands:["Ganni","Monki","NA-KD","Nelly"]},{slug:"sisustus",name:"Sisustus",blurb:"Maljakot, kynttilänjalat ja koristeet",icon:"lamp",subcategories:["Koriste","Kynttilänjalka","Maljakko"],sizes:["1 kpl","16 cm","6,4 cm"],brands:["Iittala"]},{slug:"hameet",name:"Hameet",blurb:"Mini ja midi",icon:"skirt",subcategories:["Minihame"],sizes:["38","W29"],brands:["Merkitön","Miss Sixty"]},{slug:"jakut",name:"Jakut",blurb:"Bleiserit ja jakut",icon:"blazer",subcategories:["Bleiseri"],sizes:["38"],brands:["Mango"]},{slug:"kodintekstiilit",name:"Kodintekstiilit",blurb:"Liinat ja tyynyt",icon:"cushion",subcategories:["Pöytäliina"],sizes:["140x180 cm"],brands:["Marimekko"]}];
 
-export const categoryBySlug = (slug: string) =>
-  categories.find((category) => category.slug === slug);
+export function categoryBySlug(slug: string): Category | undefined {
+  return categories.find((category) => category.slug === slug);
+}
 
-export const allColors = [
-  'Musta',
-  'Valkoinen',
-  'Beige',
-  'Ruskea',
-  'Sininen',
-  'Vihreä',
-  'Punainen',
-  'Keltainen',
-  'Harmaa',
-  'Kuvioitu',
-];
+export const allColors = ["Beige","Beige ja ruskea","Beige ruutu","Beigenharmaa","Denim Oblique","Harmaa","Harmaanvihreä","Hopea","Kamelinruskea","Kastanjanruskea","Keltainen ja luonnonvalkoinen","Kirkas","Konjakinruskea","Kulta ja musta","Laventeli","Luonnonvalkoinen","Luonnonvalkoinen ja punainen","Luonnonvalkoinen ja ruskea","Monivärinen","Monogrammi","Musta","Musta ja beige","Musta ja harmaa","Musta ja sininen","Musta kukkakuosi","Okra","Oliivinvihreä","Oranssi ja pinkki","Petrooli ja koralli","Poltettu oranssi","Punainen","Punavalkoinen","Puuteripinkki","Ruskea","Ruskea Zucca","Salvianvihreä","Sinapinkeltainen","Sini ja violetti","Siniharmaa","Sininen","Sininen ja beige","Sininen ja punainen","Sininen ja valkoinen","Sinivalkoinen","Smaragdinvihreä","Tumma sininen","Tummansininen","Tummanvihreä","Vaalea sininen","Vaaleanharmaa","Vaaleanpunainen","Vaaleanpunainen ja valkoinen","Vaaleanpunainen kuosi","Vaaleansininen","Vaaleanvihreä","Valkoinen","Valkoinen ja harmaa","Valkoinen ja musta","Valkoinen ja sininen","Valkoinen ja vihreä","Vehnänkeltainen","Vihreä","Viininpunainen ja beige"];
 
-export const allConditions = ['Uusi', 'Erinomainen', 'Hyvä', 'Käytetty'] as const;
+export const allConditions = ["Erinomainen","Hyvä","Kohtalainen","Kulunut"] as const;
+
+export const allAudiences = ["Ei kokoa","Lasten","Miesten","Naisten","Unisex"] as const;

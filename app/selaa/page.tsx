@@ -125,7 +125,7 @@ function SelaaContent() {
             const count = products.filter(
               (product) => product.category === category.slug && product.status !== 'Myyty',
             ).length;
-            const Icon = categoryIcons[category.slug];
+            const Icon = categoryIcons[category.icon];
             return (
               <Link
                 key={category.slug}

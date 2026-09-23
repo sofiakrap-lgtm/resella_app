@@ -48,9 +48,20 @@ export function ProductCard({
   const status = reservedIds.includes(product.id) ? 'Varattu' : product.status;
   const unavailable = status !== 'Saatavilla';
 
-  /** "Ogelin kirppis · 1,2 km", or just the distance on a market page. */
+  /**
+   * One line of context. A narrow tile fits the market name or the distance,
+   * not both, and the name is the more useful of the two; the wide layouts
+   * have room for the pair.
+   */
   const km = market ? haversineKm(CITY_CENTERS[city] ?? CITY_CENTERS.Helsinki, market) : null;
-  const context = [hideMarket ? null : market?.name, km === null ? null : distance(km)]
+  const roomForBoth = fullWidth || layout === 'row';
+  const context = (
+    hideMarket
+      ? [km === null ? null : distance(km)]
+      : roomForBoth
+        ? [market?.name, km === null ? null : distance(km)]
+        : [market?.name]
+  )
     .filter(Boolean)
     .join(' · ');
 

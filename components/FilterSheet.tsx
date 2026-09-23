@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { Filters } from '@/lib/types';
-import { categories, allColors, allConditions } from '@/data/categories';
+import { categories, allColors, allConditions, allAudiences } from '@/data/categories';
 import { markets, cities } from '@/data/markets';
 import { PRICE_MAX, activeFilterCount } from '@/lib/filters';
 import { Sheet } from './ui/Sheet';
@@ -63,6 +63,11 @@ export function FilterSheet({
                   {categories.find((category) => category.slug === slug)?.name ?? slug}
                 </Tag>
               ))}
+              {draft.audiences.map((audience) => (
+                <Tag key={audience} tone="accent">
+                  {audience}
+                </Tag>
+              ))}
               {draft.sizes.map((size) => (
                 <Tag key={size} tone="accent">{`Koko ${size}`}</Tag>
               ))}
@@ -88,6 +93,7 @@ export function FilterSheet({
                   setDraft({
                     ...draft,
                     categories: [],
+                    audiences: [],
                     sizes: [],
                     colors: [],
                     brands: [],
@@ -144,6 +150,22 @@ export function FilterSheet({
             aria-label="Enimmäishinta"
             className="mt-2 h-11 w-full accent-[var(--color-terracotta)]"
           />
+        </Group>
+
+        <Group title="Kenelle">
+          <div className="flex flex-wrap gap-2">
+            {allAudiences
+              .filter((audience) => audience !== 'Ei kokoa')
+              .map((audience) => (
+                <Chip
+                  key={audience}
+                  selected={draft.audiences.includes(audience)}
+                  onClick={() => setDraft({ ...draft, audiences: toggle(draft.audiences, audience) })}
+                >
+                  {audience}
+                </Chip>
+              ))}
+          </div>
         </Group>
 
         <Group title="Koko">
