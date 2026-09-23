@@ -16,34 +16,40 @@ export const ASSET_BASE = `${BASE_PATH}/assets`;
 
 export type FallbackType = 'tuote' | 'kirpputori' | 'myyja' | 'logo';
 
-const files = manifest as Record<string, string>;
-
-/** Uses the real extension when the file is there, .jpg when it is not yet. */
-function assetUrl(folder: string, name: string): string {
-  return `${ASSET_BASE}/${folder}/${name}.${files[`${folder}/${name}`] ?? 'jpg'}`;
-}
+/**
+ * Written by `npm run sync-assets`: for each folder, a map from the name the
+ * data asks for to the file that is really on disk. The two differ because
+ * the product sheet writes `Arc_teryx_Beta_LT.png` while the photo is saved
+ * as `Arc'teryx Beta LT.png`, so neither has to be renamed to match.
+ */
+const files = manifest as Record<string, Record<string, string> | undefined>;
 
 /**
- * Product photos are named by the product sheet, extension included, for
- * example `Arc_teryx_Beta_LT.png`. The manifest still wins when it knows the
- * file, so converting a photo to .jpg needs no change to the sheet.
+ * Keys are names without an extension, because the file on disk may carry a
+ * different one. When the manifest has no entry the file is not there yet,
+ * and the guessed name simply 404s into <SafeImage>'s placeholder.
  */
+function assetUrl(folder: string, key: string, fallbackExt: string): string {
+  const file = files[folder]?.[key] ?? `${key}.${fallbackExt}`;
+  return `${ASSET_BASE}/${folder}/${encodeURIComponent(file)}`;
+}
+
+/** `Arc_teryx_Beta_LT.png` -> the real file under /assets/product-photos. */
 export function productImage(fileName: string): string {
   const dot = fileName.lastIndexOf('.');
-  const base = dot > 0 ? fileName.slice(0, dot) : fileName;
-  const fallback = dot > 0 ? fileName.slice(dot + 1) : 'jpg';
-  const ext = files[`product-photos/${base}`] ?? fallback;
-  return `${ASSET_BASE}/product-photos/${base}.${ext}`;
+  const key = dot > 0 ? fileName.slice(0, dot) : fileName;
+  const ext = dot > 0 ? fileName.slice(dot + 1) : 'jpg';
+  return assetUrl('product-photos', key, ext);
 }
 
 /** `market-ogeli-hki` -> `/assets/demo/market-ogeli-hki.jpg` */
 export function marketImage(name: string): string {
-  return assetUrl('demo', name);
+  return assetUrl('demo', name, 'jpg');
 }
 
 /** `seller-anni-k` -> `/assets/demo/seller-anni-k.jpg` */
 export function sellerImage(name: string): string {
-  return assetUrl('demo', name);
+  return assetUrl('demo', name, 'jpg');
 }
 
 /**
@@ -51,27 +57,27 @@ export function sellerImage(name: string): string {
  * cream coloured, for dark or photographic backgrounds.
  */
 export const logos = {
-  wordmark: `${ASSET_BASE}/logos/logo-wordmark.svg`,
-  wordmarkLight: `${ASSET_BASE}/logos/logo-wordmark-light.svg`,
-  mark: `${ASSET_BASE}/logos/logo-mark.svg`,
-  markLight: `${ASSET_BASE}/logos/logo-mark-light.svg`,
+  wordmark: assetUrl('logos', 'logo-wordmark', 'svg'),
+  wordmarkLight: assetUrl('logos', 'logo-wordmark-light', 'svg'),
+  mark: assetUrl('logos', 'logo-mark', 'svg'),
+  markLight: assetUrl('logos', 'logo-mark-light', 'svg'),
 };
 
 export type ShapeName = 'star' | 'wave' | 'pebble';
 
 /** Decorative brand shapes. They inherit the surrounding colour. */
 export const shapes: Record<ShapeName, string> = {
-  star: `${ASSET_BASE}/graphics/shape-star.svg`,
-  wave: `${ASSET_BASE}/graphics/shape-wave.svg`,
-  pebble: `${ASSET_BASE}/graphics/shape-pebble.svg`,
+  star: assetUrl('graphics', 'shape-star', 'svg'),
+  wave: assetUrl('graphics', 'shape-wave', 'svg'),
+  pebble: assetUrl('graphics', 'shape-pebble', 'svg'),
 };
 
 export type MascotPose = 'default' | 'wave' | 'search' | 'empty' | 'celebrate';
 
 export const mascot: Record<MascotPose, string> = {
-  default: `${ASSET_BASE}/graphics/connector-mascot.svg`,
-  wave: `${ASSET_BASE}/graphics/connector-wave.svg`,
-  search: `${ASSET_BASE}/graphics/connector-search.svg`,
-  empty: `${ASSET_BASE}/graphics/connector-empty.svg`,
-  celebrate: `${ASSET_BASE}/graphics/connector-celebrate.svg`,
+  default: assetUrl('graphics', 'connector-mascot', 'svg'),
+  wave: assetUrl('graphics', 'connector-wave', 'svg'),
+  search: assetUrl('graphics', 'connector-search', 'svg'),
+  empty: assetUrl('graphics', 'connector-empty', 'svg'),
+  celebrate: assetUrl('graphics', 'connector-celebrate', 'svg'),
 };

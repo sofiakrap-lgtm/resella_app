@@ -11,6 +11,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readExpected, demoPathNames } from './expected-assets.mjs';
+import { assetKey } from './sync-assets.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const assets = path.join(root, 'assets');
@@ -28,8 +29,13 @@ async function listFiles(folder) {
 
 const WEB_FORMATS = /\.(jpg|jpeg|png|webp|avif|gif|svg)$/i;
 
+/**
+ * Matching ignores spaces, underscores and punctuation, the same way
+ * sync-assets does, so a photo saved as "Arc'teryx Beta LT.png" counts for
+ * the sheet's "Arc_teryx_Beta_LT.png" without either being renamed.
+ */
 function baseName(file) {
-  return file.replace(/\.[^.]+$/, '');
+  return assetKey(file);
 }
 
 /** Levenshtein distance, used to spot a typo close to a real name. */
@@ -79,7 +85,7 @@ async function main() {
     // Only web formats count as present: a .heic cannot be shown, so treating
     // it as present would hide it from the missing list.
     const present = new Set(files.filter((file) => WEB_FORMATS.test(file)).map(baseName));
-    const hits = names.filter((name) => present.has(name));
+    const hits = names.filter((name) => present.has(assetKey(name)));
     found += hits.length;
 
     for (const file of files) {
@@ -87,15 +93,15 @@ async function main() {
         wrongFormat.push(`${folder}/${file}`);
         continue;
       }
-      if (names.includes(baseName(file))) continue;
-      const suggestion = closest(baseName(file), names);
+      if (names.some((name) => assetKey(name) === baseName(file))) continue;
+      const suggestion = closest(baseName(file), names.map(assetKey));
       unknown.push(
         suggestion ? `${folder}/${file}  ->  tarkoititko ${suggestion}?` : `${folder}/${file}`,
       );
     }
     for (const name of names) {
       if (!demoPath.has(name)) continue;
-      if (present.has(name)) demoFound += 1;
+      if (present.has(assetKey(name))) demoFound += 1;
       else missingDemo.push(`assets/${folder}/${name}`);
     }
 
