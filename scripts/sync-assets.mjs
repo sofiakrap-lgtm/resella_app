@@ -18,7 +18,7 @@
  *
  * Runs automatically before `npm run dev` and `npm run build`.
  */
-import { cp, mkdir, rm, readdir, writeFile, stat } from 'node:fs/promises';
+import { cp, mkdir, rm, readdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -157,6 +157,40 @@ async function treeSize(dir) {
   return total;
 }
 
+/**
+ * The logo files are drawn on a large square with wide empty margins, so a
+ * height given in the app would mostly be padding and the mark would look
+ * half the size it was asked for. The artwork's real bounds are measured by
+ * rasterising once and trimming, and the copy that ships carries a viewBox
+ * cropped to them. The files under /assets are not touched.
+ */
+async function cropToArtwork(src) {
+  const svg = await readFile(src, 'utf8');
+  const open = svg.match(/<svg\b[^>]*>/);
+  const box = open?.[0].match(/viewBox="([-\d.eE]+)\s+([-\d.eE]+)\s+([-\d.eE]+)\s+([-\d.eE]+)"/);
+  if (!open || !box) return svg;
+  const [minX, minY, width, height] = box.slice(1).map(Number);
+  const full = await sharp(src, { density: 200 }).metadata();
+  const { info } = await sharp(src, { density: 200 })
+    .trim({ threshold: 1 })
+    .toBuffer({ resolveWithObject: true });
+  if (!full.width || !full.height || !info.width || !info.height) return svg;
+  const scaleX = width / full.width;
+  const scaleY = height / full.height;
+  const cropped = [
+    minX + -(info.trimOffsetLeft ?? 0) * scaleX,
+    minY + -(info.trimOffsetTop ?? 0) * scaleY,
+    info.width * scaleX,
+    info.height * scaleY,
+  ]
+    .map((value) => Number(value.toFixed(3)))
+    .join(' ');
+  const root = open[0]
+    .replace(/viewBox="[^"]*"/, `viewBox="${cropped}"`)
+    .replace(/\s(width|height)="[^"]*"/g, '');
+  return svg.replace(open[0], root);
+}
+
 async function copyTree(from, to) {
   const entries = await readdir(from, { withFileTypes: true });
   for (const entry of entries) {
@@ -171,6 +205,11 @@ async function copyTree(from, to) {
     const folder = path.basename(from);
     const ext = path.extname(entry.name).slice(1).toLowerCase();
     const isPhoto = PHOTO_FOLDERS.has(folder) && ['png', 'jpg', 'jpeg', 'webp'].includes(ext);
+    if (ext === 'svg' && folder === 'logos') {
+      await writeFile(dest, await cropToArtwork(src));
+      copied += 1;
+      continue;
+    }
     if (!isPhoto) {
       await cp(src, dest);
       copied += 1;

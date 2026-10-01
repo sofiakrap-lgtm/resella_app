@@ -130,7 +130,7 @@ function KotiContent() {
 
       <div className="px-4 pb-1 pt-1">
         <h2 data-screen-title>
-          <BrandWordmark height={40} />
+          <BrandWordmark height={26} />
           <span className="sr-only">ReSello</span>
         </h2>
       </div>
