@@ -114,9 +114,6 @@ function IlmoituksetContent() {
 
       <div className="px-4 pb-1 pt-2">
         <h1 className="t-title1">Ilmoitukset</h1>
-        <p className="t-footnote mt-1 text-brown-70">
-          {wasUnread ? `${seedNotifications.length} uutta` : 'Kaikki luettu'}
-        </p>
       </div>
 
       {loading || !ready ? (

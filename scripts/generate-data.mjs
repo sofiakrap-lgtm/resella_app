@@ -255,22 +255,25 @@ async function main() {
 
   /** Rows the notifications point at, so every tap lands on a real product. */
   const euro = (value) => `${value.toFixed(2).replace('.', ',')} €`;
-  const newest = products.find((p) => p.addedDaysAgo === 0 && p.status === 'Saatavilla');
-  const newestSeller = sellers.find((s) => s.id === newest.sellerId);
+  const busiest = markets
+    .map((m) => ({ m, n: products.filter((p) => p.marketId === m.id && p.addedDaysAgo === 0).length }))
+    .sort((a, b) => b.n - a.n)[0];
+  // From another market than the daily round-up below, so the two new item
+  // notifications do not name the same place twice.
+  const fresh = products.filter((p) => p.addedDaysAgo === 0 && p.status === 'Saatavilla');
+  const newest = fresh.find((p) => p.marketId !== busiest.m.id) ?? fresh[0];
+  const newestMarket = markets.find((m) => m.id === newest.marketId);
   // A different row from the one above, so the two notifications do not
   // point at the same product.
   const dropped = products.find(
     (p) => p.id !== newest.id && p.priceEur > 100 && p.status === 'Saatavilla',
   );
-  const busiest = markets
-    .map((m) => ({ m, n: products.filter((p) => p.marketId === m.id && p.addedDaysAgo === 0).length }))
-    .sort((a, b) => b.n - a.n)[0];
 
   const notifications = [
     {
       id: 'n-1',
       kind: 'uusi-tuote',
-      title: `${newestSeller.name} lisäsi uuden tuotteen`,
+      title: `Uusi tuote: ${newestMarket.name}`,
       body: `${newest.title}${newest.size ? `, koko ${newest.size}` : ''}, ${euro(newest.priceEur)}`,
       href: `/tuote/${newest.id}`,
       minutesAgo: 12,

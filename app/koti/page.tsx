@@ -9,7 +9,7 @@ import { useTransition } from '@/lib/motion';
 import { products, newToday } from '@/data/products';
 import { markets, marketById } from '@/data/markets';
 import { seedNotifications } from '@/data/notifications';
-import { CITY_CENTERS, haversineKm, inCity } from '@/lib/format';
+import { CITY_CENTERS, haversineKm } from '@/lib/format';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { ProductCard, ProductList } from '@/components/ProductCard';
 import { MarketCard } from '@/components/MarketHeader';
@@ -129,7 +129,6 @@ function KotiContent() {
 
       <div className="px-4 pb-1 pt-1">
         <h2 className="t-large-title" data-screen-title>ReSello</h2>
-        <p className="t-subhead mt-1 text-brown-70">Löydöt {inCity(city)}</p>
       </div>
 
       <div className="mt-4 px-4">

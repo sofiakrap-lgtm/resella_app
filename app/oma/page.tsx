@@ -113,9 +113,6 @@ function OmaContent() {
           <Mascot pose="wave" size={56} />
           <div className="min-w-0 flex-1">
             <p className="t-headline truncate">Hei, löytäjä</p>
-            <p className="t-footnote text-brown-70">
-              {city}, {wishlist.length} tallennettua
-            </p>
           </div>
         </div>
       </motion.section>
@@ -304,7 +301,7 @@ function OmaContent() {
 
           <div className="px-5 pb-4 pt-6">
             <p className="t-caption text-brown-70">
-              ReSello, demo. Tuotteet, kirpputorit ja myyjät ovat esimerkkejä.
+              ReSello, demo. Tuotteet ja kirpputorit ovat esimerkkejä.
             </p>
           </div>
         </>
