@@ -22,11 +22,6 @@ export function rating(value: number): string {
   return value.toFixed(1).replace('.', ',');
 }
 
-export function distance(km: number): string {
-  if (km < 1) return `${Math.round(km * 1000)} m`;
-  return `${km.toFixed(1).replace('.', ',')} km`;
-}
-
 export function haversineKm(
   a: { lat: number; lng: number },
   b: { lat: number; lng: number },
