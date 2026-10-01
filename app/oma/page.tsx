@@ -110,7 +110,7 @@ function OmaContent() {
         className="px-4 pt-3"
       >
         <div className="flex items-center gap-3 rounded-[22px] bg-surface p-4 shadow-card">
-          <Mascot pose="wave" size={56} />
+          <Mascot pose="default" size={64} />
           <div className="min-w-0 flex-1">
             <p className="t-headline truncate">Hei, löytäjä</p>
           </div>

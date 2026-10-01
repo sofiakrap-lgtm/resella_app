@@ -8,7 +8,13 @@
   "graphics": {
     "shape-star": "shape-star.svg",
     "shape-wave": "shape-wave.svg",
-    "shape-pebble": "shape-pebble.svg"
+    "shape-pebble": "shape-pebble.svg",
+    "jooga-piirros": "jooga-piirros.svg",
+    "kurottaa-piirros": "kurottaa-piirros.svg",
+    "makoilee-piirros": "makoilee-piirros.svg",
+    "meditoi-piirros": "meditoi-piirros.svg",
+    "henkari-sukat-piirros": "henkari-sukat-piirros.svg",
+    "tuoli-piirros": "tuoli-piirros.svg"
   },
   "product-photos": {
     "Arc_teryx_Beta_LT": "Arc'teryx Beta LT.jpg",
@@ -132,5 +138,14 @@
     "UGG_Classic_Mini_nilkkurit_38_kastanjanruskea": "UGG Classic Mini nilkkurit 38 kastanjanruskea.jpg",
     "Uniqlo_Ultra_Light_Down_takki_M_vihreä": "Uniqlo Ultra Light Down takki M vihreä.jpg",
     "Zara_trenssi": "Zara trenssi.jpg"
+  },
+  "demo": {
+    "market-tapanila-hki": "market-tapanila-hki.jpg",
+    "market-ogeli-hki": "market-ogeli-hki.jpg",
+    "market-hertsika-hki": "market-hertsika-hki.jpg",
+    "market-bella-esp": "market-bella-esp.jpg",
+    "market-relove-hki": "market-relove-hki.jpg",
+    "market-skidilandia-hki": "market-skidilandia-hki.jpg",
+    "market-siisti-hki": "market-siisti-hki.jpg"
   }
 }

@@ -1,4 +1,4 @@
-import { BrandMark } from '@/components/ui/BrandMark';
+import { BrandLockup } from '@/components/ui/BrandMark';
 
 /**
  * Shown while a screen is being fetched. A full pale field with one slow
@@ -13,7 +13,7 @@ export default function Loading() {
       aria-live="polite"
     >
       <span className="loading-mark">
-        <BrandMark size={56} />
+        <BrandLockup size={92} />
       </span>
       <span className="sr-only">Ladataan</span>
       <span className="flex gap-1.5" aria-hidden="true">

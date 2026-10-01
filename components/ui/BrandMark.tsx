@@ -49,3 +49,21 @@ export function BrandWordmark({
     />
   );
 }
+
+/**
+ * The stacked logo, for the places with room for two lines: the loading
+ * field and anywhere the app introduces itself. The drawn mark stands in
+ * if the file is missing.
+ */
+export function BrandLockup({ size = 72, className = '' }: { size?: number; className?: string }) {
+  return (
+    <SafeImage
+      src={logos.mark}
+      alt="ReSello"
+      fallbackType="logo"
+      className={className}
+      style={{ width: size, height: 'auto' }}
+      fallback={<BrandMark size={size} className={className} />}
+    />
+  );
+}

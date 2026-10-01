@@ -19,7 +19,7 @@ GitHubin Actions-sivulta pushin jälkeen.
 | `assets/logos/logo-mark.svg` * | Neliölogo, tumma |
 | `assets/logos/logo-mark-light.svg` * | Neliölogo, kerma |
 
-## 2. Grafiikat, 8 tiedostoa
+## 2. Grafiikat, 9 tiedostoa
 
 Muodot ovat koristeita ja ottavat värinsä ympäristöstä.
 
@@ -256,5 +256,5 @@ Kaikki menevät kansioon `assets/product-photos`.
 
 ## Yhteenveto
 
-- Kaikkiaan 140 kuvaa: 4 logoa, 8 grafiikkaa, 7 kirpputorikuvaa ja 121 tuotekuvaa.
+- Kaikkiaan 141 kuvaa: 4 logoa, 9 grafiikkaa, 7 kirpputorikuvaa ja 121 tuotekuvaa.
 - Demon pääpolku (tähdellä merkityt): 21 kuvaa.

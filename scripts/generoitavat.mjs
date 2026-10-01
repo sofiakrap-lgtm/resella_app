@@ -47,17 +47,21 @@ const SELLER_SCENE = {
   'oona-s': 'two designer leather handbags and a pair of heels on a marble surface',
 };
 
-/** Each mascot pose, drawn as a flat vector. */
+/**
+ * The drawn set, in the hand the drawings already on disk are in. The names
+ * are the ones the files carry, so a redraw drops straight in.
+ */
 const MASCOT_POSE = {
-  'connector-mascot': 'standing calmly, facing forward',
-  'connector-wave': 'raising one arm in a friendly wave',
-  'connector-search': 'holding a round magnifier, leaning forward slightly',
-  'connector-empty': 'sitting down, shoulders low, gently disappointed but kind',
-  'connector-celebrate': 'both arms up, three small sparks above',
+  'jooga-piirros': 'the character sitting cross legged, hands together above the head, eyes closed and calm',
+  'kurottaa-piirros': 'the character leaning forward, both arms stretched out to reach something',
+  'makoilee-piirros': 'the character lying on its side, resting, eyes closed',
+  'meditoi-piirros': 'the character sitting cross legged with both arms raised, two small sparks beside it',
+  'henkari-sukat-piirros': 'a coat hanger with a pair of socks hung over it, no character',
+  'tuoli-piirros': 'an empty armchair seen from the front, no character',
 };
 
 const SHAPE_NOTE =
-  'Flat vector mascot for a Finnish second-hand app. One rounded dark brown (#3C2415) body shape with two small eyes and a simple smile, joined to a thin terracotta (#C0693A) curved line that reads as connecting arms. No gradients, no outline, no text, plain transparent background, centred with even margins.';
+  'Single colour hand drawn line illustration for a Finnish second-hand app. One uneven black ink stroke, no fill, no shading, no outline box, no text, plain transparent background, centred with even margins, 1500 x 1500. The stroke is recoloured to the app brown automatically, so draw it in black.';
 
 async function main() {
   const expected = await readExpected();

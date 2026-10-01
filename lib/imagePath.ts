@@ -67,12 +67,28 @@ export const shapes: Record<ShapeName, string> = {
   pebble: assetUrl('graphics', 'shape-pebble', 'svg'),
 };
 
-export type MascotPose = 'default' | 'wave' | 'search' | 'empty' | 'celebrate';
+export type MascotPose =
+  | 'default'
+  | 'wave'
+  | 'search'
+  | 'empty'
+  | 'celebrate'
+  | 'henkari'
+  | 'tuoli';
 
+/**
+ * The drawn set. Four of them are the character, two are objects that say
+ * the same thing a character would in an empty list: a bare hanger, an empty
+ * chair. There are four drawings of the character for five poses, so the
+ * calm one covers both the default and the search slot; those two never
+ * appear on the same screen, while reaching and searching did.
+ */
 export const mascot: Record<MascotPose, string> = {
-  default: assetUrl('graphics', 'connector-mascot', 'svg'),
-  wave: assetUrl('graphics', 'connector-wave', 'svg'),
-  search: assetUrl('graphics', 'connector-search', 'svg'),
-  empty: assetUrl('graphics', 'connector-empty', 'svg'),
-  celebrate: assetUrl('graphics', 'connector-celebrate', 'svg'),
+  default: assetUrl('graphics', 'jooga-piirros', 'svg'),
+  wave: assetUrl('graphics', 'kurottaa-piirros', 'svg'),
+  search: assetUrl('graphics', 'jooga-piirros', 'svg'),
+  empty: assetUrl('graphics', 'makoilee-piirros', 'svg'),
+  celebrate: assetUrl('graphics', 'meditoi-piirros', 'svg'),
+  henkari: assetUrl('graphics', 'henkari-sukat-piirros', 'svg'),
+  tuoli: assetUrl('graphics', 'tuoli-piirros', 'svg'),
 };

@@ -120,6 +120,7 @@ function ToivelistaContent() {
       ) : segment === 'tuotteet' ? (
         saved.length === 0 ? (
           <EmptyState
+            pose="henkari"
             title="Ei vielä tallennettuja"
             body="Tallenna löytöjä sydämestä, niin ne odottavat sinua täällä."
             action={
@@ -198,6 +199,7 @@ function ToivelistaContent() {
         )
       ) : followedMarketList.length === 0 ? (
         <EmptyState
+          pose="tuoli"
           title="Et seuraa vielä yhtään kirpputoria"
           body="Seuraa kirpputoria, niin näet sen uutuudet ensimmäisenä."
           action={<Button href="/selaa">Selaa kirpputoreja</Button>}
