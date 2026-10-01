@@ -6,7 +6,6 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { productById } from '@/data/products';
 import { marketById, markets } from '@/data/markets';
-import { sellers } from '@/data/sellers';
 import { seedNotifications } from '@/data/notifications';
 import { price } from '@/lib/format';
 import { countdownLabel, deadlineFor } from '@/lib/time';
@@ -27,7 +26,7 @@ import {
   ClockIcon,
   HeartIcon,
   LocationIcon,
-  PersonIcon,
+
   SettingsIcon,
   LeafIcon,
 } from '@/components/ui/Icons';
@@ -51,7 +50,6 @@ function OmaContent() {
     reservations,
     wishlist,
     followedMarkets,
-    followedSellers,
     readNotifications,
     largeText,
     reduceMotion,
@@ -74,7 +72,6 @@ function OmaContent() {
   const bought = reservations.filter((reservation) => reservation.kind === 'osto');
   const unread = readNotifications.includes('all') ? 0 : seedNotifications.length;
   const followedMarketList = markets.filter((market) => followedMarkets.includes(market.id));
-  const followedSellerList = sellers.filter((seller) => followedSellers.includes(seller.id));
   const savedEur = bought.reduce((sum, reservation) => sum + reservation.totalEur, 0);
 
   if (failed) {
@@ -245,12 +242,6 @@ function OmaContent() {
               value={String(followedMarketList.length)}
               href="/toivelista"
               icon={<LocationIcon size={20} />}
-            />
-            <ListRow
-              label="Myyjät"
-              value={String(followedSellerList.length)}
-              href="/toivelista"
-              icon={<PersonIcon size={20} />}
             />
             <ListRow
               label="Tallennetut tuotteet"

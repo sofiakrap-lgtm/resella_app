@@ -4,10 +4,8 @@ import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { marketById } from '@/data/markets';
-import { sellersAtMarket } from '@/data/sellers';
 import { productsByMarket, newToday } from '@/data/products';
 import { marketImage } from '@/lib/imagePath';
-import { distance, haversineKm, CITY_CENTERS } from '@/lib/format';
 import { WEEKDAYS, WEEKDAY_LABELS, weekdayKey, openStatusLabel } from '@/lib/time';
 import { emptyFilters, filtersToQuery } from '@/lib/filters';
 import { useApp, useNow } from '@/lib/state';
@@ -20,11 +18,10 @@ import { Segmented } from '@/components/ui/Segmented';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import { ProductCard } from '@/components/ProductCard';
-import { SellerCard } from '@/components/SellerHeader';
 import { MarketMap } from '@/components/MarketMap';
 import { HeartIcon, ShareIcon, RouteIcon, ChevronDown, ClockIcon } from '@/components/ui/Icons';
 
-type Segment = 'valikoima' | 'uutta' | 'myyjat';
+type Segment = 'valikoima' | 'uutta';
 
 /** Market page: the whole floor, what arrived today, and who sells here now. */
 export function MarketView() {
@@ -32,7 +29,7 @@ export function MarketView() {
   const search = useSearchParams();
   const now = useNow();
   const transition = useTransition();
-  const { city, followedMarkets, toggleFollowMarket, pushToast } = useApp();
+  const { followedMarkets, toggleFollowMarket, pushToast } = useApp();
   const [segment, setSegment] = useState<Segment>('valikoima');
   const [hoursOpen, setHoursOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -58,7 +55,6 @@ export function MarketView() {
     () => (market ? newToday().filter((product) => product.marketId === market.id) : []),
     [market],
   );
-  const sellers = useMemo(() => (market ? sellersAtMarket(market.id) : []), [market]);
 
   if (!market) {
     return (
@@ -98,7 +94,6 @@ export function MarketView() {
   }
 
   const following = followedMarkets.includes(market.id);
-  const km = haversineKm(CITY_CENTERS[city] ?? CITY_CENTERS.Helsinki, market);
   const status = now ? openStatusLabel(market, now) : null;
   const todayKey = now ? weekdayKey(now) : null;
 
@@ -153,7 +148,6 @@ export function MarketView() {
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
             <Tag tone="accent">{`${items.length} tuotetta`}</Tag>
-            <Tag>{distance(km)}</Tag>
           </div>
           <p className="t-subhead mt-3">{market.description}</p>
           <div className="mt-4 flex items-center gap-3">
@@ -228,23 +222,11 @@ export function MarketView() {
             options={[
               { value: 'valikoima', label: 'Valikoima' },
               { value: 'uutta', label: 'Uutta tänään' },
-              { value: 'myyjat', label: 'Myyjät' },
             ]}
           />
         </div>
 
-        {segment === 'myyjat' ? (
-          <section className="mt-3">
-            {sellers.length === 0 ? (
-              <EmptyState title="Ei aktiivisia myyjiä juuri nyt." />
-            ) : (
-              sellers.map((seller, index) => (
-                <SellerCard key={seller.id} seller={seller} index={index} />
-              ))
-            )}
-          </section>
-        ) : (
-          <section className="mt-3">
+        <section className="mt-3">
             {(segment === 'uutta' ? fresh : items).length === 0 ? (
               <EmptyState
                 title="Ei tuotteita juuri nyt"
@@ -282,8 +264,7 @@ export function MarketView() {
                 )}
               </>
             )}
-          </section>
-        )}
+        </section>
 
         <section className="mt-2 px-4 pb-6">
           <div className="overflow-hidden rounded-[18px] bg-surface shadow-card">

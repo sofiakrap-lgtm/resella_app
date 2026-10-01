@@ -6,7 +6,6 @@ import { useSearchParams } from 'next/navigation';
 import { useApp } from '@/lib/state';
 import { categories } from '@/data/categories';
 import { markets, cities } from '@/data/markets';
-import { sellers } from '@/data/sellers';
 import { products } from '@/data/products';
 import { CITY_CENTERS, haversineKm } from '@/lib/format';
 import { isOpenNow } from '@/lib/time';
@@ -15,7 +14,6 @@ import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { Segmented } from '@/components/ui/Segmented';
 import { Chip } from '@/components/ui/Chip';
 import { MarketCard } from '@/components/MarketHeader';
-import { SellerCard } from '@/components/SellerHeader';
 import { StyleView } from '@/components/views/StyleView';
 import { MarketMap } from '@/components/MarketMap';
 import { Button } from '@/components/ui/Button';
@@ -24,7 +22,7 @@ import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import { RowSkeleton } from '@/components/ui/Skeleton';
 import { SearchIcon, MapIcon, GridIcon, FilterIcon, categoryIcons } from '@/components/ui/Icons';
 
-type Segment = 'kategoriat' | 'kirpputorit' | 'myyjat' | 'tyyli';
+type Segment = 'kategoriat' | 'kirpputorit' | 'tyyli';
 
 export default function SelaaPage() {
   return (
@@ -65,15 +63,6 @@ function SelaaContent() {
   /** Shown on the filter button so the viewer knows the list is narrowed. */
   const marketFilterCount = (cityFilter ? 1 : 0) + (openNow ? 1 : 0);
 
-  const activeSellers = useMemo(
-    () =>
-      [...sellers].sort((a, b) => {
-        if (a.isActive !== b.isActive) return a.isActive ? -1 : 1;
-        return b.followerCount - a.followerCount;
-      }),
-    [],
-  );
-
   if (failed) {
     return (
       <div>
@@ -108,7 +97,6 @@ function SelaaContent() {
             options={[
               { value: 'kategoriat', label: 'Kategoriat' },
               { value: 'kirpputorit', label: 'Kirpputorit' },
-              { value: 'myyjat', label: 'Myyjät' },
               { value: 'tyyli', label: 'Tyyli' },
             ]}
           />
@@ -204,21 +192,8 @@ function SelaaContent() {
             </div>
           )}
         </section>
-      ) : segment === 'tyyli' ? (
-        <StyleView />
       ) : (
-        <section className="mt-4">
-          <div className="grid grid-cols-2 gap-3 screen-x">
-            {activeSellers.slice(0, 6).map((seller, index) => (
-              <SellerCard key={seller.id} seller={seller} index={index} layout="grid" />
-            ))}
-          </div>
-          <div className="mt-4">
-            {activeSellers.slice(6).map((seller, index) => (
-              <SellerCard key={seller.id} seller={seller} index={index} />
-            ))}
-          </div>
-        </section>
+        <StyleView />
       )}
 
       <Sheet

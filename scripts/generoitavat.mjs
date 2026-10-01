@@ -77,9 +77,7 @@ async function main() {
   const markets = Object.entries(meta.places.markets).filter(
     ([, m]) => !present.has(`demo/${assetKey(`market-${m.id}`)}`),
   );
-  const sellers = Object.entries(meta.places.sellers).filter(
-    ([, s]) => !present.has(`demo/${assetKey(`seller-${s.id}`)}`),
-  );
+  const sellers = [];
   const mascots = missing('graphics', Object.keys(MASCOT_POSE));
   const photos = missing('product-photos', expected['product-photos']);
   const logos = missing('logos', expected.logos);

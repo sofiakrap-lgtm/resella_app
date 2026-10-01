@@ -48,27 +48,7 @@ Vaakakuva, suositus 1600 x 900 px.
 | `assets/demo/market-skidilandia-hki.jpg` | Skidilandia | Helsinki |
 | `assets/demo/market-siisti-hki.jpg` | Siisti Kirppis | Helsinki |
 
-## 4. Myyjäkuvat, 12 tiedostoa
-
-Neliö, suositus 600 x 600 px. Ei tunnistettavia kasvoja: kädet, pöytä tai
-vaaterekki riittää, koska myyjät ovat keksittyjä.
-
-| Tiedosto | Myyjä | Kirpputori |
-|---|---|---|
-| `assets/demo/seller-jussi-m.jpg` * | Jussi M. | Tapanilan kirppis, pöytä 12 |
-| `assets/demo/seller-tuomas-r.jpg` * | Tuomas R. | Tapanilan kirppis, pöytä 27 |
-| `assets/demo/seller-aleksi-v.jpg` * | Aleksi V. | Tapanilan kirppis, pöytä 33 |
-| `assets/demo/seller-sanni-h.jpg` * | Sanni H. | Tapanilan kirppis, pöytä 41 |
-| `assets/demo/seller-meri-l.jpg` | Meri L. | Ogelin Kirppis, pöytä 8 |
-| `assets/demo/seller-anni-k.jpg` * | Anni K. | Hertsikan kirppis, pöytä 19 |
-| `assets/demo/seller-venla-n.jpg` * | Venla N. | Hertsikan kirppis, pöytä 55 |
-| `assets/demo/seller-pihla-e.jpg` | Pihla E. | Bella Kirppis Suomenoja, pöytä 3 |
-| `assets/demo/seller-kaisa-t.jpg` | Kaisa T. | Bella Kirppis Suomenoja, pöytä 18 |
-| `assets/demo/seller-perhe-virtanen.jpg` | Perhe Virtanen | Skidilandia, pöytä 7 |
-| `assets/demo/seller-elias-p.jpg` | Elias P. | Siisti Kirppis, pöytä 22 |
-| `assets/demo/seller-oona-s.jpg` | Oona S. | Relove Freda, pöytä 3 |
-
-## 5. Tuotekuvat, 121 tiedostoa
+## 4. Tuotekuvat, 121 tiedostoa
 
 Nimet tulevat suoraan tuotetaulukosta, älä nimeä niitä uudelleen.
 Kaikki menevät kansioon `assets/product-photos`.
@@ -276,5 +256,5 @@ Kaikki menevät kansioon `assets/product-photos`.
 
 ## Yhteenveto
 
-- Kaikkiaan 152 kuvaa: 4 logoa, 8 grafiikkaa, 7 kirpputorikuvaa, 12 myyjäkuvaa ja 121 tuotekuvaa.
-- Demon pääpolku (tähdellä merkityt): 27 kuvaa.
+- Kaikkiaan 140 kuvaa: 4 logoa, 8 grafiikkaa, 7 kirpputorikuvaa ja 121 tuotekuvaa.
+- Demon pääpolku (tähdellä merkityt): 21 kuvaa.

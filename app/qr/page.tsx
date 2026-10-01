@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { productById } from '@/data/products';
 import { marketById } from '@/data/markets';
-import { sellerById } from '@/data/sellers';
 import { price } from '@/lib/format';
 import { countdownLabel, deadlineFor } from '@/lib/time';
 import { productImage } from '@/lib/imagePath';
@@ -20,7 +19,7 @@ import { Button } from '@/components/ui/Button';
 import { Sheet } from '@/components/ui/Sheet';
 import { EmptyState } from '@/components/ui/StateViews';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { LocationIcon, TagIcon, CheckIcon } from '@/components/ui/Icons';
+import { LocationIcon, TagIcon, CheckIcon, BoxIcon } from '@/components/ui/Icons';
 
 export default function QrPage() {
   return (
@@ -40,11 +39,12 @@ function QrContent() {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const reservation = reservations.find((item) => item.id === params.get('id')) ?? reservations[0];
+  const bought = reservation?.kind === 'osto';
 
   if (!ready) {
     return (
       <div>
-        <ScreenHeader title="Noutokoodi" back="/oma" />
+        <ScreenHeader title={bought ? 'Tilaus' : 'Noutokoodi'} back="/oma" />
         <div className="flex flex-col items-center gap-4 px-6 pt-8">
           <Skeleton className="h-6 w-40 rounded-full" />
           <Skeleton className="h-[220px] w-[220px] rounded-[24px]" />
@@ -56,12 +56,11 @@ function QrContent() {
 
   const product = reservation ? productById(reservation.productId) : undefined;
   const market = product ? marketById(product.marketId) : undefined;
-  const seller = product ? sellerById(product.sellerId) : undefined;
 
-  if (!reservation || !product || !market || !seller) {
+  if (!reservation || !product || !market) {
     return (
       <div>
-        <ScreenHeader title="Noutokoodi" back="/oma" />
+        <ScreenHeader title={bought ? 'Tilaus' : 'Noutokoodi'} back="/oma" />
         <EmptyState
           title="Varausta ei löytynyt"
           body="Varaus on ehkä jo noudettu tai peruttu."
@@ -71,13 +70,15 @@ function QrContent() {
     );
   }
 
-  const deadline = now ? deadlineFor(reservation.pickupWindow, new Date(reservation.createdAtIso)) : null;
+  const deadline =
+    !bought && now
+      ? deadlineFor(reservation.pickupWindow, new Date(reservation.createdAtIso))
+      : null;
   const countdown = deadline && now ? countdownLabel(deadline, now) : null;
-  const bought = reservation.kind === 'osto';
 
   return (
     <div className="pb-10">
-      <ScreenHeader title="Noutokoodi" back="/oma" />
+      <ScreenHeader title={bought ? 'Tilaus' : 'Noutokoodi'} back="/oma" />
 
       <motion.div
         initial={{ opacity: 0, y: 14 }}
@@ -91,18 +92,35 @@ function QrContent() {
             <ConfirmMark label={bought ? 'Ostettu' : 'Varattu'} />
           </div>
 
-          <div className="flex flex-col items-center px-5 pb-5 pt-6">
-            <h2 className="t-title3">Näytä kassalla</h2>
-            <div className="mt-4 rounded-[20px] bg-white p-4 shadow-card">
-              <QRCode value={reservation.code} size={208} />
+          {bought ? (
+            <div className="flex flex-col items-center px-5 pb-6 pt-6 text-center">
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-cream-panel text-terracotta-ink">
+                <BoxIcon size={30} />
+              </span>
+              <h2 className="t-title3 mt-4">Tuote tulee postissa</h2>
+              <p className="t-subhead mt-2 text-brown-70">
+                {market.name} pakkaa ja lähettää sen 1 - 3 arkipäivässä. Sinun ei tarvitse
+                käydä paikan päällä.
+              </p>
+              <p className="t-title2 mt-5 tracking-[0.18em]">{reservation.code}</p>
+              <p className="t-caption text-brown-70">Tilausnumero</p>
             </div>
-            <p className="t-title2 mt-4 tracking-[0.18em]">{reservation.code}</p>
-          </div>
+          ) : (
+            <>
+              <div className="flex flex-col items-center px-5 pb-5 pt-6">
+                <h2 className="t-title3">Näytä kassalla</h2>
+                <div className="mt-4 rounded-[20px] bg-white p-4 shadow-card">
+                  <QRCode value={reservation.code} size={208} />
+                </div>
+                <p className="t-title2 mt-4 tracking-[0.18em]">{reservation.code}</p>
+              </div>
 
-          <dl className="grid grid-cols-2 gap-px border-t border-separator bg-separator">
-            <PassField label="Nouda" value={countdown ?? reservation.pickupWindow} />
-            <PassField label="Mistä" value={`${market.name}, ${product.tableNumber}`} />
-          </dl>
+              <dl className="grid grid-cols-2 gap-px border-t border-separator bg-separator">
+                <PassField label="Nouda" value={countdown ?? reservation.pickupWindow} />
+                <PassField label="Mistä" value={`${market.name}, ${product.tableNumber}`} />
+              </dl>
+            </>
+          )}
         </div>
       </motion.div>
 
@@ -136,25 +154,29 @@ function QrContent() {
               <span className="t-caption block truncate text-brown-70">{market.address}</span>
             </span>
           </Link>
-          <Link
-            href={`/myyja/${seller.id}`}
-            className="flex min-h-11 items-center gap-2 border-t border-separator pt-2"
-          >
-            <TagIcon size={18} className="shrink-0 text-brown" />
-            <span className="min-w-0 flex-1">
-              <span className="t-body block truncate">
-                {product.tableNumber}, {seller.name}
+          {bought ? null : (
+            <span className="flex min-h-11 items-center gap-2 border-t border-separator pt-2">
+              <TagIcon size={18} className="shrink-0 text-brown" />
+              <span className="min-w-0 flex-1">
+                <span className="t-body block truncate">{product.tableNumber}</span>
+                <span className="t-caption block text-brown-70">Pöytä löytyy kartasta</span>
               </span>
-              <span className="t-caption block text-brown-70">Pöytä löytyy kartasta</span>
             </span>
-          </Link>
+          )}
         </div>
       </section>
 
       <div className="flex flex-col items-center gap-3 px-4 pt-5">
-        <Button full variant="secondary" href={`/kirpputori/${market.id}`} icon={<LocationIcon size={18} />}>
-          Reitti pöydälle
-        </Button>
+        {bought ? null : (
+          <Button
+            full
+            variant="secondary"
+            href={`/kirpputori/${market.id}`}
+            icon={<LocationIcon size={18} />}
+          >
+            Reitti pöydälle
+          </Button>
+        )}
         {bought ? null : (
           <button
             type="button"

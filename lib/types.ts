@@ -103,6 +103,7 @@ export interface SavedSearch {
 export interface Filters {
   query: string;
   categories: CategorySlug[];
+  subcategories: string[];
   audiences: Audience[];
   sizes: string[];
   colors: string[];

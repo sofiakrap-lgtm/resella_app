@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useRef, useState } from 'react';
 import type { Product } from '@/lib/types';
 import { marketById } from '@/data/markets';
-import { price, distance, haversineKm, CITY_CENTERS } from '@/lib/format';
+import { price } from '@/lib/format';
 import { productImage } from '@/lib/imagePath';
 import { useApp } from '@/lib/state';
 import { useStagger, useTapScale } from '@/lib/motion';
@@ -37,7 +37,7 @@ export function ProductCard({
   hideMarket = false,
   hideNewBadge = false,
 }: ProductCardProps) {
-  const { city, wishlist, toggleWishlist, reservedIds } = useApp();
+  const { wishlist, toggleWishlist, reservedIds } = useApp();
   const transition = useStagger(index);
   const tap = useTapScale(0.985);
   const market = marketById(product.marketId);
@@ -49,21 +49,10 @@ export function ProductCard({
   const unavailable = status !== 'Saatavilla';
 
   /**
-   * One line of context. A narrow tile fits the market name or the distance,
-   * not both, and the name is the more useful of the two; the wide layouts
-   * have room for the pair.
+   * One line of context: where the item is. On a market page the name would
+   * repeat on every card, so the city stands in for it.
    */
-  const km = market ? haversineKm(CITY_CENTERS[city] ?? CITY_CENTERS.Helsinki, market) : null;
-  const roomForBoth = fullWidth || layout === 'row';
-  const context = (
-    hideMarket
-      ? [km === null ? null : distance(km)]
-      : roomForBoth
-        ? [market?.name, km === null ? null : distance(km)]
-        : [market?.name]
-  )
-    .filter(Boolean)
-    .join(' · ');
+  const context = hideMarket ? (market?.city ?? '') : (market?.name ?? '');
 
   /**
    * One badge per card, in priority order: a blocked item first, because it

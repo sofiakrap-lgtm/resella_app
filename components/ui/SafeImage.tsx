@@ -40,12 +40,6 @@ const GLYPHS: Record<FallbackType, ReactNode> = {
   kirpputori: (
     <path d="M4 10.5 12 5l8 5.5V19H4v-8.5ZM9.5 19v-5h5v5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
   ),
-  myyja: (
-    <>
-      <circle cx="12" cy="9" r="3.4" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M5.5 20c1-3.4 3.6-5.2 6.5-5.2s5.5 1.8 6.5 5.2" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </>
-  ),
   logo: <circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" strokeWidth="1.6" />,
 };
 

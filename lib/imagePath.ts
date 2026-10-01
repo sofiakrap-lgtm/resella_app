@@ -14,7 +14,7 @@ const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 export const ASSET_BASE = `${BASE_PATH}/assets`;
 
-export type FallbackType = 'tuote' | 'kirpputori' | 'myyja' | 'logo';
+export type FallbackType = 'tuote' | 'kirpputori' | 'logo';
 
 /**
  * Written by `npm run sync-assets`: for each folder, a map from the name the
@@ -44,11 +44,6 @@ export function productImage(fileName: string): string {
 
 /** `market-ogeli-hki` -> `/assets/demo/market-ogeli-hki.jpg` */
 export function marketImage(name: string): string {
-  return assetUrl('demo', name, 'jpg');
-}
-
-/** `seller-anni-k` -> `/assets/demo/seller-anni-k.jpg` */
-export function sellerImage(name: string): string {
   return assetUrl('demo', name, 'jpg');
 }
 

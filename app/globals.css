@@ -156,6 +156,40 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
+   Loading screen
+--------------------------------------------------------------------------- */
+.loading-mark {
+  display: inline-flex;
+  animation: loading-breathe 1.8s ease-in-out infinite;
+}
+
+.loading-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--color-terracotta-ink);
+  animation: loading-bounce 1.1s ease-in-out infinite;
+}
+
+@keyframes loading-breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.93); opacity: 0.75; }
+}
+
+@keyframes loading-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.35; }
+  40% { transform: translateY(-5px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-mark, .loading-dot { animation: none; }
+  .loading-dot { opacity: 0.7; }
+}
+
+:root[data-motion='reduce'] .loading-mark,
+:root[data-motion='reduce'] .loading-dot { animation: none; }
+
+/* ---------------------------------------------------------------------------
    Layout, 8pt grid
 --------------------------------------------------------------------------- */
 .screen-x { padding-left: var(--screen-x); padding-right: var(--screen-x); }
@@ -164,6 +198,18 @@ body {
 /* ---------------------------------------------------------------------------
    Helpers
 --------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 

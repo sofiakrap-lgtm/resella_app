@@ -6,14 +6,12 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { productById } from '@/data/products';
 import { marketById, markets } from '@/data/markets';
-import { sellerById, sellers } from '@/data/sellers';
 import { applyFilters, emptyFilters, filtersToQuery } from '@/lib/filters';
 import { useApp } from '@/lib/state';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { Segmented } from '@/components/ui/Segmented';
 import { ProductCard } from '@/components/ProductCard';
 import { MarketCard } from '@/components/MarketHeader';
-import { SellerCard } from '@/components/SellerHeader';
 import { Button, IconButton } from '@/components/ui/Button';
 import { Tag } from '@/components/ui/Chip';
 import { EmptyState, ErrorState } from '@/components/ui/StateViews';
@@ -41,7 +39,6 @@ function ToivelistaContent() {
     savedSearches,
     removeSavedSearch,
     followedMarkets,
-    followedSellers,
     pushToast,
   } = useApp();
   const [segment, setSegment] = useState<Segment>('tuotteet');
@@ -68,7 +65,6 @@ function ToivelistaContent() {
 
   const saved = wishlist.map((id) => productById(id)).filter(Boolean);
   const followedMarketList = markets.filter((market) => followedMarkets.includes(market.id));
-  const followedSellerList = sellers.filter((seller) => followedSellers.includes(seller.id));
 
   const counts = useMemo(
     () =>
@@ -110,7 +106,7 @@ function ToivelistaContent() {
           options={[
             { value: 'tuotteet', label: `Tuotteet (${saved.length})` },
             { value: 'hakuvahdit', label: `Vahdit (${savedSearches.length})` },
-            { value: 'seuratut', label: `Seuratut (${followedMarketList.length + followedSellerList.length})` },
+            { value: 'seuratut', label: `Seuratut (${followedMarketList.length})` },
           ]}
         />
       </div>
@@ -200,30 +196,17 @@ function ToivelistaContent() {
             </div>
           </div>
         )
-      ) : followedMarketList.length + followedSellerList.length === 0 ? (
+      ) : followedMarketList.length === 0 ? (
         <EmptyState
-          title="Et seuraa vielä ketään"
-          body="Seuraa kirpputoria tai myyjää, niin näet uutuudet ensimmäisenä."
+          title="Et seuraa vielä yhtään kirpputoria"
+          body="Seuraa kirpputoria, niin näet sen uutuudet ensimmäisenä."
           action={<Button href="/selaa">Selaa kirpputoreja</Button>}
         />
       ) : (
         <div className="mt-3">
-          {followedMarketList.length ? (
-            <section>
-              <h2 className="t-headline px-4 pb-1">Kirpputorit</h2>
-              {followedMarketList.map((market, index) => (
-                <MarketCard key={market.id} market={market} index={index} />
-              ))}
-            </section>
-          ) : null}
-          {followedSellerList.length ? (
-            <section className="mt-5">
-              <h2 className="t-headline px-4 pb-1">Myyjät</h2>
-              {followedSellerList.map((seller, index) => (
-                <SellerCard key={seller.id} seller={seller} index={index} />
-              ))}
-            </section>
-          ) : null}
+          {followedMarketList.map((market, index) => (
+            <MarketCard key={market.id} market={market} index={index} />
+          ))}
         </div>
       )}
     </div>

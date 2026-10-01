@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useApp } from '@/lib/state';
 import { useTransition } from '@/lib/motion';
-import { products, newToday, productsBySeller } from '@/data/products';
+import { products, newToday } from '@/data/products';
 import { markets, marketById } from '@/data/markets';
 import { seedNotifications } from '@/data/notifications';
 import { CITY_CENTERS, haversineKm, inCity } from '@/lib/format';
@@ -16,7 +16,7 @@ import { MarketCard } from '@/components/MarketHeader';
 import { Button, IconButton } from '@/components/ui/Button';
 import { ErrorState } from '@/components/ui/StateViews';
 import { ProductCardSkeleton } from '@/components/ui/Skeleton';
-import { BellIcon, SearchIcon } from '@/components/ui/Icons';
+import { BellIcon, SearchIcon, SparkleIcon, PersonIcon } from '@/components/ui/Icons';
 
 export default function KotiPage() {
   return (
@@ -28,7 +28,7 @@ export default function KotiPage() {
 
 function KotiContent() {
   const search = useSearchParams();
-  const { city, interests, sizes, followedMarkets, followedSellers, readNotifications } = useApp();
+  const { city, interests, sizes, followedMarkets, readNotifications } = useApp();
   const transition = useTransition();
   const [loading, setLoading] = useState(true);
   /** The rest of the feed stays folded until the viewer asks for it. */
@@ -46,6 +46,8 @@ function KotiContent() {
   }, []);
 
   const unread = readNotifications.includes('all') ? 0 : seedNotifications.length;
+  /** Whether the viewer has told the app anything about themselves yet. */
+  const profileReady = interests.length > 0 || sizes.length > 0;
 
   /** New items from the markets and sellers this viewer follows. */
   const fromFollows = useMemo(
@@ -54,9 +56,9 @@ function KotiContent() {
         (product) =>
           product.status === 'Saatavilla' &&
           product.addedDaysAgo <= 1 &&
-          (followedMarkets.includes(product.marketId) || followedSellers.includes(product.sellerId)),
+          followedMarkets.includes(product.marketId),
       ),
-    [followedMarkets, followedSellers],
+    [followedMarkets],
   );
 
   const todayHere = useMemo(
@@ -94,7 +96,6 @@ function KotiContent() {
     .sort((a, b) => haversineKm(origin, a) - haversineKm(origin, b))
     .slice(0, 6);
   const followed = markets.filter((market) => followedMarkets.includes(market.id));
-  const followedSellerItems = followedSellers.flatMap((id) => productsBySeller(id)).slice(0, 10);
 
   if (failed) {
     return (
@@ -138,6 +139,33 @@ function KotiContent() {
         >
           <SearchIcon size={19} className="text-brown-70" />
           <span className="t-body truncate text-brown-70">Hae tuotetta, merkkiä tai kirppistä</span>
+        </Link>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-3 screen-x">
+        <Link
+          href="/sinulle"
+          className="flex min-h-[92px] flex-col justify-between rounded-[16px] bg-surface p-4 shadow-card"
+        >
+          <SparkleIcon size={24} className="text-brown" />
+          <span className="mt-3 block">
+            <span className="t-headline block">Sinulle</span>
+            <span className="t-caption block text-brown-70">
+              {profileReady ? 'Valintojesi mukaan' : 'Kokoamme valintojesi mukaan'}
+            </span>
+          </span>
+        </Link>
+        <Link
+          href="/onboarding"
+          className="flex min-h-[92px] flex-col justify-between rounded-[16px] bg-surface p-4 shadow-card"
+        >
+          <PersonIcon size={24} className="text-brown" />
+          <span className="mt-3 block">
+            <span className="t-headline block">{profileReady ? 'Oma profiili' : 'Tee profiili'}</span>
+            <span className="t-caption block text-brown-70">
+              {profileReady ? 'Muuta kiinnostuksia' : 'Kaupunki, koot, kiinnostukset'}
+            </span>
+          </span>
         </Link>
       </div>
 
@@ -226,9 +254,6 @@ function KotiContent() {
                 <ProductList title="Sinulle" products={forYou} href="/selaa" />
               ) : null}
               <ProductList title="Alle 30 euroa" products={affordable} href="/haku?max=30" />
-              {followedSellerItems.length ? (
-                <ProductList title="Seuraamiltasi myyjiltä" products={followedSellerItems} />
-              ) : null}
               {followed.length ? (
                 <section className="section">
                   <h3 className="t-title3 screen-x">Seuraamasi kirpputorit</h3>

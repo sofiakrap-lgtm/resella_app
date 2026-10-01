@@ -13,9 +13,12 @@ import { Button } from '@/components/ui/Button';
 import { Chip } from '@/components/ui/Chip';
 import { BrandWordmark } from '@/components/ui/BrandMark';
 
-/** Three light steps. No account, nothing blocking. */
+/** The sizes that actually appear in the catalogue, most common first. */
+const SIZE_OPTIONS = ['XS', 'S', 'M', 'L', 'XL', '36', '38', '40', '42', '39', '41', 'W29', 'W30'];
+
+/** Four light steps. No account, nothing blocking. */
 export default function OnboardingPage() {
-  const { set, city, interests } = useApp();
+  const { set, city, interests, sizes } = useApp();
   const router = useRouter();
   const transition = useTransition();
   const [step, setStep] = useState(0);
@@ -28,7 +31,7 @@ export default function OnboardingPage() {
 
   const go = (next: number) => {
     if (next < 0) return;
-    if (next > 2) {
+    if (next > 3) {
       finish();
       return;
     }
@@ -85,6 +88,26 @@ export default function OnboardingPage() {
               </div>
             ) : null}
 
+            {step === 3 ? (
+              <div>
+                <h1 className="t-title1 text-center">Mitkä koot?</h1>
+                <p className="t-subhead mt-2 text-center text-brown-70">
+                  Vapaaehtoinen. Nostamme sopivat löydöt esiin.
+                </p>
+                <div className="mt-6 flex flex-wrap justify-center gap-2">
+                  {SIZE_OPTIONS.map((size) => (
+                    <Chip
+                      key={size}
+                      selected={sizes.includes(size)}
+                      onClick={() => set('sizes', toggle(sizes, size))}
+                    >
+                      {size}
+                    </Chip>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
             {step === 2 ? (
               <div>
                 <h1 className="t-title1 text-center">Mikä kiinnostaa?</h1>
@@ -111,11 +134,11 @@ export default function OnboardingPage() {
       </div>
 
       <div className="mt-4 flex justify-center gap-2">
-        {[0, 1, 2].map((index) => (
+        {[0, 1, 2, 3].map((index) => (
           <button
             key={index}
             type="button"
-            aria-label={`Vaihe ${index + 1}/3`}
+            aria-label={`Vaihe ${index + 1}/4`}
             onClick={() => go(index)}
             className="flex h-11 w-11 items-center justify-center"
           >
@@ -130,7 +153,7 @@ export default function OnboardingPage() {
 
       <div className="mt-3">
         <Button full size="lg" onClick={() => go(step + 1)}>
-          {step === 2 ? 'Aloita selailu' : 'Jatka'}
+          {step === 3 ? 'Aloita selailu' : 'Jatka'}
         </Button>
         <p className="t-caption mt-3 text-center text-brown-70">
           Ei tarvitse luoda tiliä. Voit selata heti.

@@ -31,7 +31,6 @@ interface Stored {
   sizes: string[];
   wishlist: string[];
   followedMarkets: string[];
-  followedSellers: string[];
   savedSearches: SavedSearch[];
   reservations: Reservation[];
   /** Items this viewer has reserved, shown as "Varattu" to everyone. */
@@ -52,7 +51,6 @@ const defaults: Stored = {
   sizes: [],
   wishlist: [],
   followedMarkets: ['hertsika-hki'],
-  followedSellers: ['anni-k'],
   savedSearches: seedSavedSearches,
   reservations: [],
   reservedIds: [],
@@ -69,7 +67,6 @@ interface Value extends Stored {
   set: <K extends keyof Stored>(key: K, value: Stored[K]) => void;
   toggleWishlist: (productId: string) => void;
   toggleFollowMarket: (marketId: string) => void;
-  toggleFollowSeller: (sellerId: string) => void;
   addSavedSearch: (label: string, query: string, filters: Partial<Filters>) => void;
   removeSavedSearch: (id: string) => void;
   addRecentSearch: (query: string) => void;
@@ -169,11 +166,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setState((current) => ({
           ...current,
           followedMarkets: toggle(current.followedMarkets, marketId),
-        })),
-      toggleFollowSeller: (sellerId) =>
-        setState((current) => ({
-          ...current,
-          followedSellers: toggle(current.followedSellers, sellerId),
         })),
       addSavedSearch: (label, query, filters) =>
         setState((current) => ({

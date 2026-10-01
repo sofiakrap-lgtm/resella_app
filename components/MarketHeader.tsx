@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import type { Market } from '@/lib/types';
 import { marketImage } from '@/lib/imagePath';
-import { distance, haversineKm, CITY_CENTERS } from '@/lib/format';
 import { newTodayCount } from '@/data/products';
 import { openStatusLabel } from '@/lib/time';
 import { useApp, useNow } from '@/lib/state';
@@ -38,11 +37,8 @@ export function MarketCard({
   index?: number;
   layout?: 'row' | 'card';
 }) {
-  const { city } = useApp();
   const transition = useStagger(index);
   const tap = useTapScale(0.985);
-  const origin = CITY_CENTERS[city] ?? CITY_CENTERS.Helsinki;
-  const km = haversineKm(origin, market);
   const fresh = newTodayCount(market.id);
 
   const photo = (
@@ -72,7 +68,7 @@ export function MarketCard({
           <span className="mt-2 block">
             <span className="t-subhead block truncate font-semibold">{market.name}</span>
             <span className="t-caption block truncate text-brown-70">
-              {market.city}, {distance(km)}
+              {market.city}
             </span>
             <OpenStatus market={market} className="mt-0.5" />
           </span>
@@ -93,7 +89,7 @@ export function MarketCard({
         <span className="min-w-0 flex-1">
           <span className="t-headline block truncate">{market.name}</span>
           <span className="t-footnote block truncate text-brown-70">
-            {market.address}, {market.city}, {distance(km)}
+            {market.address}, {market.city}
           </span>
           <OpenStatus market={market} className="mt-0.5" />
           {fresh > 0 ? (

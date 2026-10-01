@@ -5,6 +5,7 @@ import { marketById } from '@/data/markets';
 export const emptyFilters: Filters = {
   query: '',
   categories: [],
+  subcategories: [],
   audiences: [],
   sizes: [],
   colors: [],
@@ -68,6 +69,8 @@ export function applyFilters(filters: Filters, list: Product[] = products): Prod
     if (!matchesQuery(product, filters.query)) return false;
     if (filters.categories.length && !filters.categories.includes(product.category)) return false;
     if (filters.audiences.length && !filters.audiences.includes(product.audience)) return false;
+    if (filters.subcategories.length && !filters.subcategories.includes(product.subcategory))
+      return false;
     if (filters.sizes.length && (!product.size || !filters.sizes.includes(product.size)))
       return false;
     if (filters.colors.length && !filters.colors.includes(product.color)) return false;
@@ -87,6 +90,7 @@ export function applyFilters(filters: Filters, list: Product[] = products): Prod
 export function activeFilterCount(filters: Filters): number {
   return (
     filters.categories.length +
+    filters.subcategories.length +
     filters.audiences.length +
     filters.sizes.length +
     filters.colors.length +
@@ -127,6 +131,7 @@ export function filtersToQuery(filters: Filters): string {
   };
   if (filters.query) params.set('q', filters.query);
   list('cat', filters.categories);
+  list('alakat', filters.subcategories);
   list('kenelle', filters.audiences);
   list('size', filters.sizes);
   list('color', filters.colors);
@@ -146,6 +151,7 @@ export function queryToFilters(params: URLSearchParams): Filters {
   return {
     query: params.get('q') ?? '',
     categories: list('cat') as CategorySlug[],
+    subcategories: list('alakat'),
     audiences: list('kenelle') as Audience[],
     sizes: list('size'),
     colors: list('color'),

@@ -36,6 +36,15 @@ export function FilterSheet({
   const toggle = <T,>(list: T[], value: T): T[] =>
     list.includes(value) ? list.filter((item) => item !== value) : [...list, value];
 
+  /** Only the subcategories that belong to the categories in play. */
+  const subcategories = Array.from(
+    new Set(
+      categories
+        .filter((category) => !draft.categories.length || draft.categories.includes(category.slug))
+        .flatMap((category) => category.subcategories),
+    ),
+  ).sort();
+
   const sizes = Array.from(
     new Set(
       categories
@@ -61,6 +70,11 @@ export function FilterSheet({
               {draft.categories.map((slug) => (
                 <Tag key={slug} tone="accent">
                   {categories.find((category) => category.slug === slug)?.name ?? slug}
+                </Tag>
+              ))}
+              {draft.subcategories.map((sub) => (
+                <Tag key={sub} tone="accent">
+                  {sub}
                 </Tag>
               ))}
               {draft.audiences.map((audience) => (
@@ -93,6 +107,7 @@ export function FilterSheet({
                   setDraft({
                     ...draft,
                     categories: [],
+                    subcategories: [],
                     audiences: [],
                     sizes: [],
                     colors: [],
@@ -151,6 +166,24 @@ export function FilterSheet({
             className="mt-2 h-11 w-full accent-[var(--color-terracotta)]"
           />
         </Group>
+
+        {subcategories.length ? (
+          <Group title="Mitä">
+            <div className="flex flex-wrap gap-2">
+              {subcategories.map((sub) => (
+                <Chip
+                  key={sub}
+                  selected={draft.subcategories.includes(sub)}
+                  onClick={() =>
+                    setDraft({ ...draft, subcategories: toggle(draft.subcategories, sub) })
+                  }
+                >
+                  {sub}
+                </Chip>
+              ))}
+            </div>
+          </Group>
+        ) : null}
 
         <Group title="Kenelle">
           <div className="flex flex-wrap gap-2">

@@ -4,12 +4,11 @@ import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { productById } from '@/data/products';
+import { productById, productsBySeller } from '@/data/products';
 import { marketById } from '@/data/markets';
-import { sellerById } from '@/data/sellers';
 import { categoryBySlug } from '@/data/categories';
 import { similarProducts } from '@/lib/filters';
-import { price, addedLabel, rating, distance, haversineKm, CITY_CENTERS } from '@/lib/format';
+import { price, addedLabel } from '@/lib/format';
 import { useApp } from '@/lib/state';
 import { useTransition } from '@/lib/motion';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
@@ -21,7 +20,6 @@ import { EmptyState, ErrorState } from '@/components/ui/StateViews';
 import { ProductRow } from '@/components/ProductCard';
 import { MarketMap } from '@/components/MarketMap';
 import { OpenStatus } from '@/components/MarketHeader';
-import { SellerAvatar, SellerWhere } from '@/components/SellerHeader';
 import {
   HeartIcon,
   ShareIcon,
@@ -41,8 +39,6 @@ export function ProductView() {
     city,
     wishlist,
     toggleWishlist,
-    followedSellers,
-    toggleFollowSeller,
     reservedIds,
     pushToast,
   } = useApp();
@@ -51,7 +47,6 @@ export function ProductView() {
 
   const product = productById(params.id);
   const market = product ? marketById(product.marketId) : undefined;
-  const seller = product ? sellerById(product.sellerId) : undefined;
 
   useEffect(() => {
     setFailed(search.get('demo') === 'error');
@@ -62,7 +57,7 @@ export function ProductView() {
     return () => window.clearTimeout(timer);
   }, [params.id]);
 
-  if (!product || !market || !seller) {
+  if (!product || !market) {
     return (
       <div>
         <ScreenHeader title="Tuote" back />
@@ -100,11 +95,22 @@ export function ProductView() {
   }
 
   const saved = wishlist.includes(product.id);
-  const following = followedSellers.includes(seller.id);
   const status = reservedIds.includes(product.id) ? 'Varattu' : product.status;
   const unavailable = status !== 'Saatavilla';
-  const km = haversineKm(CITY_CENTERS[city] ?? CITY_CENTERS.Helsinki, market);
   const category = categoryBySlug(product.category);
+  /** This viewer has reserved it, so the shelf is theirs to know. */
+  const reserved = reservedIds.includes(product.id);
+
+  /**
+   * The rest of what the same person brought, and then everything else that
+   * looks like this one. The seller has no page of their own, so this row is
+   * the only way their other items are reachable.
+   */
+  const fromSameSeller = productsBySeller(product.sellerId)
+    .filter((item) => item.id !== product.id && item.status !== 'Myyty')
+    .slice(0, 10);
+  const sellerIds = new Set(fromSameSeller.map((item) => item.id));
+  const similar = similarProducts(product).filter((item) => !sellerIds.has(item.id));
 
   return (
     <div className="pb-[120px]">
@@ -189,45 +195,24 @@ export function ProductView() {
               </span>
               <ChevronRight size={18} className="shrink-0 text-brown-50" />
             </Link>
-            <div className="flex items-center gap-4 border-t border-separator px-4 py-3">
-              <span className="t-subhead inline-flex items-center gap-1.5 font-semibold text-terracotta-ink">
-                <TagIcon size={16} />
-                {product.tableNumber}
-              </span>
-              <span className="t-subhead inline-flex items-center gap-1.5 text-brown-70">
-                <LocationIcon size={16} />
-                {distance(km)}
-              </span>
+            <div className="flex items-start gap-2 border-t border-separator px-4 py-3">
+              {reserved ? (
+                <span className="t-subhead inline-flex items-center gap-1.5 font-semibold text-terracotta-ink">
+                  <TagIcon size={16} />
+                  {product.tableNumber}
+                </span>
+              ) : (
+                <>
+                  <TagIcon size={16} className="mt-0.5 shrink-0 text-brown-70" />
+                  <span className="t-subhead text-brown-70">
+                    Tarkan paikan näet varauksen jälkeen.
+                  </span>
+                </>
+              )}
             </div>
             <Link href={`/kirpputori/${market.id}`} aria-label={`${market.name} kartalla`} className="block">
               <MarketMap markets={[market]} className="h-[140px] w-full" />
             </Link>
-          </div>
-        </section>
-
-        {/* Seller: the third browse dimension, reachable from every item */}
-        <section className="mt-5 px-4">
-          <h2 className="t-headline mb-2">Myyjä</h2>
-          <div className="rounded-[18px] bg-surface p-4 shadow-card">
-            <div className="flex items-center gap-3">
-              <SellerAvatar seller={seller} size={48} />
-              <span className="min-w-0 flex-1">
-                <span className="t-headline block truncate">{seller.name}</span>
-                <span className="t-footnote inline-flex items-center gap-1 text-brown-70">
-                  <StarIcon size={13} />
-                  {rating(seller.rating)} · {seller.reviewsCount} arvostelua
-                </span>
-              </span>
-              <Button size="sm" variant="secondary" onClick={() => toggleFollowSeller(seller.id)}>
-                {following ? 'Seurataan' : 'Seuraa'}
-              </Button>
-            </div>
-            <SellerWhere seller={seller} className="mt-3 block" />
-            <div className="mt-3">
-              <Button full variant="secondary" size="sm" href={`/myyja/${seller.id}`}>
-                Katso pöytä
-              </Button>
-            </div>
           </div>
         </section>
 
@@ -239,16 +224,16 @@ export function ProductView() {
               icon={<BellIcon size={18} />}
               onClick={() =>
                 pushToast({
-                  title: 'Ilmoitamme vastaavista',
-                  body: `Seuraat nyt myyjää ${seller.name}`,
-                  href: `/myyja/${seller.id}`,
+                  title: 'Hakuvahti tallennettu',
+                  body: `Ilmoitamme kun vastaava tulee myyntiin`,
+                  href: '/toivelista',
                 })
               }
             >
               Ilmoita kun vastaava tulee myyntiin
             </Button>
             <p className="t-footnote mt-2 text-center text-brown-70">
-              Tämä tuote on {status.toLowerCase()}. Seuraa myyjää, niin näet uudet heti.
+              Tämä tuote on {status.toLowerCase()}. Seuraa kirpputoria, niin näet uudet heti.
             </p>
           </div>
         ) : null}
@@ -264,7 +249,9 @@ export function ProductView() {
           </div>
         ) : null}
 
-        <ProductRow title="Samankaltaisia" products={similarProducts(product)} />
+        <ProductRow title="Myyjän muut tuotteet" products={fromSameSeller} />
+
+        <ProductRow title="Samankaltaisia" products={similar} />
       </motion.div>
 
       {!unavailable ? (

@@ -72,23 +72,7 @@ async function main() {
   }
   lines.push('');
 
-  const sellers = Object.entries(meta.places.sellers);
-  lines.push(`## 4. Myyjäkuvat, ${sellers.length} tiedostoa`);
-  lines.push('');
-  lines.push('Neliö, suositus 600 x 600 px. Ei tunnistettavia kasvoja: kädet, pöytä tai');
-  lines.push('vaaterekki riittää, koska myyjät ovat keksittyjä.');
-  lines.push('');
-  lines.push('| Tiedosto | Myyjä | Kirpputori |');
-  lines.push('|---|---|---|');
-  for (const [code, s] of sellers) {
-    const row = meta.csv.find((r) => r.Myyjätunnus === code);
-    lines.push(
-      `| \`assets/demo/seller-${s.id}.jpg\`${star(demo.has(`seller-${s.id}`))} | ${s.name} | ${row?.Kirpputori ?? ''}, pöytä ${row?.Pöytä ?? ''} |`,
-    );
-  }
-  lines.push('');
-
-  lines.push(`## 5. Tuotekuvat, ${meta.csv.length} tiedostoa`);
+  lines.push(`## 4. Tuotekuvat, ${meta.csv.length} tiedostoa`);
   lines.push('');
   lines.push('Nimet tulevat suoraan tuotetaulukosta, älä nimeä niitä uudelleen.');
   lines.push('Kaikki menevät kansioon `assets/product-photos`.');
@@ -111,13 +95,12 @@ async function main() {
     lines.push('');
   }
 
-  const total =
-    expected.logos.length + expected.graphics.length + markets.length + sellers.length + meta.csv.length;
+  const total = expected.logos.length + expected.graphics.length + markets.length + meta.csv.length;
   lines.push('## Yhteenveto');
   lines.push('');
   lines.push(
     `- Kaikkiaan ${total} kuvaa: ${expected.logos.length} logoa, ${expected.graphics.length} grafiikkaa, ` +
-      `${markets.length} kirpputorikuvaa, ${sellers.length} myyjäkuvaa ja ${meta.csv.length} tuotekuvaa.`,
+      `${markets.length} kirpputorikuvaa ja ${meta.csv.length} tuotekuvaa.`,
   );
   lines.push(`- Demon pääpolku (tähdellä merkityt): ${demo.size} kuvaa.`);
   lines.push('');

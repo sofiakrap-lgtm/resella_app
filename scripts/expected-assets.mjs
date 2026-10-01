@@ -50,7 +50,8 @@ export async function readExpected() {
 
   const productImages = csv.map((row) => stripExt(row.Kuvatiedosto));
   const marketImages = Object.values(places.markets).map((m) => `market-${m.id}`);
-  const sellerImages = Object.values(places.sellers).map((s) => `seller-${s.id}`);
+  // Sellers have no page of their own any more, so no photo is needed.
+  const sellerImages = [];
 
   return {
     logos: ['logo-wordmark', 'logo-wordmark-light', 'logo-mark', 'logo-mark-light'],
@@ -92,8 +93,6 @@ export function demoPathNames(expected) {
     'shape-wave',
     'shape-pebble',
     ...busiest.map((name) => `market-${meta.places.markets[name].id}`),
-    ...[...new Set(meta.csv.filter((r) => busiest.includes(r.Kirpputori)).map((r) => r.Myyjätunnus))]
-      .map((code) => `seller-${meta.places.sellers[code].id}`),
     ...meta.csv.slice(0, 12).map((r) => stripExt(r.Kuvatiedosto)),
   ];
 

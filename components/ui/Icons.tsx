@@ -363,3 +363,12 @@ export const categoryIcons: Record<string, (p: IconProps) => React.ReactElement>
   bag: BagIcon,
   glasses: GlassesIcon,
 };
+
+/** Parcel, for an item that is posted rather than picked up. */
+export const BoxIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M3 8.5 12 4l9 4.5v7L12 20l-9-4.5v-7Z" />
+    <path d="m3 8.5 9 4.5 9-4.5" />
+    <path d="M12 13v7" />
+  </Base>
+);
