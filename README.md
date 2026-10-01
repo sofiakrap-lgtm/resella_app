@@ -25,6 +25,7 @@ Muut komennot:
 ```bash
 npm run data         # luo /data tuotetaulukosta (aja CSV:n muutoksen jälkeen)
 npm run kuvalista    # luo assets/KUVALISTA.md samasta taulukosta
+npm run generoitavat # listaa vain puuttuvat kuvat generointikehotteineen
 npm run check-assets # kertoo mitkä kuvat puuttuvat ja mitkä nimet ovat väärin
 npm run build        # tuotantokäännös
 npm run start        # tuotantopalvelin
@@ -67,8 +68,10 @@ tiedostojärjestelmästä.
 
 ## Kuvat
 
-Oikeat kuvat pudotetaan kansioon `/assets`. Tarkka lista jokaisesta
-tiedostonimestä on tiedostossa [assets/KUVALISTA.md](assets/KUVALISTA.md), ja
+Oikeat kuvat pudotetaan kansioon `/assets`. Se mitä vielä puuttuu, valmiiden
+generointikehotteiden kanssa, on tiedostossa
+[assets/GENEROITAVAT.md](assets/GENEROITAVAT.md). Lista kaikista
+tiedostonimistä on tiedostossa [assets/KUVALISTA.md](assets/KUVALISTA.md), ja
 ohjeet lataamiseen [assets/README.md](assets/README.md). Ne kopioidaan
 automaattisesti kansioon `/public/assets` ennen `dev` ja `build` komentoja.
 Jokainen kuva renderöidään `<SafeImage>` komponentin kautta, joten puuttuva
