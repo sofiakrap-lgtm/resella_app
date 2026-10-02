@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { productById } from '@/data/products';
@@ -18,6 +18,7 @@ import { ListSection, ListRow, Toggle } from '@/components/ui/List';
 import { Button, IconButton } from '@/components/ui/Button';
 import { Tag } from '@/components/ui/Chip';
 import { ErrorState } from '@/components/ui/StateViews';
+import { Sheet } from '@/components/ui/Sheet';
 import { RowSkeleton } from '@/components/ui/Skeleton';
 import { Mascot } from '@/components/ui/Mascot';
 import {
@@ -60,6 +61,9 @@ function OmaContent() {
   } = useApp();
   // Demo switch: append ?demo=error to show the error state.
   const [failed, setFailed] = useState(false);
+  /** The demo controls live behind a long press, out of a visitor's way. */
+  const [presenterOpen, setPresenterOpen] = useState(false);
+  const pressTimer = useRef<number | undefined>(undefined);
 
   // Keeps the placeholder rows visible until the stored state is restored.
   const loading = !ready;
@@ -100,7 +104,17 @@ function OmaContent() {
       />
 
       <div className="px-4 pb-1 pt-1">
-        <h1 className="t-large-title" data-screen-title>Oma</h1>
+        <h1
+          className="t-large-title select-none"
+          data-screen-title
+          onPointerDown={() => {
+            pressTimer.current = window.setTimeout(() => setPresenterOpen(true), 600);
+          }}
+          onPointerUp={() => window.clearTimeout(pressTimer.current)}
+          onPointerLeave={() => window.clearTimeout(pressTimer.current)}
+        >
+          Oma
+        </h1>
       </div>
 
       <motion.section
@@ -257,12 +271,8 @@ function OmaContent() {
             />
           </ListSection>
 
-          <ListSection
-            title="Asetukset"
-            footer="Asetukset tallennetaan vain tähän laitteeseen. Demo ei kerää mitään tietoja."
-          >
+          <ListSection title="Asetukset">
             <ListRow label="Kaupunki" value={city} icon={<LocationIcon size={20} />} href="/onboarding" />
-            <ListRow label="Versio" value="Demo" icon={<SettingsIcon size={20} />} />
             <Toggle
               label="Suurempi teksti"
               description="Kasvattaa tekstin kokoa koko sovelluksessa"
@@ -283,29 +293,34 @@ function OmaContent() {
             />
           </ListSection>
 
-          <ListSection title="Demo">
-            <ListRow
-              label="Katso esittely uudelleen"
-              href="/onboarding"
-              icon={<SettingsIcon size={20} />}
-            />
-            <ListRow
-              label="Tyhjennä demon tiedot"
-              destructive
-              onClick={() => {
-                resetDemo();
-                pushToast({ title: 'Demo nollattu' });
-              }}
-            />
-          </ListSection>
 
-          <div className="px-5 pb-4 pt-6">
-            <p className="t-caption text-brown-70">
-              ReSella, demo. Tuotteet ja kirpputorit ovat esimerkkejä.
-            </p>
-          </div>
         </>
       )}
+
+      <Sheet
+        open={presenterOpen}
+        onClose={() => setPresenterOpen(false)}
+        title="Esittelijän valikko"
+        detents={[0.32]}
+        ariaLabel="Esittelijän valikko"
+      >
+        <div className="flex flex-col gap-2 px-4 pb-6">
+          <Button full variant="secondary" href="/onboarding">
+            Katso esittely uudelleen
+          </Button>
+          <Button
+            full
+            variant="secondary"
+            onClick={() => {
+              resetDemo();
+              setPresenterOpen(false);
+              pushToast({ title: 'Tiedot nollattu' });
+            }}
+          >
+            Nollaa tiedot
+          </Button>
+        </div>
+      </Sheet>
     </div>
   );
 }

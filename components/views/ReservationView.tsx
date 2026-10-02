@@ -155,7 +155,6 @@ export function ReservationView() {
                 MobilePay
               </button>
             </div>
-            <p className="t-caption mt-2 text-brown-70">Demossa maksu on esimerkki, mitään ei veloiteta.</p>
           </section>
         ) : (
           <section className="px-4 pt-6">

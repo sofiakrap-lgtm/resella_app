@@ -83,7 +83,7 @@ export function MarketView() {
     return (
       <div>
         <ScreenHeader title={market.name} back />
-        <Skeleton className="h-[200px] w-full rounded-none" />
+        <Skeleton className="aspect-[16/9] w-full rounded-none" />
         <div className="space-y-3 px-4 pt-4">
           <Skeleton className="h-6 w-2/3" />
           <Skeleton className="h-4 w-1/2" />
@@ -123,13 +123,28 @@ export function MarketView() {
         }
       />
 
-      <div className="h-[200px] w-full bg-cream-sink">
+      {/*
+        The cover photographs are not one shape: most are wide, one is upright.
+        Fitting the whole photograph into a fixed frame and filling what is
+        left with a blurred copy of itself keeps every market's own picture
+        intact without a bar of empty colour beside it.
+      */}
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-cream-sink">
+        <span
+          aria-hidden="true"
+          className="absolute -inset-[10%] bg-cover bg-center"
+          style={{
+            backgroundImage: `url("${marketImage(market.coverImage)}")`,
+            filter: 'blur(24px) saturate(120%)',
+            opacity: 0.55,
+          }}
+        />
         <SafeImage
           src={marketImage(market.coverImage)}
           alt={`${market.name}, kuva kirpputorilta`}
           label={market.name}
           fallbackType="kirpputori"
-          className="h-full w-full object-cover"
+          className="relative h-full w-full object-contain"
           priority
         />
       </div>

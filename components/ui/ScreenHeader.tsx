@@ -49,12 +49,20 @@ export function ScreenHeader({
       setTitleVisible(false);
       return;
     }
+    const element = target as HTMLElement;
     const observer = new IntersectionObserver(
-      ([entry]) => setTitleVisible(entry.isIntersecting),
+      ([entry]) => {
+        setTitleVisible(entry.isIntersecting);
+        element.style.transition = 'opacity 180ms ease';
+        element.style.opacity = entry.isIntersecting ? '1' : '0';
+      },
       { root: document.getElementById('app-scroll'), rootMargin: '-44px 0px 0px 0px' },
     );
     observer.observe(target);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      element.style.opacity = '';
+    };
   }, [largeTitleBelow, title]);
 
   const showTitle = largeTitleBelow ? !titleVisible : true;

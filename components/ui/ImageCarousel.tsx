@@ -40,7 +40,7 @@ export function ImageCarousel({ photos, alt, label, className = '', layoutId, ov
               src={productImage(photo)}
               alt={`${alt} ${photoIndex + 1}/${photos.length}`}
               label={label}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-contain"
               priority={photoIndex === 0}
             />
           </div>

@@ -84,7 +84,7 @@ export function ProductView() {
     return (
       <div>
         <ScreenHeader title={product.title} back />
-        <Skeleton className="h-[340px] w-full rounded-none" />
+        <Skeleton className="aspect-[4/5] w-full rounded-none" />
         <div className="space-y-3 px-4 pt-4">
           <Skeleton className="h-6 w-2/3" />
           <Skeleton className="h-7 w-1/3" />
@@ -142,7 +142,7 @@ export function ProductView() {
         photos={product.images}
         alt={product.title}
         label={product.title}
-        className="h-[340px] w-full"
+        className="aspect-[4/5] max-h-[62vh] w-full"
         overlay={
           unavailable ? (
             <span className="absolute inset-0 flex items-center justify-center bg-[rgba(60,36,21,0.45)]">

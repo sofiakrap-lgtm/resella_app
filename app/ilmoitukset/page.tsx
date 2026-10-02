@@ -110,10 +110,10 @@ function IlmoituksetContent() {
 
   return (
     <div className="pb-[120px]">
-      <ScreenHeader title="Ilmoitukset" back />
+      <ScreenHeader title="Ilmoitukset" back largeTitleBelow transparent />
 
-      <div className="px-4 pb-1 pt-2">
-        <h1 className="t-title1">Ilmoitukset</h1>
+      <div className="px-4 pb-1 pt-1">
+        <h1 className="t-large-title" data-screen-title>Ilmoitukset</h1>
       </div>
 
       {loading || !ready ? (

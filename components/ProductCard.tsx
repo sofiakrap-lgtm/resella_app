@@ -49,10 +49,10 @@ export function ProductCard({
   const unavailable = status !== 'Saatavilla';
 
   /**
-   * One line of context: where the item is. On a market page the name would
-   * repeat on every card, so the city stands in for it.
+   * One line of context: where the item is. On a market page every card is in
+   * the same place, so the line is dropped rather than repeated.
    */
-  const context = hideMarket ? (market?.city ?? '') : (market?.name ?? '');
+  const context = hideMarket ? '' : (market?.name ?? '');
 
   /**
    * One badge per card, in priority order: a blocked item first, because it
@@ -97,7 +97,7 @@ export function ProductCard({
       alt={`${product.title}, tuotekuva ${photo + 1}/${product.images.length}`}
       label={product.title}
       fallbackType="tuote"
-      className="h-full w-full object-cover"
+      className="h-full w-full object-contain"
     />
   );
 
@@ -162,7 +162,7 @@ export function ProductCard({
         <span className="absolute right-1 top-1 z-10">{heart}</span>
         <Link href={`/tuote/${product.id}`} className="block">
           <span
-            className="relative block aspect-[3/4] w-full overflow-hidden rounded-[16px] bg-cream-sink shadow-card"
+            className="relative block aspect-[4/5] w-full overflow-hidden rounded-[16px] bg-cream-sink shadow-card"
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >

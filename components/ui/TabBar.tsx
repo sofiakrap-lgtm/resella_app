@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
 import { useTapScale, useTransition } from '@/lib/motion';
 import { HomeIcon, SearchIcon, HeartIcon, PersonIcon } from './Icons';
 
@@ -15,41 +14,23 @@ const tabs = [
 ] as const;
 
 /**
- * iOS 26 style tab bar: a Liquid Glass capsule floating above the content that
- * minimizes when the content scrolls down and returns on the way up.
+ * iOS 26 style tab bar: a glass capsule floating 21px clear of the edges.
+ *
+ * It does not minimize on scroll. Minimizing is opt in on iOS, and with four
+ * tabs and no search field it only costs a tap to get back, while a tab bar's
+ * whole value is that it is always there.
  */
 export function TabBar() {
   const pathname = usePathname();
   const tap = useTapScale(0.94);
   const transition = useTransition('press');
-  const sheetTransition = useTransition('sheet');
-  const [minimized, setMinimized] = useState(false);
-
-  useEffect(() => {
-    const container = document.getElementById('app-scroll');
-    if (!container) return;
-    let previous = container.scrollTop;
-    const onScroll = () => {
-      const current = container.scrollTop;
-      if (current < 80) setMinimized(false);
-      else if (current > previous + 6) setMinimized(true);
-      else if (current < previous - 6) setMinimized(false);
-      previous = current;
-    };
-    container.addEventListener('scroll', onScroll, { passive: true });
-    return () => container.removeEventListener('scroll', onScroll);
-  }, []);
 
   return (
     <nav
       aria-label="Päävalikko"
-      className="pointer-events-none absolute inset-x-0 bottom-0 z-40 flex justify-center px-[21px] pb-[max(10px,env(safe-area-inset-bottom))]"
+      className="pointer-events-none absolute inset-x-0 bottom-0 z-40 flex justify-center px-[21px] pb-[max(21px,env(safe-area-inset-bottom))]"
     >
-      <motion.div
-        animate={{ scale: minimized ? 0.92 : 1, y: minimized ? 6 : 0 }}
-        transition={sheetTransition}
-        className="glass pointer-events-auto flex w-full items-stretch justify-between rounded-full px-1.5 py-1"
-      >
+      <div className="glass pointer-events-auto flex w-full items-stretch justify-between rounded-full p-1">
         {tabs.map(({ href, label, Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
           return (
@@ -58,27 +39,38 @@ export function TabBar() {
                 href={href}
                 aria-label={label}
                 aria-current={active ? 'page' : undefined}
-                className="flex min-h-[46px] flex-col items-center justify-center gap-0.5 rounded-full px-1"
-                style={{ color: active ? 'var(--color-terracotta-ink)' : 'var(--color-brown-70)' }}
+                className="relative flex min-h-[54px] flex-col items-center justify-center gap-[2px] rounded-full px-1"
+                style={{
+                  color: active ? 'var(--color-terracotta-ink)' : 'var(--color-brown)',
+                }}
               >
-                {href === '/toivelista' ? (
-                  <HeartIcon size={23} filled={active} />
-                ) : (
-                  <Icon size={23} />
-                )}
-                <motion.span
-                  className="t-caption max-w-full truncate"
-                  animate={{ opacity: minimized ? 0 : 1, height: minimized ? 0 : 'auto' }}
-                  transition={sheetTransition}
-                  style={{ fontWeight: active ? 600 : 400 }}
+                {/* The selected marker wraps the whole item, icon and label together. */}
+                {active ? (
+                  <motion.span
+                    layoutId="tab-selected"
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    className="absolute inset-0 rounded-full bg-[rgba(60,36,21,0.07)]"
+                  />
+                ) : null}
+                <span className="relative">
+                  <Icon size={26} filled={active} />
+                </span>
+                <span
+                  className="relative max-w-full truncate"
+                  style={{
+                    fontSize: '11px',
+                    lineHeight: '13px',
+                    letterSpacing: '0.01em',
+                    fontWeight: active ? 600 : 500,
+                  }}
                 >
                   {label}
-                </motion.span>
+                </span>
               </Link>
             </motion.div>
           );
         })}
-      </motion.div>
+      </div>
     </nav>
   );
 }

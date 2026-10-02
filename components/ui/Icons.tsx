@@ -27,15 +27,26 @@ function Base({ size = 24, children, ...rest }: IconProps) {
   );
 }
 
-export const HomeIcon = (p: IconProps) => (
+/**
+ * The tab bar asks for a filled glyph when selected, the way SF Symbols does.
+ * The roof stays a stroke in both states so the shape reads the same.
+ */
+export const HomeIcon = ({ filled = false, ...p }: IconProps & { filled?: boolean }) => (
   <Base {...p}>
-    <path d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z" />
-    <path d="M9.5 20.5v-6h5v6" />
+    <path
+      d="M4 10.5 12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19v-8.5Z"
+      fill={filled ? 'currentColor' : 'none'}
+    />
+    <path d="M9.5 20.5v-6h5v6" fill={filled ? 'var(--color-cream)' : 'none'} />
   </Base>
 );
 
-export const SearchIcon = (p: IconProps) => (
-  <Base {...p}>
+/**
+ * The magnifier has no filled counterpart in SF Symbols, so selection shows
+ * as a heavier stroke rather than a fill.
+ */
+export const SearchIcon = ({ filled = false, ...p }: IconProps & { filled?: boolean }) => (
+  <Base {...p} strokeWidth={filled ? 2.2 : 1.8}>
     <circle cx="11" cy="11" r="6.5" />
     <path d="m16 16 4.5 4.5" />
   </Base>
@@ -54,8 +65,8 @@ export const HeartIcon = ({ filled = false, ...p }: IconProps & { filled?: boole
   </Base>
 );
 
-export const PersonIcon = (p: IconProps) => (
-  <Base {...p}>
+export const PersonIcon = ({ filled = false, ...p }: IconProps & { filled?: boolean }) => (
+  <Base {...p} fill={filled ? 'currentColor' : 'none'}>
     <circle cx="12" cy="8.5" r="3.8" />
     <path d="M4.8 20c.9-3.6 3.8-5.6 7.2-5.6s6.3 2 7.2 5.6" />
   </Base>
