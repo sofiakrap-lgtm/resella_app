@@ -67,7 +67,7 @@ export function ReservationView() {
   };
 
   return (
-    <div className="pb-10">
+    <div className="pb-[120px]">
       <ScreenHeader title={buying ? 'Osta ja tilaa kotiin' : 'Varaa noudettavaksi'} back />
 
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={transition}>

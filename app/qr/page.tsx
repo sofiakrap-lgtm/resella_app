@@ -77,7 +77,7 @@ function QrContent() {
   const countdown = deadline && now ? countdownLabel(deadline, now) : null;
 
   return (
-    <div className="pb-10">
+    <div className="pb-[120px]">
       <ScreenHeader title={bought ? 'Tilaus' : 'Noutokoodi'} back="/oma" />
 
       <motion.div

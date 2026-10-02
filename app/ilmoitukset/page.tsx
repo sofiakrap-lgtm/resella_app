@@ -109,7 +109,7 @@ function IlmoituksetContent() {
   }
 
   return (
-    <div className="pb-6">
+    <div className="pb-[120px]">
       <ScreenHeader title="Ilmoitukset" back />
 
       <div className="px-4 pb-1 pt-2">
