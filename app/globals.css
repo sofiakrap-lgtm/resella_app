@@ -97,7 +97,10 @@
   --shadow-raised: var(--shadow-raised);
 
   --font-sans:
-    'Helvetica Now Text', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
+    var(--font-sans-face), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue',
+    Helvetica, Arial, sans-serif;
+  --font-display:
+    var(--font-display-face), var(--font-sans-face), -apple-system, BlinkMacSystemFont,
     'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -120,6 +123,14 @@ body {
    which is what dyslexia guidance asks for and what WCAG 1.4.12 overrides to
    anyway, so the layout is built for that spacing rather than broken by it.
 --------------------------------------------------------------------------- */
+/* Titles take the display face; everything read as text keeps the body face. */
+.t-large-title,
+.t-title1,
+.t-title2,
+.t-title3 {
+  font-family: var(--font-display);
+}
+
 .t-large-title { font-size: 2.125rem; line-height: 1.21; font-weight: 700; letter-spacing: -0.02em; }
 .t-title1 { font-size: 1.75rem; line-height: 1.22; font-weight: 700; letter-spacing: -0.015em; }
 .t-title2 { font-size: 1.375rem; line-height: 1.28; font-weight: 700; letter-spacing: -0.01em; }
