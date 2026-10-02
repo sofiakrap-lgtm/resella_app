@@ -1,6 +1,6 @@
-# ReSello, kuluttaja-appin demo
+# ReSella, kuluttaja-appin demo
 
-Interaktiivinen, iOS 26 tyylinen web-demo ReSellon kuluttajasovelluksesta.
+Interaktiivinen, iOS 26 tyylinen web-demo ReSellan kuluttajasovelluksesta.
 Demo näyttää valmiilta sovellukselta: sitä voi esitellä suoraan puhelimesta tai
 työpöydältä.
 

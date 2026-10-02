@@ -301,7 +301,7 @@ function OmaContent() {
 
           <div className="px-5 pb-4 pt-6">
             <p className="t-caption text-brown-70">
-              ReSello, demo. Tuotteet ja kirpputorit ovat esimerkkejä.
+              ReSella, demo. Tuotteet ja kirpputorit ovat esimerkkejä.
             </p>
           </div>
         </>

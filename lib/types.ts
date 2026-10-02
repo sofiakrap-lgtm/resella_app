@@ -1,4 +1,4 @@
-/** Shared types for the ReSello consumer app. */
+/** Shared types for the ReSella consumer app. */
 
 /** The four grades used in the product sheet. */
 export type Condition = 'Erinomainen' | 'Hyvä' | 'Kohtalainen' | 'Kulunut';

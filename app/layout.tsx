@@ -7,13 +7,13 @@ import { AppShell } from '@/components/ui/AppShell';
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 export const metadata: Metadata = {
-  title: 'ReSello',
+  title: 'ReSella',
   description:
-    'ReSello, löydä aarteesi läheltä. Selaa kirpputorien tuotteita ja näe heti, missä kaapissa ne odottavat.',
+    'ReSella, löydä aarteesi läheltä. Selaa kirpputorien tuotteita ja näe heti, missä kaapissa ne odottavat.',
   manifest: `${BASE_PATH}/manifest.webmanifest`,
   appleWebApp: {
     capable: true,
-    title: 'ReSello',
+    title: 'ReSella',
     statusBarStyle: 'default',
   },
   icons: {

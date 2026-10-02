@@ -78,7 +78,7 @@ async function main() {
   const missingDemo = [];
   const wrongFormat = [];
 
-  console.log('\nReSello, kuvien tarkistus\n');
+  console.log('\nReSella, kuvien tarkistus\n');
 
   for (const [folder, names] of Object.entries(expected)) {
     const files = await listFiles(folder);

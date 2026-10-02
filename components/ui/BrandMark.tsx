@@ -36,14 +36,14 @@ export function BrandWordmark({
   return (
     <SafeImage
       src={light ? logos.wordmarkLight : logos.wordmark}
-      alt="ReSello"
+      alt="ReSella"
       fallbackType="logo"
       className={className}
       style={{ height, width: 'auto' }}
       fallback={
         <span className={`inline-flex items-center gap-2 ${className}`}>
           <BrandMark size={Math.round(height * 0.8)} />
-          <span className="t-title3 tracking-tight">ReSello</span>
+          <span className="t-title3 tracking-tight">ReSella</span>
         </span>
       }
     />
@@ -59,7 +59,7 @@ export function BrandLockup({ size = 72, className = '' }: { size?: number; clas
   return (
     <SafeImage
       src={logos.mark}
-      alt="ReSello"
+      alt="ReSella"
       fallbackType="logo"
       className={className}
       style={{ width: size, height: 'auto' }}

@@ -1,4 +1,4 @@
-# ReSello, kuvatiedostot / image assets
+# ReSella, kuvatiedostot / image assets
 
 > Tarkka lista jokaisesta tiedostonimestä: [KUVALISTA.md](KUVALISTA.md)
 
@@ -45,7 +45,7 @@ git add assets && git commit -m "Lisää tuotekuvat" && git push
 
 
 Pudota oikeat kuvat tähän kansioon. Demo toimii ilman niitäkin: jos tiedosto
-puuttuu, sovellus näyttää brändinmukaisen paikkamerkin (ReSello-merkki ja
+puuttuu, sovellus näyttää brändinmukaisen paikkamerkin (ReSella-merkki ja
 hillitty värikenttä), ei koskaan rikkinäistä kuvaa.
 
 Kun tiedostot ovat paikallaan, aja `npm run sync-assets` (tai käynnistä
@@ -90,7 +90,7 @@ nimeämistapaa, muuta se siellä, älä komponenteissa.
 ## In English
 
 Drop the real images into this folder. The demo works without them: a missing
-file renders a branded placeholder (ReSello mark on a muted colour field), never
+file renders a branded placeholder (ReSella mark on a muted colour field), never
 a broken image.
 
 After adding files run `npm run sync-assets` (or restart `npm run dev`, which

@@ -39,7 +39,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           {chromeless ? null : <TabBar />}
           <ToastHost />
         </div>
-        <p className="t-caption mt-4 hidden text-center text-brown-70 md:block">ReSello, demo</p>
+        <p className="t-caption mt-4 hidden text-center text-brown-70 md:block">ReSella, demo</p>
       </div>
     </div>
     </KonstaProvider>

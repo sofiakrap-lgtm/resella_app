@@ -24,7 +24,7 @@ export function Mascot({
   const drawing = <Drawing pose={pose} size={size} />;
 
   const content = (
-    <SafeImage src={mascot[pose]} alt="ReSellon hahmo" className={className} fallback={drawing} />
+    <SafeImage src={mascot[pose]} alt="ReSellan hahmo" className={className} fallback={drawing} />
   );
 
   if (!animate) return content;

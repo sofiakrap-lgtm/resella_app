@@ -1,6 +1,6 @@
 {
-  "name": "ReSello",
-  "short_name": "ReSello",
+  "name": "ReSella",
+  "short_name": "ReSella",
   "description": "Löydä aarteesi läheltä. Selaa kirpputorien tuotteita ja näe heti, missä kaapissa ne odottavat.",
   "start_url": "koti/",
   "display": "standalone",

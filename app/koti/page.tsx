@@ -101,7 +101,7 @@ function KotiContent() {
   if (failed) {
     return (
       <div>
-        <ScreenHeader title="ReSello" />
+        <ScreenHeader title="ReSella" />
         <ErrorState
           onRetry={() => {
             setFailed(false);
@@ -115,7 +115,7 @@ function KotiContent() {
   return (
     <div>
       <ScreenHeader
-        title="ReSello"
+        title="ReSella"
         largeTitleBelow
         transparent
         right={
@@ -131,7 +131,7 @@ function KotiContent() {
       <div className="px-4 pb-1 pt-1">
         <h2 data-screen-title>
           <BrandWordmark height={26} />
-          <span className="sr-only">ReSello</span>
+          <span className="sr-only">ReSella</span>
         </h2>
       </div>
 
