@@ -10,6 +10,7 @@
     "start": "next start",
     "sync-assets": "node scripts/sync-assets.mjs",
     "typecheck": "tsc --noEmit",
+    "prebuild:export": "node scripts/sync-assets.mjs",
     "build:export": "NEXT_EXPORT=1 next build",
     "check-assets": "node scripts/check-assets.mjs",
     "kuvalista": "node scripts/kuvalista.mjs",
