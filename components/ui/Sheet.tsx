@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, type PanInfo } from 'framer-motion';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { useTransition } from '@/lib/motion';
+import { openedSheet, closedSheet } from '@/lib/sheets';
 import { IconButton } from './Button';
 import { CloseIcon } from './Icons';
 
@@ -43,6 +44,12 @@ export function Sheet({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [containerHeight, setContainerHeight] = useState(0);
   const [detentIndex, setDetentIndex] = useState(initialDetentIndex ?? detents.length - 1);
+
+  useEffect(() => {
+    if (!open) return;
+    openedSheet();
+    return closedSheet;
+  }, [open]);
 
   useLayoutEffect(() => {
     if (!open) return;
@@ -127,7 +134,7 @@ export function Sheet({
               className="pointer-events-auto absolute inset-x-0 bottom-0 flex flex-col overflow-hidden rounded-t-[22px] bg-surface shadow-raised"
             >
               <div className="glass-flat shrink-0 rounded-t-[22px] border-b border-separator px-4 pb-2 pt-2">
-                <div className="mx-auto h-1.5 w-10 rounded-full bg-brown-50" aria-hidden="true" />
+                <div className="mx-auto h-[5px] w-9 rounded-full bg-brown-50" aria-hidden="true" />
                 {title ? (
                   <div className="mt-2 flex items-center justify-between">
                     <h2 className="t-headline">{title}</h2>

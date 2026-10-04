@@ -170,7 +170,7 @@ function QrContent() {
         {bought ? null : (
           <Button
             full
-            variant="secondary"
+            variant="bordered"
             href={`/kirpputori/${market.id}`}
             icon={<LocationIcon size={18} />}
           >
@@ -212,7 +212,7 @@ function QrContent() {
             >
               Peru varaus
             </Button>
-            <Button full variant="secondary" onClick={() => setConfirmOpen(false)}>
+            <Button full variant="bordered" onClick={() => setConfirmOpen(false)}>
               Pidä varaus
             </Button>
           </div>

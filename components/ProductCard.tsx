@@ -10,7 +10,8 @@ import { productImage } from '@/lib/imagePath';
 import { useApp } from '@/lib/state';
 import { useStagger, useTapScale } from '@/lib/motion';
 import { SafeImage } from './ui/SafeImage';
-import { IconButton } from './ui/Button';
+import { Button, IconButton } from './ui/Button';
+import { Sheet } from './ui/Sheet';
 import { HeartIcon } from './ui/Icons';
 
 interface ProductCardProps {
@@ -43,6 +44,8 @@ export function ProductCard({
   const market = marketById(product.marketId);
   const saved = wishlist.includes(product.id);
   const [photo, setPhoto] = useState(0);
+  const [quickOpen, setQuickOpen] = useState(false);
+  const peek = useRef<number | undefined>(undefined);
   const touchStart = useRef<number | null>(null);
 
   const status = reservedIds.includes(product.id) ? 'Varattu' : product.status;
@@ -97,7 +100,7 @@ export function ProductCard({
       alt={`${product.title}, tuotekuva ${photo + 1}/${product.images.length}`}
       label={product.title}
       fallbackType="tuote"
-      className="h-full w-full object-contain"
+      className="h-full w-full object-cover"
     />
   );
 
@@ -138,8 +141,8 @@ export function ProductCard({
               {statusOverlay}
             </span>
             <span className="min-w-0 flex-1">
-              <span className="t-headline block truncate">{product.title}</span>
-              <span className="t-headline mt-0.5 block">{price(product.priceEur)}</span>
+              <span className="t-card-title block truncate">{product.title}</span>
+              <span className="t-card-price mt-0.5 block">{price(product.priceEur)}</span>
               <span className="t-subhead mt-0.5 block truncate text-brown-70">{context}</span>
               {badge ? <Badge>{badge}</Badge> : null}
             </span>
@@ -158,11 +161,27 @@ export function ProductCard({
       whileTap={tap}
       className={fullWidth ? 'w-full' : 'w-[168px] shrink-0'}
     >
-      <div className="relative">
+      <div
+        className="relative"
+        onPointerDown={() => {
+          // A long press opens the quick view instead of the product page.
+          peek.current = window.setTimeout(() => setQuickOpen(true), 500);
+        }}
+        onPointerUp={() => window.clearTimeout(peek.current)}
+        onPointerMove={() => window.clearTimeout(peek.current)}
+        onPointerLeave={() => window.clearTimeout(peek.current)}
+        onContextMenu={(event) => event.preventDefault()}
+      >
         <span className="absolute right-1 top-1 z-10">{heart}</span>
-        <Link href={`/tuote/${product.id}`} className="block">
+        <Link
+          href={`/tuote/${product.id}`}
+          className="block"
+          onClick={(event) => {
+            if (quickOpen) event.preventDefault();
+          }}
+        >
           <span
-            className="relative block aspect-[4/5] w-full overflow-hidden rounded-[16px] bg-cream-sink shadow-card"
+            className="relative block aspect-[4/5] w-full overflow-hidden rounded-[12px] bg-cream-sink shadow-card"
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
           >
@@ -176,12 +195,46 @@ export function ProductCard({
             ) : null}
           </span>
           <span className="mt-2 block">
-            <span className="t-headline block truncate">{product.title}</span>
-            <span className="t-headline mt-0.5 block">{price(product.priceEur)}</span>
+            <span className="t-card-title block truncate">{product.title}</span>
+            <span className="t-card-price mt-0.5 block">{price(product.priceEur)}</span>
             <span className="t-subhead mt-0.5 block truncate text-brown-70">{context}</span>
           </span>
         </Link>
       </div>
+
+      <Sheet
+        open={quickOpen}
+        onClose={() => setQuickOpen(false)}
+        title={product.title}
+        detents={[0.5]}
+        ariaLabel="Pikakatselu"
+      >
+        <div className="px-4 pb-6">
+          <span className="block aspect-[4/5] w-full overflow-hidden rounded-[12px] bg-cream-sink">
+            {image}
+          </span>
+          <p className="t-price-lg mt-3">{price(product.priceEur)}</p>
+          <p className="t-subhead mt-1 text-brown-70">
+            {market?.name}
+            {product.size ? `, koko ${product.size}` : ''}
+          </p>
+          <div className="mt-4 flex flex-col gap-2">
+            <Button full href={`/tuote/${product.id}`} onClick={() => setQuickOpen(false)}>
+              Avaa tuote
+            </Button>
+            <Button
+              full
+              variant="bordered"
+              onClick={() => {
+                toggleWishlist(product.id);
+                setQuickOpen(false);
+              }}
+            >
+              {saved ? 'Poista toivelistalta' : 'Tallenna toivelistalle'}
+            </Button>
+          </div>
+        </div>
+      </Sheet>
     </motion.div>
   );
 }

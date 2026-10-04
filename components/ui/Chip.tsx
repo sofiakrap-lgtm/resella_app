@@ -19,7 +19,7 @@ export function Chip({
   className?: string;
   ariaLabel?: string;
 }) {
-  const tap = useTapScale();
+  const tap = useTapScale(0.96);
   const transition = useTransition('press');
   return (
     <motion.button

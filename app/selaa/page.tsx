@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Suspense, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useApp } from '@/lib/state';
 import { categories } from '@/data/categories';
 import { markets, cities } from '@/data/markets';
@@ -11,6 +11,7 @@ import { CITY_CENTERS, haversineKm } from '@/lib/format';
 import { isOpenNow } from '@/lib/time';
 import { useNow } from '@/lib/state';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
+import { SearchField } from '@/components/ui/SearchField';
 import { Segmented } from '@/components/ui/Segmented';
 import { Chip } from '@/components/ui/Chip';
 import { MarketCard } from '@/components/MarketHeader';
@@ -34,6 +35,7 @@ export default function SelaaPage() {
 
 function SelaaContent() {
   const params = useSearchParams();
+  const router = useRouter();
   const { city } = useApp();
   const now = useNow();
   const [segment, setSegment] = useState<Segment>(
@@ -82,13 +84,13 @@ function SelaaContent() {
       <ScreenHeader title="Selaa" transparent />
 
       <div className="sticky top-[44px] z-20 glass px-4 pb-3 pt-2">
-        <Link
-          href="/haku"
-          className="flex min-h-11 items-center gap-2 rounded-full bg-surface px-4 py-2.5 shadow-card"
-        >
-          <SearchIcon size={19} className="text-brown-70" />
-          <span className="t-body truncate text-brown-70">Hae tai kysy, esim. villapaita koko M</span>
-        </Link>
+        <SearchField
+          value=""
+          onSearch={(next) => {
+            if (next.trim()) router.push(`/haku?q=${encodeURIComponent(next.trim())}`);
+          }}
+          placeholder="Hae tai kysy, esim. villapaita koko M"
+        />
         <div className="mt-2">
           <Segmented
             ariaLabel="Selaustapa"
@@ -135,7 +137,7 @@ function SelaaContent() {
         <section className="mt-4">
           <div className="flex items-center gap-2 screen-x">
             <Button
-              variant="secondary"
+              variant="bordered"
               size="sm"
               onClick={() => setFiltersOpen(true)}
               icon={<FilterIcon size={18} />}
@@ -200,7 +202,7 @@ function SelaaContent() {
         open={filtersOpen}
         onClose={() => setFiltersOpen(false)}
         title="Suodata kirpputorit"
-        detents={[0.55]}
+        detents={[0.5, 0.92]}
         ariaLabel="Kirpputorien suodattimet"
       >
         <div className="px-4 pb-8">

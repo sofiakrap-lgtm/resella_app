@@ -96,6 +96,14 @@ export const CloseIcon = (p: IconProps) => (
   </Base>
 );
 
+/** The filled clear glyph a search field carries, as x.circle.fill does. */
+export const CloseCircleIcon = (p: IconProps) => (
+  <Base {...p} fill="none">
+    <circle cx="12" cy="12" r="9" fill="currentColor" stroke="none" />
+    <path d="m9 9 6 6M15 9l-6 6" stroke="var(--color-cream-sink)" strokeWidth="2" />
+  </Base>
+);
+
 export const CheckIcon = (p: IconProps) => (
   <Base {...p}>
     <path d="m5 12.5 4.5 4.5L19 7" />

@@ -134,7 +134,7 @@ function ToivelistaContent() {
             <div className="flex justify-end px-4 pt-3">
               <Button
                 size="sm"
-                variant="secondary"
+                variant="bordered"
                 icon={<ShareIcon size={16} />}
                 onClick={() => pushToast({ title: 'Kokoelman linkki kopioitu' })}
               >
@@ -191,7 +191,7 @@ function ToivelistaContent() {
               </motion.article>
             ))}
             <div className="px-4 py-5">
-              <Button full variant="secondary" href="/haku" icon={<SearchIcon size={18} />}>
+              <Button full variant="bordered" href="/haku" icon={<SearchIcon size={18} />}>
                 Uusi hakuvahti
               </Button>
             </div>

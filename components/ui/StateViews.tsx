@@ -34,7 +34,7 @@ export function ErrorState({ onRetry }: { onRetry: () => void }) {
       <p className="t-subhead mt-2 text-brown-70">
         Emme saaneet tietoja juuri nyt. Kokeile hetken päästä uudelleen.
       </p>
-      <Button className="mt-5" onClick={onRetry} variant="secondary">
+      <Button className="mt-5" onClick={onRetry} variant="bordered">
         Yritä uudelleen
       </Button>
     </div>

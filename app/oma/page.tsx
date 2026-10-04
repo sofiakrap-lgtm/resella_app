@@ -149,7 +149,7 @@ function OmaContent() {
                   Ei voimassa olevia varauksia. Varaa löytö, niin se odottaa sinua kassalla.
                 </p>
                 <div className="mt-4 flex justify-center">
-                  <Button size="sm" variant="secondary" href="/selaa">
+                  <Button size="sm" variant="bordered" href="/selaa">
                     Selaa tuotteita
                   </Button>
                 </div>
@@ -305,12 +305,12 @@ function OmaContent() {
         ariaLabel="Esittelijän valikko"
       >
         <div className="flex flex-col gap-2 px-4 pb-6">
-          <Button full variant="secondary" href="/onboarding">
+          <Button full variant="bordered" href="/onboarding">
             Katso esittely uudelleen
           </Button>
           <Button
             full
-            variant="secondary"
+            variant="bordered"
             onClick={() => {
               resetDemo();
               setPresenterOpen(false);

@@ -61,7 +61,7 @@ export function FilterSheet({
   );
 
   return (
-    <Sheet open={open} onClose={onClose} title="Suodata" detents={[0.55, 0.92]}>
+    <Sheet open={open} onClose={onClose} title="Suodata" detents={[0.5, 0.92]}>
       <div className="px-4 pb-32 pt-3">
         {activeFilterCount(draft) > 0 ? (
           <section className="mb-5">

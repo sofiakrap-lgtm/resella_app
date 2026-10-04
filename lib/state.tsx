@@ -70,6 +70,7 @@ interface Value extends Stored {
   addSavedSearch: (label: string, query: string, filters: Partial<Filters>) => void;
   removeSavedSearch: (id: string) => void;
   addRecentSearch: (query: string) => void;
+  clearRecentSearches: () => void;
   toggleStyleLike: (productId: string) => void;
   reserve: (input: Omit<Reservation, 'id' | 'code' | 'createdAtIso'>) => Reservation;
   cancelReservation: (id: string) => void;
@@ -192,6 +193,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
             ),
           };
         }),
+      clearRecentSearches: () => setState((current) => ({ ...current, recentSearches: [] })),
       toggleStyleLike: (productId) =>
         setState((current) => ({ ...current, styleLikes: toggle(current.styleLikes, productId) })),
       reserve: (input) => {

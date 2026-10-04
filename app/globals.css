@@ -118,34 +118,82 @@ body {
 }
 
 /* ---------------------------------------------------------------------------
-   Type scale on the iOS point ladder (34, 28, 22, 20, 17, 15, 13, 12).
-   Display sizes take the tight iOS leading. Reading sizes keep 1.45 to 1.5,
-   which is what dyslexia guidance asks for and what WCAG 1.4.12 overrides to
-   anyway, so the layout is built for that spacing rather than broken by it.
+   Type scale, one step down from the iOS ladder.
+
+   Sizes are stated in points and multiplied by --text-scale, so the
+   "Suurempi teksti" setting still moves the whole app. Leading is a ratio
+   rather than a fixed height, so the WCAG 1.4.12 override to 1.5 widens the
+   lines instead of clipping them.
 --------------------------------------------------------------------------- */
+:root {
+  --fs-large-title: calc(28px * var(--text-scale));
+  --fs-nav-title: calc(17px * var(--text-scale));
+  --fs-section: calc(19px * var(--text-scale));
+  --fs-product: calc(19px * var(--text-scale));
+  --fs-price-lg: calc(22px * var(--text-scale));
+  --fs-headline: calc(16px * var(--text-scale));
+  --fs-body: calc(16px * var(--text-scale));
+  --fs-card-title: calc(15px * var(--text-scale));
+  --fs-card-price: calc(15px * var(--text-scale));
+  --fs-subhead: calc(13px * var(--text-scale));
+  --fs-footnote: calc(12px * var(--text-scale));
+  --fs-caption: calc(11px * var(--text-scale));
+  --fs-tab: calc(11px * var(--text-scale));
+}
+
 /* Titles take the display face; everything read as text keeps the body face. */
 .t-large-title,
+.t-nav-title,
+.t-section,
+.t-product,
+.t-price-lg,
 .t-title1,
 .t-title2,
 .t-title3 {
   font-family: var(--font-display);
 }
 
-.t-large-title { font-size: 2.125rem; line-height: 1.21; font-weight: 700; letter-spacing: -0.02em; }
-.t-title1 { font-size: 1.75rem; line-height: 1.22; font-weight: 700; letter-spacing: -0.015em; }
-.t-title2 { font-size: 1.375rem; line-height: 1.28; font-weight: 700; letter-spacing: -0.01em; }
-.t-title3 { font-size: 1.25rem; line-height: 1.25; font-weight: 600; }
-.t-headline { font-size: 1.0625rem; line-height: 1.35; font-weight: 600; }
-.t-body { font-size: 1.0625rem; line-height: 1.5; }
-.t-subhead { font-size: 0.9375rem; line-height: 1.5; }
-.t-footnote { font-size: 0.8125rem; line-height: 1.45; }
-.t-caption { font-size: 0.75rem; line-height: 1.4; }
+.t-large-title { font-size: var(--fs-large-title); line-height: 1.215; font-weight: 700; letter-spacing: -0.02em; }
+.t-nav-title { font-size: var(--fs-nav-title); line-height: 1.295; font-weight: 600; }
+.t-section { font-size: var(--fs-section); line-height: 1.265; font-weight: 700; letter-spacing: -0.01em; }
+.t-product { font-size: var(--fs-product); line-height: 1.265; font-weight: 700; letter-spacing: -0.01em; }
+.t-price-lg { font-size: var(--fs-price-lg); line-height: 1.275; font-weight: 700; letter-spacing: -0.015em; }
+.t-headline { font-size: var(--fs-headline); line-height: 1.315; font-weight: 600; }
+.t-body { font-size: var(--fs-body); line-height: 1.375; }
+.t-card-title { font-size: var(--fs-card-title); line-height: 1.335; font-weight: 500; }
+.t-card-price { font-size: var(--fs-card-price); line-height: 1.335; font-weight: 600; }
+.t-subhead { font-size: var(--fs-subhead); line-height: 1.385; }
+.t-footnote { font-size: var(--fs-footnote); line-height: 1.335; }
+.t-caption { font-size: var(--fs-caption); line-height: 1.275; font-weight: 500; }
+.t-tab { font-size: var(--fs-tab); line-height: 1.185; font-weight: 500; letter-spacing: 0.01em; }
+
+/* The three old title steps now point at the new ladder. */
+.t-title1 { font-size: var(--fs-price-lg); line-height: 1.275; font-weight: 700; letter-spacing: -0.015em; }
+.t-title2 { font-size: var(--fs-section); line-height: 1.265; font-weight: 700; letter-spacing: -0.01em; }
+.t-title3 { font-size: var(--fs-section); line-height: 1.265; font-weight: 600; }
+
 .t-label {
-  font-size: 0.6875rem;
+  font-size: var(--fs-caption);
   line-height: 1.2;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+/*
+  A 36pt control painted at 36pt but tapped at 44. WCAG 2.5.8 measures the
+  target, not the ink, so the extension below is what has to be 44 tall.
+*/
+.tap-44 {
+  position: relative;
+}
+.tap-44::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 44px;
+  transform: translateY(-50%);
 }
 
 /* ---------------------------------------------------------------------------

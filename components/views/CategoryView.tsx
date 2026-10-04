@@ -65,7 +65,7 @@ export function CategoryView() {
 
       <div className="mt-3 flex items-center gap-3 screen-x">
         <Button
-          variant="secondary"
+          variant="bordered"
           size="sm"
           onClick={() => setFiltersOpen(true)}
           icon={<FilterIcon size={18} />}
@@ -110,7 +110,7 @@ export function CategoryView() {
           </div>
           {items.length > visible ? (
             <div className="pt-6 screen-x">
-              <Button full variant="secondary" onClick={() => setVisible((n) => n + PAGE)}>
+              <Button full variant="bordered" onClick={() => setVisible((n) => n + PAGE)}>
                 Näytä lisää
               </Button>
             </div>

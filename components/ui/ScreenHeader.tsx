@@ -86,7 +86,7 @@ export function ScreenHeader({
           ) : null}
         </div>
         <h1
-          className="t-headline flex-1 truncate text-center transition-opacity duration-200"
+          className="t-nav-title flex-1 truncate text-center transition-opacity duration-200"
           style={{ opacity: showTitle ? 1 : 0 }}
         >
           {title}

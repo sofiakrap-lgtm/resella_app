@@ -45,7 +45,7 @@ export function Segmented<T extends string>({
             {selected ? (
               <motion.span
                 layoutId={`segmented-${ariaLabel}`}
-                transition={transition}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 className="absolute inset-0 -z-10 rounded-full bg-surface shadow-card"
               />
             ) : null}

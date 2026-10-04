@@ -113,7 +113,7 @@ export function ProductView() {
   const similar = similarProducts(product).filter((item) => !sellerIds.has(item.id));
 
   return (
-    <div className="pb-[120px]">
+    <div className="pb-[190px]">
       <ScreenHeader
         title={product.title}
         back
@@ -142,6 +142,7 @@ export function ProductView() {
         photos={product.images}
         alt={product.title}
         label={product.title}
+        zoomable
         className="aspect-[4/5] max-h-[62vh] w-full"
         overlay={
           unavailable ? (
@@ -216,60 +217,84 @@ export function ProductView() {
           </div>
         </section>
 
-        {unavailable ? (
-          <div className="mt-5 px-4">
+        <ProductRow title="Myyjän muut tuotteet" products={fromSameSeller} />
+
+        <ProductRow title="Samankaltaisia" products={similar} />
+      </motion.div>
+
+      {/*
+        One row, always: save, reserve, buy. A product's two ways to get it
+        are a choice, so they sit next to each other rather than one being a
+        button and the other a line of text further up the page.
+      */}
+      <div
+        className="pointer-events-none absolute inset-x-0 z-40"
+        style={{ bottom: 'calc(62px + 21px)' }}
+      >
+        <div className="glass pointer-events-auto border-t-[0.5px] border-[rgba(60,36,21,0.10)] px-4 py-2.5">
+          {status === 'Myyty' ? (
             <Button
               full
-              variant="secondary"
               icon={<BellIcon size={18} />}
               onClick={() =>
                 pushToast({
                   title: 'Hakuvahti tallennettu',
-                  body: `Ilmoitamme kun vastaava tulee myyntiin`,
+                  body: 'Ilmoitamme kun vastaava tulee myyntiin',
                   href: '/toivelista',
                 })
               }
             >
               Ilmoita kun vastaava tulee myyntiin
             </Button>
-            <p className="t-footnote mt-2 text-center text-brown-70">
-              Tämä tuote on {status.toLowerCase()}. Seuraa kirpputoria, niin näet uudet heti.
-            </p>
-          </div>
-        ) : null}
-
-        {!unavailable ? (
-          <div className="section flex justify-center screen-x">
-            <Link
-              href={`/varaus/${product.id}?osta=1`}
-              className="t-subhead inline-flex min-h-11 items-center font-semibold text-terracotta-ink"
-            >
-              {`Tai osta heti ${price(product.priceEur)}`}
-            </Link>
-          </div>
-        ) : null}
-
-        <ProductRow title="Myyjän muut tuotteet" products={fromSameSeller} />
-
-        <ProductRow title="Samankaltaisia" products={similar} />
-      </motion.div>
-
-      {!unavailable ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 px-4 pb-[94px]">
-          <div className="glass pointer-events-auto flex items-center gap-2 rounded-full p-1.5">
-            <IconButton
-              ariaLabel={saved ? 'Poista toivelistalta' : 'Tallenna toivelistalle'}
-              active={saved}
-              onClick={() => toggleWishlist(product.id)}
-            >
-              <HeartIcon size={21} filled={saved} />
-            </IconButton>
-            <Button full size="sm" href={`/varaus/${product.id}`} className="whitespace-nowrap">
-              Varaa noudettavaksi
-            </Button>
-          </div>
+          ) : (
+            <>
+              <div className="flex items-center gap-2">
+                <IconButton
+                  ariaLabel={saved ? 'Poista toivelistalta' : 'Tallenna toivelistalle'}
+                  active={saved}
+                  className="shrink-0"
+                  onClick={() => toggleWishlist(product.id)}
+                >
+                  <HeartIcon size={22} filled={saved} />
+                </IconButton>
+                <Button
+                  full
+                  className="flex-1"
+                  href={`/varaus/${product.id}`}
+                  disabled={status === 'Varattu'}
+                >
+                  Varaa nouto
+                </Button>
+                {status === 'Varattu' ? null : (
+                  <Button full variant="glass" className="flex-1" href={`/varaus/${product.id}?osta=1`}>
+                    Osta heti
+                  </Button>
+                )}
+              </div>
+              {status === 'Varattu' ? (
+                <div className="mt-1 flex justify-center">
+                  <Button
+                    variant="plain"
+                    onClick={() =>
+                      pushToast({
+                        title: 'Ilmoitamme kun vapautuu',
+                        body: product.title,
+                        href: '/toivelista',
+                      })
+                    }
+                  >
+                    Ilmoita kun vapautuu
+                  </Button>
+                </div>
+              ) : (
+                <p className="t-footnote mt-1.5 text-center text-brown-70">
+                  Varaus odottaa kassalla. Osto tulee postissa tai noudat itse.
+                </p>
+              )}
+            </>
+          )}
         </div>
-      ) : null}
+      </div>
     </div>
   );
 }

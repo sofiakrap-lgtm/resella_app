@@ -3,7 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { useTapScale, useTransition } from '@/lib/motion';
+import { useSheetOpen } from '@/lib/sheets';
 import { HomeIcon, SearchIcon, HeartIcon, PersonIcon } from './Icons';
 
 const tabs = [
@@ -22,8 +24,12 @@ const tabs = [
  */
 export function TabBar() {
   const pathname = usePathname();
-  const tap = useTapScale(0.94);
+  const router = useRouter();
+  const sheetOpen = useSheetOpen();
+  const tap = useTapScale(0.96);
   const transition = useTransition('press');
+
+  if (sheetOpen) return null;
 
   return (
     <nav
@@ -39,6 +45,13 @@ export function TabBar() {
                 href={href}
                 aria-label={label}
                 aria-current={active ? 'page' : undefined}
+                onClick={(event) => {
+                  // Tapping the tab you are already on returns to its root.
+                  if (!active) return;
+                  event.preventDefault();
+                  document.getElementById('app-scroll')?.scrollTo({ top: 0, behavior: 'smooth' });
+                  if (pathname !== href) router.push(href);
+                }}
                 className="relative flex min-h-[54px] flex-col items-center justify-center gap-[2px] rounded-full px-1"
                 style={{
                   color: active ? 'var(--color-terracotta-ink)' : 'var(--color-brown)',
@@ -56,13 +69,8 @@ export function TabBar() {
                   <Icon size={26} filled={active} />
                 </span>
                 <span
-                  className="relative max-w-full truncate"
-                  style={{
-                    fontSize: '11px',
-                    lineHeight: '13px',
-                    letterSpacing: '0.01em',
-                    fontWeight: active ? 600 : 500,
-                  }}
+                  className="t-tab relative max-w-full truncate"
+                  style={{ fontWeight: active ? 600 : 500 }}
                 >
                   {label}
                 </span>

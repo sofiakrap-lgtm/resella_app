@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import { KonstaProvider } from 'konsta/react';
 import { StatusBarMock } from './StatusBar';
 import { TabBar } from './TabBar';
+import { EdgeBack } from './EdgeBack';
 import { ToastHost } from './Toasts';
 
 /**
@@ -37,6 +38,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </main>
           </div>
           {chromeless ? null : <TabBar />}
+          <EdgeBack target="app-scroll" />
           <ToastHost />
         </div>
         <p className="t-caption mt-4 hidden text-center text-brown-70 md:block">ReSella, demo</p>

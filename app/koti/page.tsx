@@ -138,9 +138,9 @@ function KotiContent() {
       <div className="mt-4 px-4">
         <Link
           href="/haku"
-          className="flex min-h-11 items-center gap-2 rounded-full bg-surface px-4 py-2.5 shadow-card"
+          className="tap-44 flex h-9 items-center gap-1.5 rounded-[10px] bg-cream-sink pl-2.5 pr-3"
         >
-          <SearchIcon size={19} className="text-brown-70" />
+          <SearchIcon size={17} className="shrink-0 text-brown" />
           <span className="t-body truncate text-brown-70">Hae tuotetta, merkkiä tai kirppistä</span>
         </Link>
       </div>
@@ -270,7 +270,7 @@ function KotiContent() {
             </>
           ) : (
             <div className="section flex justify-center screen-x">
-              <Button variant="secondary" onClick={() => setMore(true)}>
+              <Button variant="bordered" onClick={() => setMore(true)}>
                 Näytä lisää
               </Button>
             </div>

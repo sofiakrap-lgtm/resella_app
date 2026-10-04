@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { productImage } from '@/lib/imagePath';
 import { SafeImage } from './SafeImage';
+import { ImageViewerHost } from './ImageViewer';
 
 interface ImageCarouselProps {
   photos: string[];
@@ -13,11 +14,22 @@ interface ImageCarouselProps {
   /** Shared element transition with the card that opened it. */
   layoutId?: string;
   overlay?: React.ReactNode;
+  /** Tapping a photo opens it full screen, where it is fitted not filled. */
+  zoomable?: boolean;
 }
 
 /** Swipeable photo carousel with iOS style page dots. */
-export function ImageCarousel({ photos, alt, label, className = '', layoutId, overlay }: ImageCarouselProps) {
+export function ImageCarousel({
+  photos,
+  alt,
+  label,
+  className = '',
+  layoutId,
+  overlay,
+  zoomable = false,
+}: ImageCarouselProps) {
   const [index, setIndex] = useState(0);
+  const [viewerOpen, setViewerOpen] = useState(false);
   const scroller = useRef<HTMLDivElement | null>(null);
 
   const onScroll = () => {
@@ -35,12 +47,16 @@ export function ImageCarousel({ photos, alt, label, className = '', layoutId, ov
         className="hide-scrollbar flex h-full w-full snap-x snap-mandatory overflow-x-auto"
       >
         {photos.map((photo, photoIndex) => (
-          <div key={photo} className="h-full w-full shrink-0 snap-center">
+          <div
+            key={photo}
+            className="h-full w-full shrink-0 snap-center"
+            onClick={zoomable ? () => setViewerOpen(true) : undefined}
+          >
             <SafeImage
               src={productImage(photo)}
               alt={`${alt} ${photoIndex + 1}/${photos.length}`}
               label={label}
-              className="h-full w-full object-contain"
+              className="h-full w-full object-cover"
               priority={photoIndex === 0}
             />
           </div>
@@ -64,6 +80,14 @@ export function ImageCarousel({ photos, alt, label, className = '', layoutId, ov
       ) : null}
 
       {overlay}
+
+      <ImageViewerHost
+        open={viewerOpen}
+        photos={photos}
+        startIndex={index}
+        alt={alt}
+        onClose={() => setViewerOpen(false)}
+      />
     </motion.div>
   );
 }

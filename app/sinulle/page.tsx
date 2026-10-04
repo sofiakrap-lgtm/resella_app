@@ -114,7 +114,7 @@ function SinulleContent() {
             ))}
           </div>
           <div className="pt-6 screen-x">
-            <Button full variant="secondary" href="/onboarding" icon={<PersonIcon size={18} />}>
+            <Button full variant="bordered" href="/onboarding" icon={<PersonIcon size={18} />}>
               Säädä profiilia
             </Button>
           </div>

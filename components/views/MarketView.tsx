@@ -123,28 +123,13 @@ export function MarketView() {
         }
       />
 
-      {/*
-        The cover photographs are not one shape: most are wide, one is upright.
-        Fitting the whole photograph into a fixed frame and filling what is
-        left with a blurred copy of itself keeps every market's own picture
-        intact without a bar of empty colour beside it.
-      */}
       <div className="relative aspect-[16/9] w-full overflow-hidden bg-cream-sink">
-        <span
-          aria-hidden="true"
-          className="absolute -inset-[10%] bg-cover bg-center"
-          style={{
-            backgroundImage: `url("${marketImage(market.coverImage)}")`,
-            filter: 'blur(24px) saturate(120%)',
-            opacity: 0.55,
-          }}
-        />
         <SafeImage
           src={marketImage(market.coverImage)}
           alt={`${market.name}, kuva kirpputorilta`}
           label={market.name}
           fallbackType="kirpputori"
-          className="relative h-full w-full object-contain"
+          className="h-full w-full object-cover [object-position:center_40%]"
           priority
         />
       </div>
@@ -167,7 +152,7 @@ export function MarketView() {
           <p className="t-subhead mt-3">{market.description}</p>
           <div className="mt-4 flex items-center gap-3">
             <Button
-              variant={following ? 'secondary' : 'primary'}
+              variant={following ? 'bordered' : 'prominent'}
               onClick={() => toggleFollowMarket(market.id)}
               icon={<HeartIcon size={18} filled={following} />}
             >
@@ -262,7 +247,7 @@ export function MarketView() {
                 </div>
                 {(segment === 'uutta' ? fresh : items).length > visible ? (
                   <div className="px-4 py-5">
-                    <Button full variant="secondary" onClick={() => setVisible((current) => current + 8)}>
+                    <Button full variant="bordered" onClick={() => setVisible((current) => current + 8)}>
                       Näytä lisää
                     </Button>
                   </div>
@@ -270,7 +255,7 @@ export function MarketView() {
                   <div className="px-4 py-5">
                     <Button
                       full
-                      variant="secondary"
+                      variant="bordered"
                       href={`/haku?${filtersToQuery({ ...emptyFilters, marketIds: [market.id] })}`}
                     >
                       Suodata tämän kirpputorin tuotteita

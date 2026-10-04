@@ -9,6 +9,7 @@ import { exampleSearches } from '@/data/exampleSearches';
 import { categories } from '@/data/categories';
 import { markets } from '@/data/markets';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
+import { SearchField } from '@/components/ui/SearchField';
 import { ProductCard } from '@/components/ProductCard';
 import { FilterSheet } from '@/components/FilterSheet';
 import { Chip, Tag } from '@/components/ui/Chip';
@@ -36,7 +37,8 @@ export default function HakuPage() {
 function HakuContent() {
   const params = useSearchParams();
   const router = useRouter();
-  const { recentSearches, addRecentSearch, addSavedSearch, pushToast } = useApp();
+  const { recentSearches, addRecentSearch, clearRecentSearches, addSavedSearch, pushToast } =
+    useApp();
 
   const parsed = useMemo(() => queryToFilters(new URLSearchParams(params.toString())), [params]);
   const [filters, setFilters] = useState<Filters>(parsed);
@@ -100,43 +102,19 @@ function HakuContent() {
         }
       />
 
-      <form
-        className="flex items-center gap-2 px-4 py-2"
-        onSubmit={(event) => {
-          event.preventDefault();
-          run({ ...filters, query: input });
-        }}
-        role="search"
-      >
-        <span className="flex min-h-11 min-w-0 flex-1 items-center gap-2 rounded-[12px] bg-cream-sink px-3">
-          <SearchIcon size={18} className="shrink-0 text-brown-70" />
-          <input
-            value={input}
-            onChange={(event) => setInput(event.target.value)}
-            placeholder="Hae tai kysy, esim. villapaita koko M"
-            aria-label="Hae"
-            enterKeyHint="search"
-            className="t-body min-w-0 flex-1 bg-transparent py-2 outline-none placeholder:text-brown-70"
-          />
-          {input ? (
-            <button
-              type="button"
-              onClick={() => setInput('')}
-              aria-label="Tyhjennä haku"
-              className="-mr-1 flex h-11 w-11 shrink-0 items-center justify-center text-brown-70"
-            >
-              <CloseIcon size={16} />
-            </button>
-          ) : null}
-        </span>
-        <Button type="submit" size="sm" ariaLabel="Hae" className="shrink-0">
-          Hae
-        </Button>
-      </form>
+      <div className="px-4 py-2">
+        <SearchField
+          value={input}
+          autoFocus
+          onChange={setInput}
+          onSearch={(next) => run({ ...filters, query: next })}
+          placeholder="Hae tai kysy, esim. villapaita koko M"
+        />
+      </div>
 
-      <div className="flex items-center gap-2 px-4">
+      <div className="flex items-center gap-2 px-4 pt-2">
         <Button
-          variant="secondary"
+          variant="bordered"
           size="sm"
           onClick={() => setFiltersOpen(true)}
           icon={<FilterIcon size={18} />}
@@ -237,7 +215,12 @@ function HakuContent() {
 
           {recentSearches.length ? (
             <section className="section">
-              <h2 className="t-headline screen-x">Viimeksi haetut</h2>
+              <div className="flex items-baseline justify-between gap-3 screen-x">
+                <h2 className="t-headline">Viimeksi haetut</h2>
+                <Button variant="plain" size="sm" onClick={clearRecentSearches}>
+                  Tyhjennä
+                </Button>
+              </div>
               <ul className="mt-1">
                 {recentSearches.map((recent) => (
                   <li key={recent}>
@@ -279,7 +262,7 @@ function HakuContent() {
               >
                 Tallenna hakuvahti
               </Button>
-              <Button variant="secondary" size="sm" onClick={() => run({ ...emptyFilters, query: filters.query })}>
+              <Button variant="bordered" size="sm" onClick={() => run({ ...emptyFilters, query: filters.query })}>
                 Tyhjennä suodattimet
               </Button>
             </div>
@@ -294,7 +277,7 @@ function HakuContent() {
           </div>
           {visible < results.length ? (
             <div className="px-4 py-5">
-              <Button full variant="secondary" onClick={() => setVisible((current) => current + PAGE_SIZE)}>
+              <Button full variant="bordered" onClick={() => setVisible((current) => current + PAGE_SIZE)}>
                 Näytä lisää
               </Button>
             </div>
