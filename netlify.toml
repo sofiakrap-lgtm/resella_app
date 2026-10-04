@@ -1,0 +1,8 @@
+# Netlify builds the static export and serves ./out at demo.resella.fi.
+[build]
+  command = "npm run build:export"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_TELEMETRY_DISABLED = "1"
