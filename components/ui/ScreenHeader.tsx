@@ -24,6 +24,7 @@ export function ScreenHeader({
   transparent = false,
 }: ScreenHeaderProps) {
   const router = useRouter();
+  /** Whether any content has moved under the bar yet. */
   const [scrolled, setScrolled] = useState(false);
   /** True while the screen's own title is still on screen under the bar. */
   const [titleVisible, setTitleVisible] = useState(largeTitleBelow);
@@ -31,7 +32,7 @@ export function ScreenHeader({
   useEffect(() => {
     const container = document.getElementById('app-scroll');
     if (!container) return;
-    const onScroll = () => setScrolled(container.scrollTop > 28);
+    const onScroll = () => setScrolled(container.scrollTop > 2);
     onScroll();
     container.addEventListener('scroll', onScroll, { passive: true });
     return () => container.removeEventListener('scroll', onScroll);
@@ -69,9 +70,16 @@ export function ScreenHeader({
   const glass = transparent ? scrolled : true;
 
   return (
+    /*
+     * The meeting between the bar and the content under it is a short fade of
+     * the bar's own colour, and it only exists while something is actually
+     * passing beneath. A permanent 1px rule draws a line where there is
+     * nothing to separate.
+     */
     <header
-      className={`sticky top-0 z-30 transition-colors duration-200 ${
-        glass ? 'glass border-b border-separator' : 'border-b border-transparent'
+      data-scrolled={scrolled ? 'true' : 'false'}
+      className={`scroll-edge sticky top-0 z-30 transition-colors duration-200 ${
+        glass ? 'glass' : ''
       }`}
     >
       <div className="flex min-h-[44px] items-center gap-1 px-2">
@@ -86,7 +94,7 @@ export function ScreenHeader({
           ) : null}
         </div>
         <h1
-          className="t-nav-title flex-1 truncate text-center transition-opacity duration-200"
+          className="t-nav-title on-glass flex-1 truncate text-center transition-opacity duration-200"
           style={{ opacity: showTitle ? 1 : 0 }}
         >
           {title}

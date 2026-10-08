@@ -28,6 +28,7 @@ export function TabBar() {
   const sheetOpen = useSheetOpen();
   const tap = useTapScale(0.96);
   const transition = useTransition('press');
+  const marker = useTransition('press');
 
   if (sheetOpen) return null;
 
@@ -61,7 +62,7 @@ export function TabBar() {
                 {active ? (
                   <motion.span
                     layoutId="tab-selected"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    transition={marker}
                     className="absolute inset-0 rounded-full bg-[rgba(60,36,21,0.07)]"
                   />
                 ) : null}

@@ -36,13 +36,19 @@ export function ProductView() {
   const search = useSearchParams();
   const transition = useTransition();
   const {
+    ready,
     city,
     wishlist,
     toggleWishlist,
     reservedIds,
     pushToast,
   } = useApp();
-  const [loading, setLoading] = useState(true);
+  /**
+   * The skeleton stands in only until the stored state is actually in hand,
+   * which is the frame after mount. There was a timer here; the data is local
+   * and synchronous, so the wait was pure latency pretending to be loading.
+   */
+  const loading = !ready;
   const [failed, setFailed] = useState(false);
 
   const product = productById(params.id);
@@ -52,10 +58,6 @@ export function ProductView() {
     setFailed(search.get('demo') === 'error');
   }, [search]);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 340);
-    return () => window.clearTimeout(timer);
-  }, [params.id]);
 
   if (!product || !market) {
     return (
@@ -73,7 +75,6 @@ export function ProductView() {
         <ErrorState
           onRetry={() => {
             setFailed(false);
-            setLoading(true);
           }}
         />
       </div>
@@ -231,7 +232,7 @@ export function ProductView() {
         className="pointer-events-none absolute inset-x-0 z-40"
         style={{ bottom: 'calc(62px + 21px)' }}
       >
-        <div className="glass pointer-events-auto border-t-[0.5px] border-[rgba(60,36,21,0.10)] px-4 py-2.5">
+        <div className="glass-thick pointer-events-auto px-4 py-2.5">
           {status === 'Myyty' ? (
             <Button
               full

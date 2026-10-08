@@ -1,14 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { animate, motion, useMotionValue } from 'framer-motion';
+import type { AnimationPlaybackControls } from 'framer-motion';
 import { useRef, useState } from 'react';
 import type { Product } from '@/lib/types';
 import { marketById } from '@/data/markets';
 import { price } from '@/lib/format';
 import { productImage } from '@/lib/imagePath';
 import { useApp } from '@/lib/state';
-import { useStagger, useTapScale } from '@/lib/motion';
+import { spring, useStagger, useTapScale, useMotionAllowed } from '@/lib/motion';
+import { HYSTERESIS, VelocityTracker, project, rubberband, capture, release } from '@/lib/physics';
 import { SafeImage } from './ui/SafeImage';
 import { Button, IconButton } from './ui/Button';
 import { Sheet } from './ui/Sheet';
@@ -46,7 +48,12 @@ export function ProductCard({
   const [photo, setPhoto] = useState(0);
   const [quickOpen, setQuickOpen] = useState(false);
   const peek = useRef<number | undefined>(undefined);
-  const touchStart = useRef<number | null>(null);
+  const motionAllowed = useMotionAllowed();
+  const frameRef = useRef<HTMLSpanElement | null>(null);
+  const strip = useMotionValue(0);
+  const playback = useRef<AnimationPlaybackControls | null>(null);
+  const tracker = useRef(new VelocityTracker());
+  const swipe = useRef({ active: false, pointerId: -1, startX: 0, startY: 0, startOffset: 0, decided: false, moved: false });
 
   const status = reservedIds.includes(product.id) ? 'Varattu' : product.status;
   const unavailable = status !== 'Saatavilla';
@@ -73,35 +80,122 @@ export function ProductCard({
       active={saved}
       onClick={() => toggleWishlist(product.id)}
     >
-      <span className="glass flex h-9 w-9 items-center justify-center rounded-full">
+      <span className="glass-chip flex h-9 w-9 items-center justify-center rounded-full">
         <HeartIcon size={18} filled={saved} />
       </span>
     </IconButton>
   );
 
-  /** Swiping the thumbnail steps through the images without leaving the list. */
-  const onTouchStart = (event: React.TouchEvent) => {
-    touchStart.current = event.touches[0].clientX;
+  /**
+   * Swiping the thumbnail steps through the images without leaving the list.
+   * The strip tracks the finger the whole way rather than jumping a frame at
+   * the end of the gesture, and a flick lands on the photo the throw was
+   * heading for, which is how a small input becomes a big output.
+   */
+  const frameWidth = () => frameRef.current?.clientWidth || 1;
+  const pages = product.images.length;
+  const offsetFor = (index: number) => -index * frameWidth();
+
+  const onPointerDown = (event: React.PointerEvent) => {
+    if (pages < 2) return;
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    playback.current?.stop();
+    tracker.current.reset();
+    tracker.current.add(event.clientX);
+    swipe.current = {
+      active: true,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startOffset: strip.get(),
+      decided: false,
+      moved: false,
+    };
   };
-  const onTouchEnd = (event: React.TouchEvent) => {
-    if (touchStart.current === null) return;
-    const delta = event.changedTouches[0].clientX - touchStart.current;
-    if (Math.abs(delta) > 30) {
-      setPhoto((current) =>
-        delta < 0 ? Math.min(current + 1, product.images.length - 1) : Math.max(current - 1, 0),
-      );
+
+  const onPointerMove = (event: React.PointerEvent) => {
+    const state = swipe.current;
+    if (!state.active || event.pointerId !== state.pointerId) return;
+    tracker.current.add(event.clientX);
+    const dx = event.clientX - state.startX;
+    const dy = event.clientY - state.startY;
+
+    if (!state.decided) {
+      if (Math.abs(dx) < HYSTERESIS && Math.abs(dy) < HYSTERESIS) return;
+      if (Math.abs(dy) >= Math.abs(dx)) {
+        // Vertical won, so this pointer belongs to the scroll, not to us.
+        state.active = false;
+        return;
+      }
+      state.decided = true;
+      state.moved = true;
+      state.startX = event.clientX;
+      state.startOffset = strip.get();
+      capture(frameRef.current, event.pointerId);
     }
-    touchStart.current = null;
+
+    const width = frameWidth();
+    const raw = state.startOffset + (event.clientX - state.startX);
+    const min = offsetFor(pages - 1);
+    const resisted =
+      raw > 0 ? rubberband(raw, width) : raw < min ? min - rubberband(min - raw, width) : raw;
+    strip.set(resisted);
+    // The dots report the photo under the finger as it crosses, not only once
+    // the gesture has finished, so the feedback is continuous.
+    const crossed = Math.min(Math.max(Math.round(-resisted / width), 0), pages - 1);
+    if (crossed !== photo) setPhoto(crossed);
+  };
+
+  const onPointerUp = (event: React.PointerEvent) => {
+    const state = swipe.current;
+    if (!state.active || event.pointerId !== state.pointerId) return;
+    state.active = false;
+    release(frameRef.current, event.pointerId);
+    if (!state.decided) return;
+
+    const width = frameWidth();
+    const velocity = tracker.current.velocity();
+    const projected = strip.get() + project(velocity);
+    const index = Math.min(Math.max(Math.round(-projected / width), 0), pages - 1);
+    setPhoto(index);
+    const target = offsetFor(index);
+    if (!motionAllowed) {
+      strip.set(target);
+      return;
+    }
+    playback.current = animate(strip, target, { ...spring.sheet, velocity });
+  };
+
+  /** A swipe must not also open the product page on release. */
+  const guardSwipeClick = (event: React.MouseEvent) => {
+    if (!swipe.current.moved) return;
+    swipe.current.moved = false;
+    event.preventDefault();
+  };
+
+  const frameProps = {
+    ref: frameRef,
+    onPointerDown,
+    onPointerMove,
+    onPointerUp,
+    onPointerCancel: onPointerUp,
+    style: pages > 1 ? ({ touchAction: 'pan-y' } as const) : undefined,
   };
 
   const image = (
-    <SafeImage
-      src={productImage(product.images[photo])}
-      alt={`${product.title}, tuotekuva ${photo + 1}/${product.images.length}`}
-      label={product.title}
-      fallbackType="tuote"
-      className="h-full w-full object-cover"
-    />
+    <motion.span className="flex h-full w-full" style={{ x: strip }}>
+      {product.images.map((name, imageIndex) => (
+        <span key={name} className="block h-full w-full shrink-0">
+          <SafeImage
+            src={productImage(name)}
+            alt={`${product.title}, tuotekuva ${imageIndex + 1}/${pages}`}
+            label={product.title}
+            fallbackType="tuote"
+            className="h-full w-full object-cover"
+          />
+        </span>
+      ))}
+    </motion.span>
   );
 
   const dots =
@@ -130,11 +224,14 @@ export function ProductCard({
         whileTap={tap}
       >
         <div className="flex items-center gap-3 border-b border-separator px-4 py-3 last:border-b-0">
-          <Link href={`/tuote/${product.id}`} className="flex min-w-0 flex-1 items-center gap-3">
+          <Link
+            href={`/tuote/${product.id}`}
+            onClick={guardSwipeClick}
+            className="flex min-w-0 flex-1 items-center gap-3"
+          >
             <span
+              {...frameProps}
               className="relative block h-[88px] w-[88px] shrink-0 overflow-hidden rounded-[12px] bg-cream-sink"
-              onTouchStart={onTouchStart}
-              onTouchEnd={onTouchEnd}
             >
               {image}
               {dots}
@@ -178,12 +275,12 @@ export function ProductCard({
           className="block"
           onClick={(event) => {
             if (quickOpen) event.preventDefault();
+            guardSwipeClick(event);
           }}
         >
           <span
+            {...frameProps}
             className="relative block aspect-[4/5] w-full overflow-hidden rounded-[12px] bg-cream-sink shadow-card"
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
           >
             {image}
             {dots}

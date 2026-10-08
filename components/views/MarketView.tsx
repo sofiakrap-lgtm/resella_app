@@ -29,10 +29,15 @@ export function MarketView() {
   const search = useSearchParams();
   const now = useNow();
   const transition = useTransition();
-  const { followedMarkets, toggleFollowMarket, pushToast } = useApp();
+  const { ready, followedMarkets, toggleFollowMarket, pushToast } = useApp();
   const [segment, setSegment] = useState<Segment>('valikoima');
   const [hoursOpen, setHoursOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  /**
+   * The skeleton stands in only until the stored state is actually in hand,
+   * which is the frame after mount. There was a timer here; the data is local
+   * and synchronous, so the wait was pure latency pretending to be loading.
+   */
+  const loading = !ready;
   const [failed, setFailed] = useState(false);
   const [visible, setVisible] = useState(8);
 
@@ -42,10 +47,6 @@ export function MarketView() {
     setFailed(search.get('demo') === 'error');
   }, [search]);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 340);
-    return () => window.clearTimeout(timer);
-  }, [params.id]);
 
   const items = useMemo(
     () => (market ? productsByMarket(market.id).filter((product) => product.status !== 'Myyty') : []),
@@ -72,7 +73,6 @@ export function MarketView() {
         <ErrorState
           onRetry={() => {
             setFailed(false);
-            setLoading(true);
           }}
         />
       </div>

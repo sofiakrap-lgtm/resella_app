@@ -239,7 +239,8 @@ function PassField({ label, value }: { label: string; value: string }) {
  */
 function ConfirmMark({ label }: { label: string }) {
   const { motionEnabled } = useApp();
-  const spring = { type: 'spring' as const, stiffness: 340, damping: 18, mass: 0.7 };
+  /* Overshoot is earned here: this is the one moment the app is allowed joy. */
+  const spring = useTransition('lively');
   return (
     <span className="inline-flex items-center gap-1.5 text-positive">
       <motion.span

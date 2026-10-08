@@ -24,19 +24,20 @@ export default function KarttaPage() {
 
 function KarttaContent() {
   const params = useSearchParams();
-  const { city } = useApp();
+  const { ready, city } = useApp();
   const now = useNow();
   const listRef = useRef<HTMLDivElement | null>(null);
   const [cityFilter, setCityFilter] = useState<string | null>(city);
   const [openNow, setOpenNow] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  /**
+   * The skeleton stands in only until the stored state is actually in hand,
+   * which is the frame after mount. There was a timer here; the data is local
+   * and synchronous, so the wait was pure latency pretending to be loading.
+   */
+  const loading = !ready;
   const [failed, setFailed] = useState(params.get('demo') === 'error');
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 420);
-    return () => window.clearTimeout(timer);
-  }, []);
 
   const visible = useMemo(() => {
     let list = markets;
@@ -63,7 +64,6 @@ function KarttaContent() {
           <ErrorState
             onRetry={() => {
               setFailed(false);
-              setLoading(true);
             }}
           />
         </div>

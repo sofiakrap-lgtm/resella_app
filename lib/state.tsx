@@ -16,6 +16,7 @@ import {
 } from 'react';
 import type { CategorySlug, Filters, Reservation, SavedSearch } from './types';
 import { seedSavedSearches } from '@/data/savedSearches';
+import { haptic } from './haptics';
 
 export interface Toast {
   id: string;
@@ -161,8 +162,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
       dismissToast,
       motionEnabled: !state.reduceMotion && !systemReducedMotion,
       set,
-      toggleWishlist: (productId) =>
-        setState((current) => ({ ...current, wishlist: toggle(current.wishlist, productId) })),
+      toggleWishlist: (productId) => {
+        // Fired on the commit itself, in the same turn as the state change, so
+        // the tap and the feel of it land together rather than one chasing the
+        // other.
+        haptic('commit');
+        setState((current) => ({ ...current, wishlist: toggle(current.wishlist, productId) }));
+      },
       toggleFollowMarket: (marketId) =>
         setState((current) => ({
           ...current,

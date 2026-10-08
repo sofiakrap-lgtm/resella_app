@@ -54,9 +54,20 @@
   --shadow-card: 0 1px 2px rgba(60, 36, 21, 0.04), 0 6px 16px -12px rgba(60, 36, 21, 0.35);
   --shadow-raised: 0 2px 6px rgba(60, 36, 21, 0.06), 0 18px 40px -24px rgba(60, 36, 21, 0.4);
 
+  /*
+   * Glass. A bigger surface has to read as a thicker piece of material, so
+   * blur and shadow scale with the surface rather than one value serving a
+   * 28px chip and a full width sheet alike.
+   */
   --glass-bg: rgba(255, 253, 250, 0.8);
   --glass-border: rgba(255, 255, 255, 0.6);
   --glass-blur: 22px;
+  --glass-blur-thick: 34px;
+  --glass-blur-chip: 12px;
+  --glass-shadow: 0 10px 30px -18px rgba(60, 36, 21, 0.6);
+  /* Deeper, because the sheet and the action bar both sit over text. */
+  --glass-shadow-thick: 0 -2px 10px rgba(60, 36, 21, 0.07), 0 -14px 34px -14px rgba(60, 36, 21, 0.42);
+  --glass-shadow-chip: 0 2px 8px -6px rgba(60, 36, 21, 0.5);
 
   --k-color-primary: var(--color-terracotta);
   color-scheme: light;
@@ -70,6 +81,8 @@
   --color-hairline: rgba(60, 36, 21, 0.5);
   --glass-bg: rgba(255, 253, 250, 0.98);
   --glass-blur: 0px;
+  --glass-blur-thick: 0px;
+  --glass-blur-chip: 0px;
 }
 
 @theme inline {
@@ -115,6 +128,8 @@ body {
   color: var(--color-brown);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  /* Let the face pick its own shapes per size where it carries an optical axis. */
+  font-optical-sizing: auto;
 }
 
 /* ---------------------------------------------------------------------------
@@ -153,19 +168,28 @@ body {
   font-family: var(--font-display);
 }
 
-.t-large-title { font-size: var(--fs-large-title); line-height: 1.215; font-weight: 700; letter-spacing: -0.02em; }
-.t-nav-title { font-size: var(--fs-nav-title); line-height: 1.295; font-weight: 600; }
-.t-section { font-size: var(--fs-section); line-height: 1.265; font-weight: 700; letter-spacing: -0.01em; }
-.t-product { font-size: var(--fs-product); line-height: 1.265; font-weight: 700; letter-spacing: -0.01em; }
-.t-price-lg { font-size: var(--fs-price-lg); line-height: 1.275; font-weight: 700; letter-spacing: -0.015em; }
-.t-headline { font-size: var(--fs-headline); line-height: 1.315; font-weight: 600; }
-.t-body { font-size: var(--fs-body); line-height: 1.375; }
-.t-card-title { font-size: var(--fs-card-title); line-height: 1.335; font-weight: 500; }
-.t-card-price { font-size: var(--fs-card-price); line-height: 1.335; font-weight: 600; }
-.t-subhead { font-size: var(--fs-subhead); line-height: 1.385; }
-.t-footnote { font-size: var(--fs-footnote); line-height: 1.335; }
-.t-caption { font-size: var(--fs-caption); line-height: 1.275; font-weight: 500; }
-.t-tab { font-size: var(--fs-tab); line-height: 1.185; font-weight: 500; letter-spacing: 0.01em; }
+/*
+  Tracking is a function of size, never one value for the whole app. Letters
+  read too far apart as they grow, so the large steps pull in; they read too
+  tight as they shrink, so the small steps open up. Leading runs the other
+  way: tight on the display sizes, loose on anything read as a paragraph.
+
+  Optical sizing is left to the face where the face has it, so a 28px title
+  and an 11px caption are not the same shapes at two scales.
+*/
+.t-large-title { font-size: var(--fs-large-title); line-height: 1.215; font-weight: 700; letter-spacing: -0.021em; }
+.t-nav-title { font-size: var(--fs-nav-title); line-height: 1.295; font-weight: 600; letter-spacing: -0.006em; }
+.t-section { font-size: var(--fs-section); line-height: 1.265; font-weight: 700; letter-spacing: -0.012em; }
+.t-product { font-size: var(--fs-product); line-height: 1.265; font-weight: 700; letter-spacing: -0.012em; }
+.t-price-lg { font-size: var(--fs-price-lg); line-height: 1.275; font-weight: 700; letter-spacing: -0.016em; }
+.t-headline { font-size: var(--fs-headline); line-height: 1.315; font-weight: 600; letter-spacing: -0.002em; }
+.t-body { font-size: var(--fs-body); line-height: 1.375; letter-spacing: 0; }
+.t-card-title { font-size: var(--fs-card-title); line-height: 1.335; font-weight: 500; letter-spacing: 0.001em; }
+.t-card-price { font-size: var(--fs-card-price); line-height: 1.335; font-weight: 600; letter-spacing: 0.001em; }
+.t-subhead { font-size: var(--fs-subhead); line-height: 1.385; letter-spacing: 0.005em; }
+.t-footnote { font-size: var(--fs-footnote); line-height: 1.345; letter-spacing: 0.007em; }
+.t-caption { font-size: var(--fs-caption); line-height: 1.285; font-weight: 500; letter-spacing: 0.011em; }
+.t-tab { font-size: var(--fs-tab); line-height: 1.185; font-weight: 500; letter-spacing: 0.012em; }
 
 /* The three old title steps now point at the new ladder. */
 .t-title1 { font-size: var(--fs-price-lg); line-height: 1.275; font-weight: 700; letter-spacing: -0.015em; }
@@ -204,13 +228,105 @@ body {
   backdrop-filter: blur(var(--glass-blur)) saturate(180%);
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
   border: 0.5px solid var(--glass-border);
-  box-shadow: 0 10px 30px -18px rgba(60, 36, 21, 0.6);
+  box-shadow: var(--glass-shadow);
+}
+
+/* The sheet chrome: the largest glass in the app, so the thickest. */
+.glass-thick {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur-thick)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-thick)) saturate(180%);
+  border-top: 0.5px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-thick);
+}
+
+/*
+ * A second strip of chrome directly below the navigation bar. It is the same
+ * slab of material continuing, not a new layer, so it drops the top edge and
+ * carries the seam only at its bottom.
+ */
+.glass-attached {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border-bottom: 0.5px solid var(--glass-border);
+}
+
+/* A chip is a small piece of the same material, so thinner and lighter. */
+.glass-chip {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur-chip)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-chip)) saturate(160%);
+  border: 0.5px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-chip);
+}
+
+/*
+ * Scroll edge. Where content passes under floating chrome, the meeting is a
+ * short fade of the chrome's own colour rather than a 1px rule, and it only
+ * appears once there is something underneath to separate from.
+ */
+/*
+ * No position is set here on purpose. This class lands after Tailwind's
+ * utilities, so a `position: relative` of its own would beat the `sticky` on
+ * the element it is applied to and quietly stop the navigation bar sticking.
+ * Every user of it is positioned by its own classes.
+ */
+.scroll-edge::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 100%;
+  height: 14px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, var(--glass-bg), rgba(255, 253, 250, 0));
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+
+.scroll-edge[data-scrolled='true']::after { opacity: 1; }
+
+/*
+ * Vibrancy. Text sitting on glass has a moving background behind it, so it
+ * takes the strongest ink, a touch more weight and a touch more tracking
+ * than the same text would need on a solid card.
+ */
+.on-glass {
+  color: var(--color-brown);
+  font-weight: 600;
+  letter-spacing: 0.006em;
 }
 
 @media (prefers-reduced-transparency: reduce) {
   :root {
     --glass-bg: rgba(255, 253, 250, 0.98);
     --glass-blur: 0px;
+    --glass-blur-thick: 0px;
+    --glass-blur-chip: 0px;
+  }
+}
+
+/*
+ * More contrast asks for near solid surfaces with a border that is actually
+ * there, not a hairline standing in for one.
+ */
+@media (prefers-contrast: more) {
+  :root {
+    --color-brown-70: rgba(48, 28, 16, 0.95);
+    --color-brown-50: rgba(48, 28, 16, 0.8);
+    --color-separator: rgba(60, 36, 21, 0.5);
+    --color-hairline: rgba(60, 36, 21, 0.5);
+    --glass-bg: rgba(255, 253, 250, 0.98);
+    --glass-blur: 0px;
+    --glass-blur-thick: 0px;
+    --glass-blur-chip: 0px;
+  }
+
+  .glass,
+  .glass-thick,
+  .glass-chip {
+    border-color: rgba(60, 36, 21, 0.5);
+    border-width: 1px;
   }
 }
 
@@ -282,20 +398,36 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
 }
 
+/*
+  The sweep is a transform on an overlay, not an animated background-position.
+  Background position cannot be composited, so the old version repainted every
+  skeleton tile on every frame, which is exactly the cost a skeleton exists to
+  avoid.
+*/
 .shimmer {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-cream-sink);
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
   background: linear-gradient(
     100deg,
-    var(--color-cream-sink) 30%,
+    rgba(255, 253, 250, 0) 20%,
     color-mix(in oklab, var(--color-cream-sink) 55%, var(--color-cream)) 50%,
-    var(--color-cream-sink) 70%
+    rgba(255, 253, 250, 0) 80%
   );
-  background-size: 220% 100%;
+  transform: translateX(-100%);
+  will-change: transform;
   animation: shimmer 1.4s linear infinite;
 }
 
 @keyframes shimmer {
-  from { background-position: 180% 0; }
-  to { background-position: -40% 0; }
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
 }
 
 :focus-visible {
@@ -305,7 +437,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shimmer { animation: none; }
+  .shimmer::after { animation: none; opacity: 0; }
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
@@ -313,4 +445,4 @@ body {
   }
 }
 
-:root[data-motion='reduce'] .shimmer { animation: none; }
+:root[data-motion='reduce'] .shimmer::after { animation: none; opacity: 0; }

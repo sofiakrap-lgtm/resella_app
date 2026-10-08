@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { productImage } from '@/lib/imagePath';
+import { project } from '@/lib/physics';
 import { useApp } from '@/lib/state';
+import { useTransition } from '@/lib/motion';
 import { IconButton } from './Button';
 import { CloseIcon } from './Icons';
 
@@ -28,6 +30,7 @@ export function ImageViewer({
   onClose: () => void;
 }) {
   const { motionEnabled } = useApp();
+  const transition = useTransition('sheet');
   const [index, setIndex] = useState(startIndex);
   const [zoom, setZoom] = useState(1);
   const scroller = useRef<HTMLDivElement | null>(null);
@@ -58,15 +61,23 @@ export function ImageViewer({
       role="dialog"
       aria-modal="true"
       aria-label={alt}
-      initial={motionEnabled ? { opacity: 0 } : false}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+      /*
+       * It arrives by growing into place and leaves the same way, so the
+       * photograph reads as the card opening rather than as a new screen
+       * appearing from nowhere.
+       */
+      initial={motionEnabled ? { opacity: 0, scale: 0.94 } : false}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={motionEnabled ? { opacity: 0, scale: 0.94 } : { opacity: 0 }}
+      transition={transition}
       drag={zoom > 1 ? false : 'y'}
       dragConstraints={{ top: 0, bottom: 0 }}
       dragElastic={0.5}
       onDragEnd={(_, info) => {
-        if (info.offset.y > 110) onClose();
+        // A slow drag that got far and a flick that got nowhere both have to
+        // resolve the same way the hand expects, so the decision is made on
+        // where the throw was heading, not on where the finger stopped.
+        if (info.offset.y + project(info.velocity.y) > 110) onClose();
       }}
       className="absolute inset-0 z-[60] bg-black"
       style={{ WebkitTapHighlightColor: 'transparent' }}

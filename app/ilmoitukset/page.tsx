@@ -50,16 +50,17 @@ function IlmoituksetContent() {
   const search = useSearchParams();
   const now = useNow();
   const { ready, reservations, readNotifications, markNotificationsRead } = useApp();
-  const [loading, setLoading] = useState(true);
+  /**
+   * The skeleton stands in only until the stored state is actually in hand,
+   * which is the frame after mount. There was a timer here; the data is local
+   * and synchronous, so the wait was pure latency pretending to be loading.
+   */
+  const loading = !ready;
   // Demo switch: append ?demo=error to show the error state.
   const [failed, setFailed] = useState(false);
   /** Captured before the badge is cleared, so the unread marks still show once. */
   const [wasUnread, setWasUnread] = useState(false);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 300);
-    return () => window.clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     setFailed(search.get('demo') === 'error');

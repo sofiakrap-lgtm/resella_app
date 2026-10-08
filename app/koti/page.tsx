@@ -29,9 +29,14 @@ export default function KotiPage() {
 
 function KotiContent() {
   const search = useSearchParams();
-  const { city, interests, sizes, followedMarkets, readNotifications } = useApp();
+  const { ready, city, interests, sizes, followedMarkets, readNotifications } = useApp();
   const transition = useTransition();
-  const [loading, setLoading] = useState(true);
+  /**
+   * The skeleton stands in only until the stored state is actually in hand,
+   * which is the frame after mount. There was a timer here; the data is local
+   * and synchronous, so the wait was pure latency pretending to be loading.
+   */
+  const loading = !ready;
   /** The rest of the feed stays folded until the viewer asks for it. */
   const [more, setMore] = useState(false);
   // Demo switch: append ?demo=error to show the error state.
@@ -41,10 +46,6 @@ function KotiContent() {
     setFailed(search.get('demo') === 'error');
   }, [search]);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 480);
-    return () => window.clearTimeout(timer);
-  }, []);
 
   const unread = readNotifications.includes('all') ? 0 : seedNotifications.length;
   /** Whether the viewer has told the app anything about themselves yet. */
@@ -105,7 +106,6 @@ function KotiContent() {
         <ErrorState
           onRetry={() => {
             setFailed(false);
-            setLoading(true);
           }}
         />
       </div>

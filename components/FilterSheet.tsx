@@ -319,7 +319,7 @@ export function FilterSheet({
         </Group>
       </div>
 
-      <div className="glass absolute inset-x-0 bottom-0 px-4 pb-5 pt-3">
+      <div className="glass-thick absolute inset-x-0 bottom-0 px-4 pb-5 pt-3">
         <Button
           full
           size="lg"

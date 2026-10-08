@@ -19,7 +19,11 @@ export function Segmented<T extends string>({
   ariaLabel,
   className = '',
 }: SegmentedProps<T>) {
-  const transition = useTransition();
+  /*
+   * The marker used to carry its own spring, which meant it ignored the house
+   * values and kept animating for someone who had asked for less movement.
+   */
+  const transition = useTransition('press');
   /** Four segments in a phone width need smaller type and tighter padding. */
   const tight = options.length > 3;
   return (
@@ -45,7 +49,7 @@ export function Segmented<T extends string>({
             {selected ? (
               <motion.span
                 layoutId={`segmented-${ariaLabel}`}
-                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                transition={transition}
                 className="absolute inset-0 -z-10 rounded-full bg-surface shadow-card"
               />
             ) : null}

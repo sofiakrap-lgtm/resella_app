@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { Chip, Tag } from '@/components/ui/Chip';
 import { EmptyState } from '@/components/ui/StateViews';
 import { ClockIcon, LocationIcon, CheckIcon, BoxIcon } from '@/components/ui/Icons';
+import { haptic } from '@/lib/haptics';
 
 const SERVICE_FEE = 1.5;
 
@@ -51,10 +52,17 @@ export function ReservationView() {
 
   const submit = () => {
     if (!buying && phone.trim().length < 6) {
+      haptic('warning');
       setStatus('error');
       return;
     }
     setStatus('processing');
+    /*
+     * This wait stays. Every other timer in the app was faking the load of
+     * data that was already in memory; this one stands in for a payment
+     * confirmation, which is real work with a real wait, and a demo that
+     * resolved it instantly would be describing something that cannot exist.
+     */
     setTimeout(() => {
       const reservation = reserve({
         productId: product.id,
@@ -62,6 +70,7 @@ export function ReservationView() {
         pickupWindow,
         totalEur: total,
       });
+      haptic('success');
       router.push(`/qr?id=${reservation.id}`);
     }, 1100);
   };

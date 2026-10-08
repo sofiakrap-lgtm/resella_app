@@ -36,7 +36,7 @@ export default function SelaaPage() {
 function SelaaContent() {
   const params = useSearchParams();
   const router = useRouter();
-  const { city } = useApp();
+  const { ready, city } = useApp();
   const now = useNow();
   const [segment, setSegment] = useState<Segment>(
     (params.get('nakyma') as Segment) ?? 'kategoriat',
@@ -46,13 +46,14 @@ function SelaaContent() {
   const [openNow, setOpenNow] = useState(false);
   const [selectedMarket, setSelectedMarket] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  /**
+   * The skeleton stands in only until the stored state is actually in hand,
+   * which is the frame after mount. There was a timer here; the data is local
+   * and synchronous, so the wait was pure latency pretending to be loading.
+   */
+  const loading = !ready;
   const [failed, setFailed] = useState(params.get('demo') === 'error');
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 380);
-    return () => window.clearTimeout(timer);
-  }, [segment]);
 
   const visibleMarkets = useMemo(() => {
     let list = markets;
@@ -72,7 +73,6 @@ function SelaaContent() {
         <ErrorState
           onRetry={() => {
             setFailed(false);
-            setLoading(true);
           }}
         />
       </div>
@@ -83,7 +83,7 @@ function SelaaContent() {
     <div>
       <ScreenHeader title="Selaa" transparent />
 
-      <div className="sticky top-[44px] z-20 glass px-4 pb-3 pt-2">
+      <div className="sticky top-[44px] z-20 glass-attached px-4 pb-3 pt-2">
         <SearchField
           value=""
           onSearch={(next) => {

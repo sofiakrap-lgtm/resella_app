@@ -37,7 +37,7 @@ export default function HakuPage() {
 function HakuContent() {
   const params = useSearchParams();
   const router = useRouter();
-  const { recentSearches, addRecentSearch, clearRecentSearches, addSavedSearch, pushToast } =
+  const { ready, recentSearches, addRecentSearch, clearRecentSearches, addSavedSearch, pushToast } =
     useApp();
 
   const parsed = useMemo(() => queryToFilters(new URLSearchParams(params.toString())), [params]);
@@ -45,7 +45,6 @@ function HakuContent() {
   const [input, setInput] = useState(parsed.query);
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const [failed, setFailed] = useState(params.get('demo') === 'error');
 
@@ -55,14 +54,23 @@ function HakuContent() {
     setVisible(PAGE_SIZE);
   }, [parsed]);
 
-  useEffect(() => {
-    setLoading(true);
-    const timer = window.setTimeout(() => setLoading(false), 360);
-    return () => window.clearTimeout(timer);
-  }, [filters]);
+  /**
+   * There was a 360ms spinner on every filter change here. Filtering runs
+   * against a local array and finishes inside the same frame, so the spinner
+   * was not reporting work, it was adding a flash between a question and its
+   * answer. The skeleton is now only for the frame before stored state lands.
+   */
+  const loading = !ready;
 
-  const results = useMemo(() => applyFilters(filters), [filters]);
-  const hasSearch = Boolean(filters.query) || activeFilterCount(filters) > 0;
+  /**
+   * Results follow what is in the field, not what is in the URL, so the list
+   * narrows on the keystroke. The URL and the recent searches are written on
+   * commit instead, which is the one part of this that should not run ten
+   * times a second.
+   */
+  const live = useMemo(() => ({ ...filters, query: input }), [filters, input]);
+  const results = useMemo(() => applyFilters(live), [live]);
+  const hasSearch = Boolean(input) || activeFilterCount(filters) > 0;
 
   const run = (next: Filters, exampleNote?: string) => {
     setNote(exampleNote ?? null);
@@ -92,7 +100,7 @@ function HakuContent() {
             <IconButton
               ariaLabel="Tallenna haku"
               onClick={() => {
-                addSavedSearch(filters.query || 'Tallennettu haku', filters.query, filters);
+                addSavedSearch(live.query || 'Tallennettu haku', live.query, live);
                 pushToast({ title: 'Hakuvahti tallennettu', body: 'Ilmoitamme kun sopiva tulee myyntiin.', href: '/toivelista' });
               }}
             >
@@ -249,20 +257,20 @@ function HakuContent() {
         </div>
       ) : results.length === 0 ? (
         <EmptyState
-          title={filters.query ? `Ei osumia haulle "${filters.query}"` : 'Ei osumia'}
+          title={live.query ? `Ei osumia haulle "${live.query}"` : 'Ei osumia'}
           body="Tallenna haku, niin ilmoitamme kun tällainen tulee myyntiin."
           action={
             <div className="flex flex-col items-center gap-3">
               <Button
                 onClick={() => {
-                  addSavedSearch(filters.query || 'Tallennettu haku', filters.query, filters);
+                  addSavedSearch(live.query || 'Tallennettu haku', live.query, live);
                   pushToast({ title: 'Hakuvahti tallennettu', href: '/toivelista' });
                 }}
                 icon={<BookmarkIcon size={18} />}
               >
                 Tallenna hakuvahti
               </Button>
-              <Button variant="bordered" size="sm" onClick={() => run({ ...emptyFilters, query: filters.query })}>
+              <Button variant="bordered" size="sm" onClick={() => run({ ...emptyFilters, query: live.query })}>
                 Tyhjennä suodattimet
               </Button>
             </div>

@@ -42,13 +42,14 @@ function ToivelistaContent() {
     pushToast,
   } = useApp();
   const [segment, setSegment] = useState<Segment>('tuotteet');
-  const [loading, setLoading] = useState(true);
+  /**
+   * The skeleton stands in only until the stored state is actually in hand,
+   * which is the frame after mount. There was a timer here; the data is local
+   * and synchronous, so the wait was pure latency pretending to be loading.
+   */
+  const loading = !ready;
   const [failed, setFailed] = useState(params.get('demo') === 'error');
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 320);
-    return () => window.clearTimeout(timer);
-  }, []);
 
   // Mocked push: a new alert reports its match once, not on every visit.
   useEffect(() => {
@@ -84,7 +85,6 @@ function ToivelistaContent() {
         <ErrorState
           onRetry={() => {
             setFailed(false);
-            setLoading(true);
           }}
         />
       </div>

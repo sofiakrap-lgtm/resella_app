@@ -34,24 +34,25 @@ export function SearchField({
   const [text, setText] = useState(value);
   const [focused, setFocused] = useState(false);
   const field = useRef<HTMLInputElement | null>(null);
-  const timer = useRef<number | undefined>(undefined);
-  /** The latest callback, so the debounce never fires a stale one. */
-  const latest = useRef(onSearch);
-  latest.current = onSearch;
 
   useEffect(() => setText(value), [value]);
-  useEffect(() => () => window.clearTimeout(timer.current), []);
 
+  /**
+   * Every keystroke reaches the screen immediately through onChange, so a
+   * search filters as it is typed. There used to be a 200ms debounce in front
+   * of onSearch here, which meant two things that were both wrong: the first
+   * letter typed on the browse screen navigated away to a search for one
+   * letter, and on the search screen the results lagged the typing by a fifth
+   * of a second for no work being done. onSearch is now the commit, and it
+   * only runs when the search is actually submitted.
+   */
   const type = (next: string) => {
     setText(next);
     onChange?.(next);
-    window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => latest.current(next), 200);
   };
 
   const submitNow = (next: string) => {
-    window.clearTimeout(timer.current);
-    latest.current(next);
+    onSearch(next);
   };
 
   return (
